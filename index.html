@@ -36,35 +36,35 @@
             </div>
 
             <div id="navSection" class="nav-section">
-                <div class="nav-group">
+                <div class="nav-group" role="tablist">
                     <div class="nav-group-title" id="nav-docs-label">Documentation</div>
-                    <button class="nav-btn active" data-view-target="overview-view" aria-current="page" aria-describedby="nav-docs-label">Overview &amp; Vision</button>
-                    <button class="nav-btn" data-view-target="world-view" aria-describedby="nav-docs-label">World &amp; Characters</button>
-                    <button class="nav-btn" data-view-target="systems-view" aria-describedby="nav-docs-label">Core Systems &amp; Gauges</button>
-                    <button class="nav-btn" data-view-target="scenarios-view" aria-describedby="nav-docs-label">Scenarios &amp; Flow</button>
+                    <button class="nav-btn active" role="tab" aria-selected="true" data-view-target="overview-view" aria-describedby="nav-docs-label">Overview &amp; Vision</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="world-view" aria-describedby="nav-docs-label">World &amp; Characters</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="systems-view" aria-describedby="nav-docs-label">Core Systems &amp; Gauges</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="scenarios-view" aria-describedby="nav-docs-label">Scenarios &amp; Flow</button>
                 </div>
 
-                <div class="nav-group">
+                <div class="nav-group" role="tablist">
                     <div class="nav-group-title" id="nav-arch-label">Architecture</div>
-                    <button class="nav-btn" data-view-target="technical-view" aria-describedby="nav-arch-label">Tech Spec &amp; UI Standards</button>
-                    <button class="nav-btn" data-view-target="network-view" aria-describedby="nav-arch-label">Systems Network Map</button>
-                    <button class="nav-btn" data-view-target="production-view" aria-describedby="nav-arch-label">Production &amp; UI Tools</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="technical-view" aria-describedby="nav-arch-label">Tech Spec &amp; UI Standards</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="network-view" aria-describedby="nav-arch-label">Systems Network Map</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="production-view" aria-describedby="nav-arch-label">Production &amp; UI Tools</button>
                 </div>
 
-                <div class="nav-group">
+                <div class="nav-group" role="tablist">
                     <div class="nav-group-title" id="nav-design-label">Design Systems</div>
-                    <button class="nav-btn" data-view-target="achievements-view" aria-describedby="nav-design-label">Achievements &amp; Clues</button>
-                    <button class="nav-btn" data-view-target="scope-view" aria-describedby="nav-design-label">Scope &amp; Delivery</button>
-                    <button class="nav-btn" data-view-target="gallery-view" aria-describedby="nav-design-label">Visual Progress &amp; Gallery</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="achievements-view" aria-describedby="nav-design-label">Achievements &amp; Clues</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="scope-view" aria-describedby="nav-design-label">Scope &amp; Delivery</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="gallery-view" aria-describedby="nav-design-label">Visual Progress &amp; Gallery</button>
                 </div>
 
-                <div class="nav-group">
+                <div class="nav-group" role="tablist">
                     <div class="nav-group-title" id="nav-status-label">Project Status</div>
-                    <button class="nav-btn" data-view-target="status-view" aria-describedby="nav-status-label">Patch Notes &amp; Roadmap</button>
+                    <button class="nav-btn" role="tab" aria-selected="false" data-view-target="status-view" aria-describedby="nav-status-label">Patch Notes &amp; Roadmap</button>
                 </div>
                 
                 <div class="nav-group cta-group">
-                    <button class="nav-btn nav-cta-btn" data-view-target="status-view" onclick="setTimeout(() => document.querySelector('[data-tab-target=\'status-involved\']').click(), 50)">
+                    <button class="nav-btn nav-cta-btn" data-view-target="status-view" data-specific-tab="status-involved">
                         Become a Contributor
                     </button>
                 </div>
@@ -87,7 +87,7 @@
 
             <div class="print-header print-only" aria-hidden="true">
                 <strong>Road Remains - Game Design Document v2.0.2</strong>
-                Alpha / Production Build &nbsp;|&nbsp; 17 June 2026
+                Alpha / Production Build &nbsp;|&nbsp; 18 June 2026
             </div>
 
             <section id="overview-view" class="view-section active" aria-labelledby="overview-heading">
@@ -152,12 +152,12 @@
 
                         <div class="definition-item">
                             <h4>0.4 Difficulty Scope - MVP vs Post-Launch</h4>
-                            <p><strong>MVP scope includes Standard mode only.</strong> Hard mode, Expert mode, and Speedrun mode are documented in Section 17 as post-launch features. They are not built in the initial release. The game state architecture must be designed to support them without refactoring, but they are not activated in v1.0 of the product.</p>
+                            <p><strong>MVP scope includes Standard mode only.</strong> Hard mode, Expert mode, and Speedrun mode are documented in Section 22.2 as post-launch features. They are not built in the initial release. The game state architecture must be designed to support them without refactoring, but they are not activated in v1.0 of the product.</p>
                         </div>
 
                         <div class="definition-item">
                             <h4>0.5 Platform Scope - MVP</h4>
-                            <p><strong>MVP is web browser only.</strong> Both Component A and Component B are web applications. Android packaging (Android 12+) is a post-launch deliverable documented in Section 17. The web build must be responsive and function correctly on mobile browsers as a prerequisite for eventual Android packaging.</p>
+                            <p><strong>MVP is web browser only.</strong> Both Component A and Component B are web applications. Android packaging (Android 12+) is a post-launch deliverable documented in Section 22.2. The web build must be responsive and function correctly on mobile browsers as a prerequisite for eventual Android packaging.</p>
                         </div>
                     </div>
 
@@ -194,7 +194,7 @@
                         <div class="content-block">
                             <h3>2. The Town - Alupotha</h3>
                             <p>Alupotha means Middle Town. It is a composite of everywhere in Sri Lanka - not Colombo, not a village, but the kind of semi-urban junction town that most Sri Lankans either come from or pass through. There is a kovil on one side of the main road and a temple on the other. One traffic light that is technically functional. A bus that comes when it comes. Coconut trees everywhere, including in places where coconut trees probably should not be.</p>
-                            <p>The game world is presented as a clickable illustrated town map scaled dynamically on a 1920x1080 canvas. All 13 locations are mapped from the beginning. Some are interactive hubs, while others provide atmospheric depth. The player navigates by clicking a location on the map. The week countdown and three gauges are always visible at the top of the screen regardless of which location the player is in.</p>
+                            <p>The game world is presented as a clickable illustrated town map scaled dynamically on a 1920x1080 canvas. 12 of the 13 locations are mapped from the beginning; the 13th, Skeptics Cafe, unlocks later (see Section 0.3). Some are interactive hubs, while others provide atmospheric depth. The player navigates by clicking a location on the map. The week countdown and three gauges are always visible at the top of the screen regardless of which location the player is in.</p>
                             <figure class="editorial-figure">
                                 <img src="assets/fullmap.webp" alt="Alupotha Town Map Wireframe">
                                 <figcaption class="editorial-caption">Fig 1. Alupotha Map Layout (Draft)</figcaption>
@@ -577,7 +577,7 @@
                     <div id="flow-misinfo" class="sub-tab-content active" role="tabpanel">
                         <div class="content-block">
                             <h3>9. Linear Chapter / Scene Breakdown (Karunasena Template)</h3>
-                            <p>This path outlines the expected chronological flow for Karunasena from Week 6 to Week 0. This serves as the narrative map for Godot scene connections and dialogue sequencing.</p>
+                            <p>This path outlines the expected chronological flow for Karunasena from Week 6 to Week 0. This serves as the narrative map for DOM scene connections and dialogue sequencing.</p>
                             <table class="data-table" aria-label="Scene by scene breakdown">
                                 <thead><tr><th scope="col">Week</th><th scope="col">Location</th><th scope="col">NPC Encountered</th><th scope="col">Decision Point / Action</th><th scope="col">Consequence / Next Step</th></tr></thead>
                                 <tbody>
@@ -600,7 +600,7 @@
                             <h4>10.1 Content Formats</h4>
                             <ul class="clean-list">
                                 <li><strong>Text forward:</strong> Looks like a news article. Has a headline, a body, and a source that sounds plausible.</li>
-                                <li><strong>Voice note:</strong> Cannot be easily fact-checked because there is no text to search. Player hears a written transcript summary, not the audio itself - because audio is inaccessible without transcripts (WCAG compliance).</li>
+                                <li><strong>Voice note:</strong> Cannot be easily fact-checked because there is no text to search. Player reads a written transcript summary, not the audio itself - because audio is inaccessible without transcripts (WCAG compliance).</li>
                                 <li><strong>Screenshot:</strong> An image of something allegedly said by a real institution. Player must evaluate whether the institution would say this and whether the formatting looks correct.</li>
                                 <li><strong>Video clip:</strong> Shown as a still frame with a caption. The caption may or may not accurately describe what is in the video.</li>
                             </ul>
@@ -635,10 +635,22 @@
                                     <div class="node-title">Scenario 1 - Week 6: Text Forward about Registration Deadline</div>
                                     <div class="node-desc"><strong>Content:</strong> "URGENT: Voter registration closes THIS WEEK. If you are not registered by Friday you cannot vote. Share with everyone you know before it is too late."</div>
                                     <div class="choices">
-                                        <button class="choice bad btn-interact" aria-expanded="false">Share immediately with WhatsApp contacts<div class="consequence"><strong>Result:</strong> False information spreads. Community members miss the real deadline because they thought they had already missed it. -20 CT, -15 IH, -20 VP.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Check the Elections Commission board first<div class="consequence"><strong>Result:</strong> Board shows real deadline is Week 4, not Week 6. You share the correction instead. +10 CT, +15 IH, +5 VP. Unlocks "The Algorithm Would Hate You" achievement.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Ask Nandadasa Mahaththaya directly<div class="consequence"><strong>Result:</strong> He confirms the real deadline without looking up from his desk. "Week 4. It is printed on the notice. The notice is on the board." +5 CT, +20 IH, +5 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">Ignore the message completely<div class="consequence"><strong>Result:</strong> The message spreads through others anyway. You are not the source but also not the correction. -5 CT, -5 IH, -5 VP. Note: some accuracy is lost even without your involvement.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-1-1">Share immediately with WhatsApp contacts</button>
+                                            <div id="cons-1-1" class="consequence" hidden><strong>Result:</strong> False information spreads. Community members miss the real deadline because they thought they had already missed it. -20 CT, -15 IH, -20 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-1-2">Check the Elections Commission board first</button>
+                                            <div id="cons-1-2" class="consequence" hidden><strong>Result:</strong> Board shows real deadline is Week 4, not Week 6. You share the correction instead. +10 CT, +15 IH, +5 VP. Unlocks "The Algorithm Would Hate You" achievement.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-1-3">Ask Nandadasa Mahaththaya directly</button>
+                                            <div id="cons-1-3" class="consequence" hidden><strong>Result:</strong> He confirms the real deadline without looking up from his desk. "Week 4. It is printed on the notice. The notice is on the board." +5 CT, +20 IH, +5 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-1-4">Ignore the message completely</button>
+                                            <div id="cons-1-4" class="consequence" hidden><strong>Result:</strong> The message spreads through others anyway. You are not the source but also not the correction. -5 CT, -5 IH, -5 VP. Note: some accuracy is lost even without your involvement.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -646,10 +658,22 @@
                                     <div class="node-title">Scenario 2 - Week 5: Voice Note about Polling Station Assignment</div>
                                     <div class="node-desc"><strong>Content:</strong> A voice note (shown as transcript): "My cousin who works at the elections office told me - they changed it. You can go to any polling station now. No need to find your assigned one. Pass this on."</div>
                                     <div class="choices">
-                                        <button class="choice bad btn-interact" aria-expanded="false">Forward the voice note: "URGENT SHARE IMMEDIATELY"<div class="consequence"><strong>Result:</strong> Spreads widely before being debunked. Dozens of voters go to the wrong stations and cannot vote. -20 CT, -15 IH, -20 VP.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Ask Grama Officer to confirm or deny<div class="consequence"><strong>Result:</strong> Officer denies it calmly. "This is not correct. Voters must attend their assigned station. The assignment is on the notice board." You share the clarification. +5 CT, +20 IH, +5 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">Ask "Is this legit?" in the Alupotha Patriots group<div class="consequence"><strong>Result:</strong> Group splits. Some believe it, some do not. The uncertainty spreads. No clear outcome. No gauge change - but the misinformation gains traction anyway.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">Delete without checking or sharing<div class="consequence"><strong>Result:</strong> The rumour still spreads through others. You missed the chance to correct it. -5 CT, -5 IH, -5 VP.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-2-1">Forward the voice note: "URGENT SHARE IMMEDIATELY"</button>
+                                            <div id="cons-2-1" class="consequence" hidden><strong>Result:</strong> Spreads widely before being debunked. Dozens of voters go to the wrong stations and cannot vote. -20 CT, -15 IH, -20 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-2-2">Ask Grama Officer to confirm or deny</button>
+                                            <div id="cons-2-2" class="consequence" hidden><strong>Result:</strong> Officer denies it calmly. "This is not correct. Voters must attend their assigned station. The assignment is on the notice board." You share the clarification. +5 CT, +20 IH, +5 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-2-3">Ask "Is this legit?" in the Alupotha Patriots group</button>
+                                            <div id="cons-2-3" class="consequence" hidden><strong>Result:</strong> Group splits. Some believe it, some do not. The uncertainty spreads. No clear outcome. No gauge change - but the misinformation gains traction anyway.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-2-4">Delete without checking or sharing</button>
+                                            <div id="cons-2-4" class="consequence" hidden><strong>Result:</strong> The rumour still spreads through others. You missed the chance to correct it. -5 CT, -5 IH, -5 VP.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -657,10 +681,22 @@
                                     <div class="node-title">Scenario 3 - Week 4: Screenshot of Fake Elections Commission Notice</div>
                                     <div class="node-desc"><strong>Content:</strong> A screenshot of what looks like an official Elections Commission notice. It states voting hours have changed and polling will begin at 4am instead of 7am due to security concerns. The EC logo is present but slightly wrong.</div>
                                     <div class="choices">
-                                        <button class="choice bad btn-interact" aria-expanded="false">"This is what I've been saying - share IMMEDIATELY"<div class="consequence"><strong>Result:</strong> 23 people arrive at the polling station at 4am. When debunked, you are identified as a source. Community trust in your information drops. -15 CT, -20 IH, -20 VP. Triggers the queue-at-4am consequence chain.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Check the actual Elections Commission notice board<div class="consequence"><strong>Result:</strong> Board shows real opening hours: 7am to 5pm. The EC logo on the screenshot is wrong. You explain it is fake, with evidence. +10 CT, +15 IH, +5 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">"I'm not sure about this one…" - share with a question mark<div class="consequence"><strong>Result:</strong> Others fill the uncertainty with stronger claims. Misinformation wins by default when doubt is left unresolved. No positive gauge change.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Share with Skeptics Cafe if it has been unlocked<div class="consequence"><strong>Result:</strong> Group debunks together within minutes. You are part of the verification network. +10 CT, +10 IH, +5 VP. Only available if verifiedAtBoardCount is 3 or more.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-3-1">"This is what I've been saying - share IMMEDIATELY"</button>
+                                            <div id="cons-3-1" class="consequence" hidden><strong>Result:</strong> 23 people arrive at the polling station at 4am. When debunked, you are identified as a source. Community trust in your information drops. -15 CT, -20 IH, -20 VP. Triggers the queue-at-4am consequence chain.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-3-2">Check the actual Elections Commission notice board</button>
+                                            <div id="cons-3-2" class="consequence" hidden><strong>Result:</strong> Board shows real opening hours: 7am to 5pm. The EC logo on the screenshot is wrong. You explain it is fake, with evidence. +10 CT, +15 IH, +5 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-3-3">"I'm not sure about this one…" - share with a question mark</button>
+                                            <div id="cons-3-3" class="consequence" hidden><strong>Result:</strong> Others fill the uncertainty with stronger claims. Misinformation wins by default when doubt is left unresolved. No positive gauge change.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-3-4">Share with Skeptics Cafe if it has been unlocked</button>
+                                            <div id="cons-3-4" class="consequence" hidden><strong>Result:</strong> Group debunks together within minutes. You are part of the verification network. +10 CT, +10 IH, +5 VP. Only available if verifiedAtBoardCount is 3 or more.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -668,10 +704,22 @@
                                     <div class="node-title">Scenario 4 - Week 3: Correct Information about NIC Requirement</div>
                                     <div class="node-desc"><strong>Content:</strong> Text forward: "Reminder to everyone - you MUST bring your NIC or passport to vote. No other ID is accepted. Please remind your family members who might not know this."</div>
                                     <div class="choices">
-                                        <button class="choice good btn-interact" aria-expanded="false">Share it - this sounds right<div class="consequence"><strong>Result:</strong> This one is true. Sharing accurate information is the correct action. Community members are reminded of what to bring. +10 CT, +10 IH, +10 VP. Unlocks "It Spreads Both Ways" achievement.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Verify it at the Elections Commission board first, then share<div class="consequence"><strong>Result:</strong> Board confirms it. You share it with added authority. +10 CT, +15 IH, +10 VP. Slightly higher IH gain for verifying even true information.</div></button>
-                                        <button class="choice bad btn-interact" aria-expanded="false">Ignore it - you have been ignoring everything<div class="consequence"><strong>Result:</strong> Accurate information does not spread. Some voters arrive without their NIC and cannot vote. The game penalises blanket distrust the same way it penalises blanket trust. -5 CT, -5 IH, -5 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">File it away - you will deal with it later<div class="consequence"><strong>Result:</strong> The moment passes. Information does not reach people in time. No positive gain. Neutral outcome but missed opportunity.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-4-1">Share it - this sounds right</button>
+                                            <div id="cons-4-1" class="consequence" hidden><strong>Result:</strong> This one is true. Sharing accurate information is the correct action. Community members are reminded of what to bring. +10 CT, +10 IH, +10 VP. Unlocks "It Spreads Both Ways" achievement.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-4-2">Verify it at the Elections Commission board first, then share</button>
+                                            <div id="cons-4-2" class="consequence" hidden><strong>Result:</strong> Board confirms it. You share it with added authority. +10 CT, +15 IH, +10 VP. Slightly higher IH gain for verifying even true information.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-4-3">Ignore it - you have been ignoring everything</button>
+                                            <div id="cons-4-3" class="consequence" hidden><strong>Result:</strong> Accurate information does not spread. Some voters arrive without their NIC and cannot vote. The game penalises blanket distrust the same way it penalises blanket trust. -5 CT, -5 IH, -5 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-4-4">File it away - you will deal with it later</button>
+                                            <div id="cons-4-4" class="consequence" hidden><strong>Result:</strong> The moment passes. Information does not reach people in time. No positive gain. Neutral outcome but missed opportunity.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -679,10 +727,22 @@
                                     <div class="node-title">Scenario 5 - Week 2: Video Clip with Fake Candidate List</div>
                                     <div class="node-desc"><strong>Content:</strong> A video clip shared as a still frame with the caption "CONFIRMED: Full candidate list for our district - share before they take it down." The list has two names that do not appear on the official list and is missing one candidate who is actually running.</div>
                                     <div class="choices">
-                                        <button class="choice bad btn-interact" aria-expanded="false">Share as confirmed - the caption says so<div class="consequence"><strong>Result:</strong> Voters make decisions based on a fabricated list. Some prepare to vote for candidates who do not exist. When the real list is published, community confusion peaks. -15 CT, -20 IH, -10 VP.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Compare to the Elections Commission board candidate list from Week 3<div class="consequence"><strong>Result:</strong> The discrepancy is immediate and obvious. Two fake names. One real name missing. You document and share the comparison. +10 CT, +20 IH, +10 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">Ask Mahinda Bandara's supporters about it<div class="consequence"><strong>Result:</strong> They confirm names that benefit their candidate. Biased source. No gauge gain. Information remains unreliable.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Check the official Elections Commission website<div class="consequence"><strong>Result:</strong> Official list matches the board version. Discrepancy confirmed. Sharing the official source directly earns maximum trust. +10 CT, +15 IH, +10 VP.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-5-1">Share as confirmed - the caption says so</button>
+                                            <div id="cons-5-1" class="consequence" hidden><strong>Result:</strong> Voters make decisions based on a fabricated list. Some prepare to vote for candidates who do not exist. When the real list is published, community confusion peaks. -15 CT, -20 IH, -10 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-5-2">Compare to the Elections Commission board candidate list from Week 3</button>
+                                            <div id="cons-5-2" class="consequence" hidden><strong>Result:</strong> The discrepancy is immediate and obvious. Two fake names. One real name missing. You document and share the comparison. +10 CT, +20 IH, +10 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-5-3">Ask Mahinda Bandara's supporters about it</button>
+                                            <div id="cons-5-3" class="consequence" hidden><strong>Result:</strong> They confirm names that benefit their candidate. Biased source. No gauge gain. Information remains unreliable.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-5-4">Check the official Elections Commission website</button>
+                                            <div id="cons-5-4" class="consequence" hidden><strong>Result:</strong> Official list matches the board version. Discrepancy confirmed. Sharing the official source directly earns maximum trust. +10 CT, +15 IH, +10 VP.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -690,10 +750,22 @@
                                     <div class="node-title">Scenario 6 - Week 1: Voice Note about Ballot Fold Procedure</div>
                                     <div class="node-desc"><strong>Content:</strong> Voice note transcript: "I just found out - you have to fold the ballot in thirds, not in half. If you fold it in half your vote does not count. My brother-in-law works at the counting centre and he confirmed this."</div>
                                     <div class="choices">
-                                        <button class="choice bad btn-interact" aria-expanded="false">Trust it - the brother-in-law works at the counting centre<div class="consequence"><strong>Result:</strong> On election day, the player folds the ballot incorrectly. The ballot is spoiled. -10 CT, -20 IH, -10 VP. This is the most direct consequence in the entire game - your vote does not count because of a voice note you did not verify.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Ask Nandadasa Mahaththaya - he will know the exact procedure<div class="consequence"><strong>Result:</strong> Nandadasa explains the correct fold without looking up. The vote counts. +5 CT, +20 IH, +5 VP. This IH gain is the highest single-source gain available in Week 1.</div></button>
-                                        <button class="choice good btn-interact" aria-expanded="false">Ask Sergeant Wickramasinghe at the police station<div class="consequence"><strong>Result:</strong> Sergeant describes the correct procedure clearly and adds that he has seen spoiled ballots from this exact misinformation before. +10 CT, +10 IH, +5 VP.</div></button>
-                                        <button class="choice neutral btn-interact" aria-expanded="false">Ignore it - you already know how to vote<div class="consequence"><strong>Result:</strong> If this is Kamala's Assumption disadvantage triggering, she thinks she knows the fold from last time. She was wrong. If this is a deliberate ignore from another character: -5 CT, -5 IH. The information that the fold matters is not received.</div></button>
+                                        <div class="choice-wrapper">
+                                            <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-6-1">Trust it - the brother-in-law works at the counting centre</button>
+                                            <div id="cons-6-1" class="consequence" hidden><strong>Result:</strong> On election day, the player folds the ballot incorrectly. The ballot is spoiled. -10 CT, -20 IH, -10 VP. This is the most direct consequence in the entire game - your vote does not count because of a voice note you did not verify.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-6-2">Ask Nandadasa Mahaththaya - he will know the exact procedure</button>
+                                            <div id="cons-6-2" class="consequence" hidden><strong>Result:</strong> Nandadasa explains the correct fold without looking up. The vote counts. +5 CT, +20 IH, +5 VP. This IH gain is the highest single-source gain available in Week 1.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-6-3">Ask Sergeant Wickramasinghe at the police station</button>
+                                            <div id="cons-6-3" class="consequence" hidden><strong>Result:</strong> Sergeant describes the correct procedure clearly and adds that he has seen spoiled ballots from this exact misinformation before. +10 CT, +10 IH, +5 VP.</div>
+                                        </div>
+                                        <div class="choice-wrapper">
+                                            <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-6-4">Ignore it - you already know how to vote</button>
+                                            <div id="cons-6-4" class="consequence" hidden><strong>Result:</strong> If this is Kamala's Assumption disadvantage triggering, she thinks she knows the fold from last time. She was wrong. If this is a deliberate ignore from another character: -5 CT, -5 IH. The information that the fold matters is not received.</div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -701,22 +773,37 @@
                         </div>
 
                         <div class="content-block">
-                            <h3>10.5 Kumaran's Language Barrier Scenarios (MVP Scope)</h3>
-                            <p>Kumaran's path explicitly involves trilingual inclusion mechanics that impact his ability to participate. These are core MVP scenarios rather than post-launch deferrals.</p>
+                            <h3>10.5 Kumaran's Language Barrier Scenarios (Documented - Locked Path)</h3>
+                            <p>Kumaran's path explicitly involves trilingual inclusion mechanics that impact his ability to participate. Kumaran himself remains locked until a later phase (see Section 22.1), but these scenarios are fully designed now so they're ready to activate the moment his path unlocks.</p>
                             
                             <h4>Scenario A: The Sinhala-Only Form (Grama Sevaka Office)</h4>
                             <p><strong>Context:</strong> Kumaran attempts to transfer his voter registration. The required form is only available in Sinhala. Nandadasa is trying to help, but his Tamil is limited.</p>
                             <div class="choices" style="margin-bottom: var(--sp-4);">
-                                <button class="choice bad btn-interact" aria-expanded="false">Guess the fields based on formatting<div class="consequence"><strong>Result:</strong> Form is rejected for errors. Kumaran has to return next week. -10 VP, -5 IH.</div></button>
-                                <button class="choice good btn-interact" aria-expanded="false">Ask Kamala (via phone/text) to translate<div class="consequence"><strong>Result:</strong> Kamala translates. Form submitted correctly. +15 VP, +10 CT. Shows community network value.</div></button>
-                                <button class="choice neutral btn-interact" aria-expanded="false">Ask Nandadasa to point to the mandatory fields<div class="consequence"><strong>Result:</strong> Gets the bare minimum done. Accepted, but Kumaran misses out on optional context. +5 VP.</div></button>
+                                <div class="choice-wrapper">
+                                    <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-k1-1">Guess the fields based on formatting</button>
+                                    <div id="cons-k1-1" class="consequence" hidden><strong>Result:</strong> Form is rejected for errors. Kumaran has to return next week. -10 VP, -5 IH.</div>
+                                </div>
+                                <div class="choice-wrapper">
+                                    <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-k1-2">Ask Kamala (via phone/text) to translate</button>
+                                    <div id="cons-k1-2" class="consequence" hidden><strong>Result:</strong> Kamala translates. Form submitted correctly. +15 VP, +10 CT. Shows community network value.</div>
+                                </div>
+                                <div class="choice-wrapper">
+                                    <button class="choice neutral btn-interact" aria-expanded="false" aria-controls="cons-k1-3">Ask Nandadasa to point to the mandatory fields</button>
+                                    <div id="cons-k1-3" class="consequence" hidden><strong>Result:</strong> Gets the bare minimum done. Accepted, but Kumaran misses out on optional context. +5 VP.</div>
+                                </div>
                             </div>
 
                             <h4>Scenario B: Polling Station Instructions (Week 0)</h4>
                             <p><strong>Context:</strong> At the polling station, the presiding officer mispronounces Kumaran's name and issues verbal instructions in rapid Sinhala. Kumaran needs to ensure he doesn't spoil his ballot.</p>
                             <div class="choices">
-                                <button class="choice bad btn-interact" aria-expanded="false">Nod and walk to the booth quickly<div class="consequence"><strong>Result:</strong> High risk of spoiled ballot if the fold is wrong. -15 IH.</div></button>
-                                <button class="choice good btn-interact" aria-expanded="false">Request the trilingual instruction card<div class="consequence"><strong>Result:</strong> The officer pauses, finds the card, and hands it over. Kumaran votes confidently. +20 VP, +10 IH.</div></button>
+                                <div class="choice-wrapper">
+                                    <button class="choice bad btn-interact" aria-expanded="false" aria-controls="cons-k2-1">Nod and walk to the booth quickly</button>
+                                    <div id="cons-k2-1" class="consequence" hidden><strong>Result:</strong> High risk of spoiled ballot if the fold is wrong. -15 IH.</div>
+                                </div>
+                                <div class="choice-wrapper">
+                                    <button class="choice good btn-interact" aria-expanded="false" aria-controls="cons-k2-2">Request the trilingual instruction card</button>
+                                    <div id="cons-k2-2" class="consequence" hidden><strong>Result:</strong> The officer pauses, finds the card, and hands it over. Kumaran votes confidently. +20 VP, +10 IH.</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -869,9 +956,9 @@
                         <div class="content-block">
                             <h3>14. Visual Style Bible</h3>
                             <ul class="clean-list">
-                                <li><strong>Color Palette:</strong> Garnet Red (#8B1A2B), Slate (#4A5568), Gold (#D4AF37) for Civic Trust, Green (#6B9080) for Info Health.</li>
+                                <li><strong>Color Palette:</strong> Garnet Red (#8B1A2B), Slate (#3D4A5C), Gold (#D4AF37) for Civic Trust, Green (#6B9080) for Info Health.</li>
                                 <li><strong>UI Treatment &amp; Philosophy:</strong> The UI strictly follows a grounded "2006 card" aesthetic. Avoid modern floating glassmorphism entirely. Panels should feel solid, tactile, and editorial with hard beveled edges (<code>.game-btn</code>).</li>
-                                <li><strong>Typography:</strong> <em>Playfair Display</em> for cinematic headings, <em>Noto Sans</em> for UI body, and mapped variants for Sinhala/Tamil.</li>
+                                <li><strong>Typography:</strong> <em>Cormorant Garamond</em> for display, <em>Source Serif 4</em> for body, <em>DM Sans</em> for UI, and <em>JetBrains Mono</em> for mono.</li>
                             </ul>
                         </div>
                     </div>
@@ -978,7 +1065,7 @@
                                     <div class="legend-item"><div class="legend-color char-player" aria-hidden="true"></div><span>Playable Characters</span></div>
                                     <div class="legend-item"><div class="legend-color char-npc" aria-hidden="true"></div><span>NPCs &amp; Supporting Characters</span></div>
                                     <div class="legend-item"><div class="legend-color loc-public" aria-hidden="true"></div><span>Locations &amp; Spaces</span></div>
-                                    <div class="legend-item"><div class="legend-color" style="background:#0F172A" aria-hidden="true"></div><span>Abstract Systems &amp; Scenarios</span></div>
+                                    <div class="legend-item"><div class="legend-color" style="background:var(--c-dark)" aria-hidden="true"></div><span>Abstract Systems &amp; Scenarios</span></div>
 
                                     <h3>Relationship Types</h3>
                                     <div class="legend-item"><svg width="24" height="4" aria-hidden="true"><line x1="0" y1="2" x2="24" y2="2" class="line-trust" stroke-width="2"/></svg><span>Trust / Support</span></div>
@@ -1050,8 +1137,8 @@
                         <p>Core visual parameters to be defined as Figma components in Week 1.</p>
                         <ul class="clean-list">
                             <li><strong>Color Palette:</strong> Garnet Red (#8B1A2B) for primary accents/critical actions, Slate (#3D4A5C) for typography/secondary, Off-White (#F5F0EA) for backgrounds.</li>
-                            <li><strong>UI Treatment:</strong> Glassmorphic overlays for floating panels (menus, gauges). Dialogue boxes must use solid Off-White backgrounds to ensure text contrast.</li>
-                            <li><strong>Typography:</strong> Inter (Latin), Noto Sans Sinhala, Noto Sans Tamil. <em>Note:</em> Sinhala and Tamil characters render larger than Latin at the same font size. All UI elements (buttons, dialogue boxes) must use flexible auto-layout in Figma to accommodate language switching without text clipping.</li>
+                            <li><strong>UI Treatment:</strong> The UI strictly follows a grounded "2006 card" aesthetic. Avoid modern floating glassmorphism entirely. Panels should feel solid, tactile, and editorial with hard beveled edges.</li>
+                            <li><strong>Typography:</strong> Cormorant Garamond, Source Serif 4, DM Sans, and JetBrains Mono. <em>Note:</em> Sinhala and Tamil characters render larger than Latin at the same font size. All UI elements (buttons, dialogue boxes) must use flexible auto-layout in Figma to accommodate language switching without text clipping.</li>
                         </ul>
                     </div>
 
@@ -1061,28 +1148,28 @@
                             <thead><tr><th scope="col">Week</th><th scope="col">Phase</th><th scope="col">Deliverables</th><th scope="col">Dependencies</th></tr></thead>
                             <tbody>
                                 <tr><td>Week 1</td><td>Foundation</td><td>Visual Style Bible, Screen Inventory, Asset Checklist, Linear Scene Breakdown, Karunasena Dialogue Drafts.</td><td>GDD finalized. Character Brief completed.</td></tr>
-                                <tr><td>Week 2</td><td>Design</td><td>Figma wireframes (all 16 screens). Kamala/Kumaran dialogues. Component B flows. Figma-to-Godot handoff protocol.</td><td>Week 1 specifications approved.</td></tr>
+                                <tr><td>Week 2</td><td>Design</td><td>Figma wireframes (all 16 screens). Kamala/Kumaran dialogues. Component B flows. Figma-to-DOM handoff protocol.</td><td>Week 1 specifications approved.</td></tr>
                                 <tr><td>Week 3</td><td>Art & Audio</td><td>Generate all 7 backgrounds, character sprites, NPC portraits, UI assets, and audio. Submit dialogue for Sinhala/Tamil review.</td><td>Figma wireframes locked. Visual style locked.</td></tr>
-                                <tr><td>Week 4</td><td>Godot Build (Core)</td><td>Godot scene tree setup. Town Map, Gauge HUD, Week Counter, Dialogic implementation, State save/load system.</td><td>All Week 3 art and audio exported in correct formats.</td></tr>
-                                <tr><td>Week 5</td><td>Godot Build (Content) & Review</td><td>All 7 location scenes built. Cross-zone consequence chains implemented. <strong>Formal Milestone: Legal/Accuracy Review of Electoral Law content.</strong> Component B coded.</td><td>Dialogic system fully functional. Translation review completed.</td></tr>
-                                <tr><td>Week 6</td><td>Testing & Polish</td><td>Manual playtest of 12 consequence chains and 25 achievements. WCAG accessibility checks. Delivery prep.</td><td>Feature freeze. No new mechanics allowed.</td></tr>
+                                <tr><td>Week 4</td><td>DOM Build (Core)</td><td>DOM scene structure setup. Town Map, Gauge HUD, Week Counter, dialogue engine implementation, State save/load system.</td><td>All Week 3 art and audio exported in correct formats.</td></tr>
+                                <tr><td>Week 5</td><td>DOM Build (Content) & Review</td><td>All 7 location scenes built. Cross-zone consequence chains implemented. <strong>Formal Milestone: Legal/Accuracy Review of Electoral Law content.</strong> Component B coded.</td><td>Dialogue system fully functional. Translation review completed.</td></tr>
+                                <tr><td>Week 6</td><td>Testing & Polish</td><td>Manual playtest of 12 consequence chains and 28 achievements. WCAG accessibility checks. Delivery prep.</td><td>Feature freeze. No new mechanics allowed.</td></tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div class="content-block">
                         <h3>18.4 Critical Production Warnings</h3>
-                        <div class="warning-callout" role="alert">
+                        <div class="warning-callout" role="alert" data-label="Notice">
                             <p><strong>Sri Lankan electoral law accuracy:</strong> The voter registration steps, polling rules, and election commission procedures must be verified against real Sri Lankan sources before writing the dialogue. Do not use AI memory for these facts. Cross-check against the Elections Commission of Sri Lanka's official published materials.</p>
                         </div>
-                        <div class="warning-callout" role="alert">
+                        <div class="warning-callout" role="alert" data-label="Notice">
                             <p><strong>Trilingual final review - non-negotiable:</strong> AI translation of Sinhala and Tamil produces a first draft only. One native Sinhala speaker and one native Tamil speaker who understands the electoral context must review all translated content before it goes live. This especially applies to Kumaran's path and all ballot instructions.</p>
                         </div>
-                        <div class="warning-callout" role="alert">
-                            <p><strong>Consequence chain testing:</strong> All 12 consequence chains in Section 8 must be manually triggered and verified by a human player before release. This takes one focused day of playtesting, not a week. Do not skip it. Automated testing cannot replace this - the chains involve state combinations that require playing through as a human.</p>
+                        <div class="warning-callout" role="alert" data-label="Notice">
+                            <p><strong>Consequence chain testing:</strong> All 12 consequence chains in Section 7 must be manually triggered and verified by a human player before release. This takes one focused day of playtesting, not a week. Do not skip it. Automated testing cannot replace this - the chains involve state combinations that require playing through as a human.</p>
                         </div>
-                        <div class="warning-callout" role="alert">
-                            <p><strong>Achievement testing:</strong> All 25 achievements must be manually triggered in a test environment to confirm their conditions fire correctly. Pay particular attention to "The Road Remains" - it must fire on every single ending including the bad ending, and must not fire before an ending is reached.</p>
+                        <div class="warning-callout" role="alert" data-label="Notice">
+                            <p><strong>Achievement testing:</strong> All 28 achievements must be manually triggered in a test environment to confirm their conditions fire correctly. Pay particular attention to "The Road Remains" - it must fire on every single ending including the bad ending, and must not fire before an ending is reached.</p>
                         </div>
                     </div>
                 </div>
@@ -1092,7 +1179,7 @@
                 <header class="doc-header">
                     <span class="section-eyebrow">Design Systems</span>
                     <h2 id="achievements-heading">Achievements &amp; Subtle Clue System</h2>
-                    <p class="lead-text">25 total achievements. 4 hidden. The system exists to give an education game a reason to be replayed.</p>
+                    <p class="lead-text">28 total achievements. 4 hidden. The system exists to give an education game a reason to be replayed.</p>
                 </header>
 
                 <div class="doc-tabs" role="tablist" aria-label="Achievements section tabs">
@@ -1113,9 +1200,9 @@
                             <ul class="clean-list">
                                 <li>Achievements are stored in the same <code>gameState</code> localStorage object as everything else. No external platform required for MVP.</li>
                                 <li>The Achievements screen is accessible from the main menu only. It is not accessible mid-game.</li>
-                                <li>The screen shows all 25 achievements including locked ones. Locked achievements show their name but the description is replaced with a placeholder dash. The player has to earn it to read what it says.</li>
+                                <li>The screen shows all 28 achievements including locked ones. Locked achievements show their name but the description is replaced with a placeholder dash. The player has to earn it to read what it says.</li>
                                 <li>Four achievements are fully hidden when locked - they appear as a blank tile with a question mark. The player does not know these exist until they unlock them.</li>
-                                <li>The screen shows a simple counter: X / 25 Unlocked. No percentage. No rarity. No global statistics. Just the number.</li>
+                                <li>The screen shows a simple counter: X / 28 Unlocked. No percentage. No rarity. No global statistics. Just the number.</li>
                             </ul>
 
                             <h4>Notification Types</h4>
@@ -1137,7 +1224,7 @@
                     
                     <div id="ach-list" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
-                            <h3>20. All 25 Achievements - Complete List</h3>
+                            <h3>20. All 28 Achievements - Complete List</h3>
                             <table class="data-table" aria-label="Complete achievement list">
                                 <thead>
                                     <tr><th scope="col">Name</th><th scope="col">Description (visible after unlock)</th><th scope="col">Trigger Condition</th><th scope="col">Notification Type</th></tr>
@@ -1224,7 +1311,7 @@
                                 <p class="note-text"><em>He does not look up. He does not explain. That is the entire clue.</em></p>
                             </div>
 
-                            <div class="content-block" style="background: var(--bg-surface, #F1F5F9); border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem;">
+                            <div class="content-block" style="background: var(--c-surface); border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem;">
                                 <h4>Implementation Note for Developers</h4>
                                 <p>Each clue fires exactly once per playthrough and is tracked by a boolean flag in gameState:</p>
                                 <pre class="code-block" style="margin-top: 0.75rem;"><code>flags: {
@@ -1257,13 +1344,13 @@
                             <li>All 6 secret content pieces: Road File, 1977 Receipt, Manifesto Comparison, Sergeant's Transfer, Bulletin Board Thread, Skeptics Cafe.</li>
                             <li>Full misinformation mechanic with all 6 Uncle Sirisena messages and all 4 response options.</li>
                             <li>3 subtle clue dialogues as specified in the Clue System.</li>
-                            <li>All 25 achievements with correct trigger conditions and notification types.</li>
+                            <li>All 28 achievements with correct trigger conditions and notification types.</li>
                             <li>Component B facilitator tool with real-time session management, WebSocket communication, and CSV export.</li>
                             <li>Trilingual support: English, Sinhala, Tamil - all UI, all dialogue, all system text.</li>
                             <li>Standard difficulty mode only.</li>
                             <li>Web browser delivery only - no Android application in v1.0.</li>
                             <li>Analytics dashboard with all 13 events from Section 16 tracked and accessible.</li>
-                            <li>WCAG accessibility compliance as specified in Section 14.</li>
+                            <li>WCAG accessibility compliance as specified in Section 17.</li>
                             <li>Unencrypted source code delivered via GitHub repository.</li>
                         </ul>
                     </div>
@@ -1399,7 +1486,7 @@
                         <div class="content-block">
                             <h3>25. Contributions &amp; Co-Creation</h3>
                             
-                            <div class="warning-callout" style="background: var(--c-surface-alt); border-color: var(--c-border-strong);" role="status">
+                            <div class="warning-callout" style="background: var(--c-surface-alt); border-color: var(--c-border-strong);" role="status" data-label="Context">
                                 <h4 style="color: var(--c-garnet); margin-bottom: var(--sp-2); border: none; padding: 0;">An Independent, Purpose-Driven Project</h4>
                                 <p>This game is a completely independent, unfunded initiative. The project has been in active development since <strong>April 28th, 2026</strong>, with over <strong>400+ hours</strong> invested into the engine, design, and narrative logic.</p>
                                 <p style="margin-top: var(--sp-3);">I am building this because you rarely see games tackling civic realism and systemic literacy in Sri Lanka. My ultimate goal is to help shape more informed citizens, inspire local game developers, and prove that interactive media can be a powerful educational tool. Currently, there is no financial backing or studio budget—if I had the funds, everyone would be paid for their craft. Until then, I am looking for passionate collaborators who share this vision to help cross the finish line.</p>

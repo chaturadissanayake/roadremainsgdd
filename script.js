@@ -26,6 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Declared early so activateView() can safely check it during the
+    // state-restore step below, before the D3 network map section
+    // (further down this file) actually assigns it a function.
+    let initNetwork = null;
+    let overlayTimer; // Declared early to prevent Temporal Dead Zone ReferenceError during initial saved-view restoration
+
     // =========================================================================
     // 1. State Persistence & Initialization
     // =========================================================================
@@ -80,10 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
 
     function activateView(btn, targetViewId, shouldScroll) {
+        const targetView = document.getElementById(targetViewId);
+        if (!targetView) return;
+
         // Reset all navigation buttons
         document.querySelectorAll('.nav-btn').forEach(b => {
             b.classList.remove('active');
-            b.removeAttribute('aria-current');
+            b.setAttribute('aria-selected', 'false');
         });
         
         // Hide all views
@@ -91,9 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Activate selected button and view
         btn.classList.add('active');
-        btn.setAttribute('aria-current', 'page');
+        btn.setAttribute('aria-selected', 'true');
 
-        const targetView = document.getElementById(targetViewId);
         if (targetView) {
             targetView.classList.add('active');
             
@@ -111,6 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Force D3.js dimension recalculation if the map becomes visible
         if (targetViewId === 'network-view' && typeof initNetwork === 'function') {
             requestAnimationFrame(() => initNetwork());
+        }
+
+        if (btn.dataset.specificTab) {
+            requestAnimationFrame(() => {
+                const tabBtn = document.querySelector(`[data-tab-target="${btn.dataset.specificTab}"]`);
+                if (tabBtn) activateTab(tabBtn);
+            });
         }
 
         // Reset scroll position for the new view
@@ -151,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Activate selected
-        btn.classList.add('active');
+        btn.classList.add('active', 'visited');
         btn.setAttribute('aria-selected', 'true');
         const targetContent = document.getElementById(targetId);
         if (targetContent) {
@@ -160,15 +175,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleLogicTree(btn) {
-        const consequence = btn.querySelector('.consequence');
+        const consequenceId = btn.getAttribute('aria-controls');
+        const consequence = document.getElementById(consequenceId);
         const isExpanded = btn.getAttribute('aria-expanded') === 'true';
         
         // Close siblings cleanly within the same decision node
         btn.closest('.choices').querySelectorAll('.btn-interact').forEach(sib => {
             if (sib !== btn) {
                 sib.setAttribute('aria-expanded', 'false');
-                const sibCons = sib.querySelector('.consequence');
-                if (sibCons) sibCons.classList.remove('show');
+                const sibConsId = sib.getAttribute('aria-controls');
+                const sibCons = document.getElementById(sibConsId);
+                if (sibCons) {
+                    sibCons.classList.remove('show');
+                    sibCons.hidden = true;
+                }
             }
         });
 
@@ -176,34 +196,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (consequence) {
             btn.setAttribute('aria-expanded', !isExpanded);
             consequence.classList.toggle('show', !isExpanded);
+            consequence.hidden = isExpanded;
         }
     }
 
     // --- Keyboard Accessibility for ARIA Tabs ---
     document.body.addEventListener('keydown', (e) => {
-        if (e.target.classList.contains('tab-btn')) {
+        const isTabBtn = e.target.classList.contains('tab-btn');
+        const isNavBtn = e.target.classList.contains('nav-btn');
+        if (isTabBtn || isNavBtn) {
             const btn = e.target;
-            const tabsContainer = btn.closest('[role="tablist"]');
-            if (!tabsContainer) return;
+            const containerSelector = isTabBtn ? '[role="tablist"]' : '[role="tablist"]';
+            const container = btn.closest(containerSelector);
+            if (!container) return;
             
-            const tabs = Array.from(tabsContainer.querySelectorAll('.tab-btn'));
-            const idx = tabs.indexOf(btn);
+            const btnClass = isTabBtn ? '.tab-btn' : '.nav-btn';
+            const btns = Array.from(container.querySelectorAll(btnClass));
+            const idx = btns.indexOf(btn);
             let nextBtn;
 
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                nextBtn = tabs[(idx + 1) % tabs.length];
+                nextBtn = btns[(idx + 1) % btns.length];
             } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                nextBtn = tabs[(idx - 1 + tabs.length) % tabs.length];
+                nextBtn = btns[(idx - 1 + btns.length) % btns.length];
             } else if (e.key === 'Home') {
-                nextBtn = tabs[0];
+                nextBtn = btns[0];
             } else if (e.key === 'End') {
-                nextBtn = tabs[tabs.length - 1];
+                nextBtn = btns[btns.length - 1];
             }
 
             if (nextBtn) { 
                 e.preventDefault(); 
                 nextBtn.focus(); 
-                activateTab(nextBtn); 
+                if (isTabBtn) activateTab(nextBtn);
+                else activateView(nextBtn, nextBtn.getAttribute('data-view-target'), true);
             }
         }
     });
@@ -212,14 +238,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. D3.js Systems Network Map - Stabilized & Bounded
     // =========================================================================
     let networkNodes, networkLinks, simulation, svg, zoomBehavior;
-    let initNetwork = null;
     
     // Hard-coded visual theme to match the brutalist CSS updates
     const themeColors = { 
         character: "#8B1A2B", // Garnet
         npc: "#000000",       // Black
         location: "#B8860B",  // Dark Gold
-        scenario: "#FFFFFF"   // White (Requires thick stroke to be visible)
+        scenario: "#F5EDD8"   // Pale Ochre (Improves contrast against canvas)
     };
     
     const gameData = {
@@ -329,8 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
         networkNodes.append('text')
             .attr('dy', d => (d.type === 'character' ? 32 : 26))
             .attr('text-anchor', 'middle')
-            .text(d => d.label)
-            .style('font-family', 'Inter, sans-serif')
+            .text(d => d.shortName)
+            .style('font-family', "'DM Sans', system-ui, sans-serif")
             .style('font-size', '12px')
             .style('font-weight', '800')
             .style('fill', '#000000')
@@ -401,7 +426,12 @@ document.addEventListener('DOMContentLoaded', () => {
             networkNodes.style('opacity', 1); 
             networkLinks.style('stroke-opacity', 0.8);
             const panel = document.getElementById('selectedInfo');
-            if (panel) panel.innerHTML = `<p class="empty-state">Click on any node to view details.</p>`;
+            if (panel) {
+                const p = document.createElement('p');
+                p.className = 'empty-state';
+                p.textContent = 'Click on any node to view details.';
+                panel.replaceChildren(p);
+            }
         });
 
         // Reset button functionality
@@ -448,19 +478,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 simulation.alpha(0.3).restart(); 
             }
         };
-
-        // Window resize observer (throttled)
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                const nwView = document.getElementById('network-view');
-                if (nwView && nwView.classList.contains('active')) {
-                    initNetwork();
-                }
-            }, 150);
-        });
     }
+
+    // Global Window resize observer & Dynamic Heights
+    let resizeTimer;
+    function updateDynamicHeights() {
+        const header = document.querySelector('.sidebar-header');
+        if (header) {
+            document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
+        }
+    }
+    updateDynamicHeights();
+
+    window.addEventListener('resize', () => {
+        updateDynamicHeights();
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            const nwView = document.getElementById('network-view');
+            if (nwView && nwView.classList.contains('active') && typeof initNetwork === 'function') {
+                initNetwork();
+            }
+        }, 150);
+    });
 
     function handleNetworkFilter(btn) {
         if (!networkNodes) return;
@@ -495,7 +534,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.setAttribute('aria-expanded', 'false');
         if (DOM.sidebarOverlay) { 
             DOM.sidebarOverlay.classList.remove('visible'); 
-            setTimeout(() => { DOM.sidebarOverlay.style.display = 'none'; }, 200); 
+            clearTimeout(overlayTimer);
+            overlayTimer = setTimeout(() => { DOM.sidebarOverlay.style.display = 'none'; }, 200); 
         }
         document.body.classList.remove('menu-open');
     }
@@ -511,6 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.classList.add('menu-open');
                 
                 if (DOM.sidebarOverlay) { 
+                    clearTimeout(overlayTimer);
                     DOM.sidebarOverlay.style.display = 'block'; 
                     requestAnimationFrame(() => DOM.sidebarOverlay.classList.add('visible')); 
                 }
@@ -522,14 +563,45 @@ document.addEventListener('DOMContentLoaded', () => {
         DOM.sidebarOverlay.addEventListener('click', closeMobileMenu);
     }
 
-    // Scroll Observer for Back to Top Button
-    if (DOM.mainContent && DOM.backToTop) {
+    // Scroll Observer for Back to Top Button & Progress
+    if (DOM.mainContent) {
+        const scrollProgressBar = document.createElement('div');
+        scrollProgressBar.className = 'scroll-progress';
+        DOM.mainContent.appendChild(scrollProgressBar);
+
         DOM.mainContent.addEventListener('scroll', () => { 
-            DOM.backToTop.classList.toggle('visible', DOM.mainContent.scrollTop > 300); 
+            if (DOM.backToTop) {
+                DOM.backToTop.classList.toggle('visible', DOM.mainContent.scrollTop > 300); 
+            }
+            const scrollHeight = DOM.mainContent.scrollHeight - DOM.mainContent.clientHeight;
+            const progress = scrollHeight > 0 ? (DOM.mainContent.scrollTop / scrollHeight) * 100 : 0;
+            scrollProgressBar.style.width = progress + '%';
         }, { passive: true });
         
-        DOM.backToTop.addEventListener('click', () => {
-            DOM.mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+        if (DOM.backToTop) {
+            DOM.backToTop.addEventListener('click', () => {
+                DOM.mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    }
+
+    // Delta Table Grouping toggle
+    const deltaTable = document.querySelector('.delta-table');
+    if (deltaTable) {
+        deltaTable.querySelectorAll('tr').forEach(tr => {
+            if (tr.classList.contains('table-group')) {
+                tr.style.cursor = 'pointer';
+                tr.setAttribute('aria-expanded', 'true');
+                tr.addEventListener('click', () => {
+                    const isExpanded = tr.getAttribute('aria-expanded') === 'true';
+                    tr.setAttribute('aria-expanded', !isExpanded);
+                    let next = tr.nextElementSibling;
+                    while(next && !next.classList.contains('table-group')) {
+                        next.style.display = isExpanded ? 'none' : '';
+                        next = next.nextElementSibling;
+                    }
+                });
+            }
         });
     }
 
@@ -538,5 +610,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pdfBtn) {
         pdfBtn.addEventListener('click', () => window.print());
     }
+
+    // Scroll indicators for horizontal tabs
+    document.querySelectorAll('.doc-tabs').forEach(tabs => {
+        const checkScroll = () => {
+            const isAtEnd = Math.ceil(tabs.scrollLeft + tabs.clientWidth) >= tabs.scrollWidth;
+            tabs.classList.toggle('is-at-end', isAtEnd);
+        };
+        tabs.addEventListener('scroll', checkScroll, { passive: true });
+        window.addEventListener('resize', checkScroll);
+        setTimeout(checkScroll, 100);
+    });
 
 });

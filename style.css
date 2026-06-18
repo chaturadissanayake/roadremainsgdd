@@ -244,6 +244,18 @@ code {
     width: 100%;
 }
 
+.scroll-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--c-garnet);
+    width: 0%;
+    z-index: 100;
+    transition: width 0.1s;
+    pointer-events: none;
+}
+
 /* ============================================================================
    SIDEBAR NAVIGATION — DARK MAHOGANY
    ============================================================================ */
@@ -378,8 +390,8 @@ code {
     gap: var(--sp-2);
     width: 100%;
     min-height: 44px;
-    background: var(--c-garnet);
-    border: 1px solid var(--c-garnet);
+    background: var(--c-ochre);
+    border: 1px solid var(--c-ochre);
     padding: 10px var(--sp-4);
     font-family: var(--font-ui);
     font-size: 12px;
@@ -394,7 +406,7 @@ code {
 }
 
 .nav-cta-btn:hover {
-    background: var(--c-garnet-hover);
+    background: var(--c-ink);
     color: #fff;
 }
 
@@ -603,8 +615,25 @@ code {
     display: none;
 }
 
+.doc-tabs::after {
+    content: '';
+    position: sticky;
+    right: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, var(--c-paper));
+    pointer-events: none;
+    flex-shrink: 0;
+    opacity: 1;
+    transition: opacity var(--t-fast);
+}
+
+.doc-tabs.is-at-end::after {
+    opacity: 0;
+}
+
 .doc-tabs .tab-btn {
     background: transparent;
+    position: relative;
     border: none;
     border-bottom: 2px solid transparent;
     padding: var(--sp-3) var(--sp-5);
@@ -632,6 +661,17 @@ code {
     border-bottom-color: var(--c-garnet);
 }
 
+.doc-tabs .tab-btn.visited::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--c-ink-dim);
+}
+
 /* Network map sub-tabs — slightly different style */
 .sub-tabs {
     display: flex;
@@ -652,6 +692,7 @@ code {
 
 .sub-tabs .tab-btn {
     background: var(--c-surface);
+    position: relative;
     border: 1px solid var(--c-border);
     border-radius: 0;
     padding: 8px 14px;
@@ -842,7 +883,7 @@ code {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); /* Increased from 280px to make images much larger */
+    grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); /* Increased from 280px to make images much larger */
     gap: var(--sp-6); /* Slightly increased gap so they have room to breathe */
     margin-top: var(--sp-6);
 }
@@ -924,6 +965,13 @@ code {
 }
 
 /* Table group row (section dividers within tables) */
+.table-group td::after {
+    content: ' ▼';
+    float: right;
+}
+.table-group[aria-expanded="false"] td::after {
+    content: ' ►';
+}
 .table-group td {
     background: var(--c-dark) !important;
     color: var(--c-ink-light) !important;
@@ -1085,6 +1133,17 @@ code {
     border-color: var(--c-garnet);
 }
 
+.btn-interact::after {
+    content: ' ▼';
+    float: right;
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+.btn-interact[aria-expanded="true"]::after {
+    content: ' ▲';
+}
+
 .btn-interact[aria-expanded="true"] {
     background: var(--c-paper);
     color: var(--c-ink);
@@ -1092,12 +1151,17 @@ code {
     z-index: 1;
 }
 
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .consequence {
     display: none;
-    margin: var(--sp-4) calc(var(--sp-5) * -1) calc(var(--sp-4) * -1);
+    margin: 0;
     padding: var(--sp-4) var(--sp-5);
-    border: none;
-    border-top: 1px solid var(--c-border);
+    border: 1px solid var(--c-border);
+    border-top: none;
     font-size: 13px;
     line-height: 1.65;
     color: var(--c-ink);
@@ -1376,7 +1440,7 @@ code {
 }
 
 .warning-callout::before {
-    content: 'Notice';
+    content: attr(data-label);
     display: inline-block;
     margin-bottom: var(--sp-3);
     background: var(--c-garnet);
@@ -1528,19 +1592,8 @@ code {
         border-top: none;
     }
 
-    .network-sidebar .sub-tabs {
-        display: none;
-    }
-
     .network-sidebar .tab-content-container {
         padding: var(--sp-4);
-        display: flex;
-        gap: var(--sp-6);
-    }
-
-    .network-sidebar .sub-tab-content {
-        display: block !important;
-        flex: 1;
     }
 }
 
@@ -1612,8 +1665,8 @@ code {
         width: 100%;
         background: var(--c-dark);
         border-bottom: 2px solid var(--c-garnet);
-        max-height: calc(100vh - 72px);
-        max-height: calc(100dvh - 72px);
+        max-height: calc(100vh - var(--header-h, 72px));
+        max-height: calc(100dvh - var(--header-h, 72px));
         overflow-y: auto;
         overflow-x: hidden;
         display: none;
@@ -1650,7 +1703,9 @@ code {
     }
 
     .nav-group-title {
-        display: none; /* Hidden to declutter the menu */
+        display: block;
+        padding: var(--sp-3) var(--sp-5) var(--sp-2);
+        border-bottom: 1px solid var(--c-dark-hover);
     }
 
     .nav-btn {
@@ -1688,7 +1743,7 @@ code {
     }
 
     .nav-cta-btn {
-        background: var(--c-garnet);
+        background: var(--c-ochre);
         color: #fff;
         border: none;
         padding: 14px;
@@ -1728,6 +1783,12 @@ code {
    ============================================================================ */
 
 @media (max-width: 640px) {
+    .character-profile .editorial-figure.portrait {
+        float: none !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+    }
+
     :root {
         --sp-12: 2.5rem;
         --sp-10: 2rem;
@@ -1760,7 +1821,7 @@ code {
     }
 
     .network-canvas-container {
-        height: 50vh;
+        height: 50dvh;
         min-height: 320px;
     }
 
@@ -1775,7 +1836,7 @@ code {
     }
 
     .back-to-top {
-        bottom: var(--sp-5);
+        bottom: max(var(--sp-5), calc(env(safe-area-inset-bottom) + var(--sp-3)));
         right: var(--sp-5);
     }
 
