@@ -329,14 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
         networkNodes.append('text')
             .attr('dy', d => (d.type === 'character' ? 32 : 26))
             .attr('text-anchor', 'middle')
-            .text(d => d.shortName)
+            .text(d => d.label)
             .style('font-family', 'Inter, sans-serif')
             .style('font-size', '12px')
             .style('font-weight', '800')
             .style('fill', '#000000')
-            .style('pointer-events', 'none')
-            // Heavy white text-shadow acts as a backdrop against the blueprint lines
-            .style('text-shadow', '1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff');
+            .style('pointer-events', 'none');
 
         simulation.on('tick', () => {
             // Hard bounds clamping to prevent nodes from drifting entirely off canvas

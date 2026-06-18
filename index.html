@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road Remains - Game Design Document v2.0.2</title>
+    <title>Road Remains — Game Design Document v2.0.2</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Editorial & structural typography stack -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Warm civic typography stack -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -23,7 +23,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-header-left">
                     <h1>Road Remains</h1>
-                    <span class="version-badge">GDD v2.0.2</span>
+                    <span class="sidebar-tagline">A Civic Realism Experience</span>
                 </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="navSection" aria-label="Toggle navigation menu">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -55,11 +55,18 @@
                     <div class="nav-group-title" id="nav-design-label">Design Systems</div>
                     <button class="nav-btn" data-view-target="achievements-view" aria-describedby="nav-design-label">Achievements &amp; Clues</button>
                     <button class="nav-btn" data-view-target="scope-view" aria-describedby="nav-design-label">Scope &amp; Delivery</button>
+                    <button class="nav-btn" data-view-target="gallery-view" aria-describedby="nav-design-label">Visual Progress &amp; Gallery</button>
                 </div>
 
                 <div class="nav-group">
                     <div class="nav-group-title" id="nav-status-label">Project Status</div>
                     <button class="nav-btn" data-view-target="status-view" aria-describedby="nav-status-label">Patch Notes &amp; Roadmap</button>
+                </div>
+                
+                <div class="nav-group cta-group">
+                    <button class="nav-btn nav-cta-btn" data-view-target="status-view" onclick="setTimeout(() => document.querySelector('[data-tab-target=\'status-involved\']').click(), 50)">
+                        Become a Contributor
+                    </button>
                 </div>
             </div>
 
@@ -84,10 +91,16 @@
             </div>
 
             <section id="overview-view" class="view-section active" aria-labelledby="overview-heading">
-                <header class="doc-header">
-                    <h2 id="overview-heading">Overview &amp; Vision Statement</h2>
-                    <p class="lead-text">Status: Alpha / Production Build (v2.0.2) &nbsp;|&nbsp; Date: 17 June 2026</p>
-                </header>
+                
+                <!-- Hero Cover -->
+                <div class="hero-cover">
+                    <span class="hero-eyebrow">Chatura Dissanayake presents</span>
+                    <h1 class="hero-title">Road Remains</h1>
+                    <p class="hero-subtitle">Game Design Document</p>
+                    <p class="hero-meta">A Civic Realism Experience &nbsp;|&nbsp; v2.0.2 &nbsp;|&nbsp; 18 June 2026</p>
+                </div>
+
+                <h2 id="overview-heading" style="margin-top: var(--sp-6);">Overview &amp; Vision Statement</h2>
 
                 <div class="doc-body">
 
@@ -97,39 +110,11 @@
                         <p>The experience establishes misinformation resilience structurally through consequence. The layout shifts, administrative processing queues swell, and civic infrastructure degrades reactively based on data handling actions across a six-week timeline.</p>
                         <p>The atmosphere is grounded in raw, un-embellished domestic realism, capturing localized administrative environments, personal information ecosystems, and structural inertia. The experience rejects didactic instruction, forcing the player to parse systemic accuracy firsthand.</p>
                         <div class="meta-specs" role="list" aria-label="Game specifications">
-                            <span class="spec-tag" role="listitem">Target session length: 15 to 20 minutes</span>
+                            <span class="spec-tag" role="listitem">Target session length: 30 to 40 minutes</span>
                             <span class="spec-tag" role="listitem">Designed for structural replay paths</span>
                             <span class="spec-tag" role="listitem">Available in English, Sinhala, and Tamil</span>
-                            <span class="spec-tag" role="listitem">Platform Architecture: Vanilla JavaScript DOM Engine</span>
+                            <span class="spec-tag" role="listitem">Architecture: Vanilla JavaScript DOM Engine</span>
                         </div>
-                    </div>
-
-                    <div class="content-block">
-                        <h3>1.2 Development Journey &amp; Patch Notes</h3>
-                        <p>We are still in the early stages of development. Here is how the project has evolved to reach this point:</p>
-                        <table class="data-table" aria-label="Patch Notes">
-                            <thead>
-                                <tr><th scope="col">Version</th><th scope="col">Focus</th><th scope="col">Key Changes</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><strong>v1.0</strong></td><td>Pre-Production &amp; Prototyping</td><td>Original concept pitched as "Play. Learn. Vote." Initial prototype built using the Godot 2D Engine and the Dialogic plugin. Town map limited to 7 locations.</td></tr>
-                                <tr><td><strong>v2.0</strong></td><td>The Web Pivot</td><td>Project renamed to "Road Remains." Godot engine scrapped in favor of a lightweight, accessible Vanilla JS and HTML5 DOM engine. Map expanded to 13 locations for deeper world-building.</td></tr>
-                                <tr><td><strong>v2.0.2</strong></td><td>Alpha Core Loop</td><td>Integrated custom Visual Novel UI, WhatsApp media cards, and the strict 6-week countdown state machine. Karunasena's path made fully playable. Achievements system built.</td></tr>
-                            </tbody>
-                        </table>
-                        
-                        <h4 style="margin-top: var(--sp-6);">Current Limitations</h4>
-                        <ul class="clean-list">
-                            <li><strong>Web Only:</strong> The game currently only runs in web browsers. Native Android/APK builds are deferred to post-launch.</li>
-                            <li><strong>English Only (For Now):</strong> While the trilingual UI framework is active, the Sinhala and Tamil dialogue content is still being translated. Those languages are currently locked.</li>
-                        </ul>
-
-                        <h4 style="margin-top: var(--sp-6);">How to Help</h4>
-                        <p>As an early-stage project, we need community support to reach the finish line:</p>
-                        <ul class="clean-list">
-                            <li><strong>People:</strong> We are looking for native Sinhala and Tamil translators with an understanding of Sri Lankan electoral law, QA playtesters, and Vanilla JS contributors.</li>
-                            <li><strong>Donations:</strong> Funding is required to support server hosting, commission professional translations, and finalize audio/visual assets.</li>
-                        </ul>
                     </div>
 
                     <div class="content-block">
@@ -177,7 +162,7 @@
                     </div>
 
                     <div class="content-block">
-                        <h3>What This Game Is Not</h3>
+                        <h3>1.1 What This Game Is Not</h3>
                         <ul class="clean-list">
                             <li><strong>It does not tell the player who to vote for.</strong> Mahinda Bandara is a fictional candidate. No real political party is named or depicted. The Elections Commission of Sri Lanka is referenced as an institution but no real officials are depicted.</li>
                             <li><strong>It does not claim the electoral system is perfect.</strong> Nandadasa Mahaththaya's Road File exists precisely to show that correct process and good outcomes are not the same thing.</li>
@@ -192,6 +177,7 @@
 
             <section id="world-view" class="view-section" aria-labelledby="world-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Documentation</span>
                     <h2 id="world-heading">World, Locations &amp; Characters</h2>
                 </header>
 
@@ -209,34 +195,87 @@
                             <h3>2. The Town - Alupotha</h3>
                             <p>Alupotha means Middle Town. It is a composite of everywhere in Sri Lanka - not Colombo, not a village, but the kind of semi-urban junction town that most Sri Lankans either come from or pass through. There is a kovil on one side of the main road and a temple on the other. One traffic light that is technically functional. A bus that comes when it comes. Coconut trees everywhere, including in places where coconut trees probably should not be.</p>
                             <p>The game world is presented as a clickable illustrated town map scaled dynamically on a 1920x1080 canvas. All 13 locations are mapped from the beginning. Some are interactive hubs, while others provide atmospheric depth. The player navigates by clicking a location on the map. The week countdown and three gauges are always visible at the top of the screen regardless of which location the player is in.</p>
+                            <figure class="editorial-figure">
+                                <img src="assets/fullmap.webp" alt="Alupotha Town Map Wireframe">
+                                <figcaption class="editorial-caption">Fig 1. Alupotha Map Layout (Draft)</figcaption>
+                            </figure>
                         </div>
 
                         <div class="content-block">
                             <h3>3. The 13 Map Locations</h3>
                             <p class="muted-text">The map has been expanded to 13 locations to improve atmospheric depth and world-building. Interactive hubs drive the narrative, while atmospheric nodes provide texture.</p>
 
-                            <div class="location-card">
-                                <h4>Interactive Hubs</h4>
-                                <ul class="clean-list">
-                                    <li><strong>Grama Sevaka Office (loc1):</strong> Procedural core. Voter registration, NIC issues.</li>
-                                    <li><strong>Uncle Sirisena's House (loc2):</strong> Main misinformation mechanic.</li>
-                                    <li><strong>EC Notice Board (loc3):</strong> The verification authority. Updates automatically.</li>
-                                    <li><strong>Mudalali's Boutique (loc4):</strong> Informal information exchange and junction shop.</li>
-                                    <li><strong>Police Station (loc6):</strong> Election law enforcement and violation reporting.</li>
-                                    <li><strong>Campaign Tent (loc8):</strong> Political promises and manifesto comparison.</li>
-                                    <li><strong>Skeptics Cafe (loc7):</strong> Hidden location unlocked after 3 successful verifications.</li>
-                                    <li><strong>Polling Station (loc9):</strong> Locked until Week 0. The climax of the game.</li>
-                                </ul>
+                            <h4 style="margin-top: var(--sp-6); margin-bottom: var(--sp-4); font-family: var(--font-ui); color: var(--c-garnet); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--c-border); padding-bottom: var(--sp-2);">Interactive Hubs</h4>
+                            <div class="doc-grid" style="margin-bottom: var(--sp-8);">
+                                <div class="grid-item">
+                                    <h4>Grama Sevaka Office</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/gramasewaka.webp" alt="Grama Sevaka Office"></figure>
+                                    <p>Procedural core. Voter registration, NIC issues.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Uncle Sirisena's House</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/uncle.webp" alt="Uncle Sirisena's House"></figure>
+                                    <p>Main misinformation mechanic.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>EC Notice Board</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/board.webp" alt="EC Notice Board"></figure>
+                                    <p>The verification authority. Updates automatically.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Mudalali's Boutique</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/market.webp" alt="Mudalali's Boutique"></figure>
+                                    <p>Informal information exchange and junction shop.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Police Station</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/police.webp" alt="Police Station"></figure>
+                                    <p>Election law enforcement and violation reporting.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Campaign Tent</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/tent.webp" alt="Campaign Tent"></figure>
+                                    <p>Political promises and manifesto comparison.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Skeptics Cafe</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/cafe.webp" alt="Skeptics Cafe"></figure>
+                                    <p>Hidden location unlocked after 3 successful verifications.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Polling Station</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/school.webp" alt="Polling Station"></figure>
+                                    <p>Locked until Week 0. The climax of the game.</p>
+                                </div>
                             </div>
 
-                            <div class="location-card">
-                                <h4>Atmospheric / Secondary Nodes</h4>
-                                <ul class="clean-list">
-                                    <li><strong>Kovil (loc_kovil) &amp; Temple (loc_temple):</strong> Peaceful spots. "Whatever you came here for, it is not here."</li>
-                                    <li><strong>The Bar (loc_bar):</strong> Quiet daytime spot. "No election talk. Owner's orders."</li>
-                                    <li><strong>Community Hall (loc5):</strong> Empty space with notices for next week.</li>
-                                    <li><strong>Boarding House (loc_boarding):</strong> Kumaran's residence. Includes bilingual paperwork hurdles for his specific path.</li>
-                                </ul>
+                            <h4 style="margin-top: var(--sp-6); margin-bottom: var(--sp-4); font-family: var(--font-ui); color: var(--c-garnet); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--c-border); padding-bottom: var(--sp-2);">Atmospheric / Secondary Nodes</h4>
+                            <div class="doc-grid" style="margin-bottom: var(--sp-8);">
+                                <div class="grid-item">
+                                    <h4>Kovil</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/kovil.webp" alt="Kovil"></figure>
+                                    <p>Peaceful spot. "Whatever you came here for, it is not here."</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Temple</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/temple.webp" alt="Temple"></figure>
+                                    <p>Peaceful spot. "Whatever you came here for, it is not here."</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>The Bar</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/bar.webp" alt="The Bar"></figure>
+                                    <p>Quiet daytime spot. "No election talk. Owner's orders."</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Community Hall</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/meeting.webp" alt="Community Hall"></figure>
+                                    <p>Empty space with notices for next week.</p>
+                                </div>
+                                <div class="grid-item">
+                                    <h4>Boarding House</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/boarding.webp" alt="Boarding House"></figure>
+                                    <p>Kumaran's residence. Includes bilingual paperwork hurdles for his specific path.</p>
+                                </div>
                             </div>
 
                         </div>
@@ -250,6 +289,10 @@
                             <div class="character-profile">
                                 <h4>Karunasena (Playable MVP)</h4>
                                 <p class="char-meta">19 years old &nbsp;|&nbsp; First-time voter from Kurunegala</p>
+                                <figure class="editorial-figure portrait" style="max-width: 240px; float: right; margin: 0 0 var(--sp-4) var(--sp-4);">
+                                    <img src="assets/char_karunasena_neutral.webp" alt="Karunasena Sprite">
+                                    <figcaption class="editorial-caption">Karunasena Default</figcaption>
+                                </figure>
                                 <p><strong>Background:</strong> He has just moved to Alupotha to live with his uncle while attending a vocational training programme. He is not particularly political. He has opinions but is not sure yet where they come from. Uncle Sirisena is his actual uncle, which means the WhatsApp group is not optional - he is a member by default and receives every notification in the game whether he wants to or not.</p>
                                 <p><strong>Perk - Curiosity:</strong> At every location he gets one additional dialogue option the other characters do not - he can ask why something works the way it does and receive a deeper explanation. This makes him the character best suited to players who want to understand the system from the ground up.</p>
                                 <p><strong>Disadvantage - Exposure:</strong> Because Uncle Sirisena is family, ignoring his messages has a social cost. Civic Trust takes a penalty of -10 CT for every 3 messages Karunasena dismisses without engaging. He cannot simply opt out of the misinformation - he has to navigate it.</p>
@@ -260,6 +303,10 @@
                             <div class="character-profile">
                                 <h4>Kamala (Locked - Coming Soon)</h4>
                                 <p class="char-meta">34 years old &nbsp;|&nbsp; School teacher - has voted before, but inattentively</p>
+                                <figure class="editorial-figure portrait" style="max-width: 240px; float: right; margin: 0 0 var(--sp-4) var(--sp-4);">
+                                    <img src="assets/char_kamala_neutral.webp" alt="Kamala Sprite">
+                                    <figcaption class="editorial-caption">Kamala Default</figcaption>
+                                </figure>
                                 <p><strong>Background:</strong> She has lived in Alupotha for eight years. She knows most people. She voted in the last two elections and filled in her ballot the way she always had, assuming she was doing it correctly. She was mostly right. Mostly.</p>
                                 <p><strong>Perk - Network:</strong> She has social capital in every location - queues are slightly shorter, characters share information more readily, and she occasionally gets warned about a problem before it becomes one.</p>
                                 <p><strong>Disadvantage - Assumption:</strong> The game periodically gives her information she believes she already knows but has subtly wrong - a detail about the preference vote system, a rule about polling station conduct, a deadline she thought was later than it is. She must recognise and correct these assumptions to maintain her Information Health score. Correcting a false assumption gives a +15 IH bonus. The lesson is that experience without attention accumulates errors.</p>
@@ -270,6 +317,10 @@
                             <div class="character-profile">
                                 <h4>Kumaran (Locked - Coming Soon)</h4>
                                 <p class="char-meta">28 years old &nbsp;|&nbsp; Migrant worker from the Northern Province - Tamil-speaking</p>
+                                <figure class="editorial-figure portrait" style="max-width: 240px; float: right; margin: 0 0 var(--sp-4) var(--sp-4);">
+                                    <img src="assets/char_kumaran_neutral.webp" alt="Kumaran Sprite">
+                                    <figcaption class="editorial-caption">Kumaran Default</figcaption>
+                                </figure>
                                 <p><strong>Background:</strong> He moved to Alupotha two years ago for work. His voter registration is in his home district. He needs to transfer it. The process involves more steps than it should and some of those steps involve forms that exist only in Sinhala, being processed by an officer who is doing his best but whose Tamil is limited. Kumaran's story is harder. It is also more complete.</p>
                                 <p><strong>Perk - Persistence:</strong> He earns significantly more points for completing each step because each step costs him more. He also unlocks a separate thread of content - conversations and situations that only arise when the player is navigating the system in a second language. The bilingual ballot. The Tamil notice on the Elections Commission board that contradicts the Sinhala notice because it was printed at a different time. The polling officer who mispronounced his name on the register.</p>
                                 <p><strong>Disadvantage - Distance:</strong> He does not have the social network Kamala has or the family anchor Karunasena has. He has fewer informal information sources, which makes accurate information harder to find and misinformation slightly harder to counter without the Elections Commission board.</p>
@@ -311,30 +362,39 @@
                             <div class="doc-grid">
                                 <div class="grid-item">
                                     <h4>Nandadasa Mahaththaya</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;">
+                                        <img src="assets/npc_nandadasa_neutral.webp" alt="Nandadasa Portrait">
+                                    </figure>
                                     <p>The grama sevaka. Has been at this posting since 1994. Processes approximately 40 files per day at a consistent pace that has never been observed to vary based on external conditions including urgency, rainfall, or the proximity of election day. He is not obstructing anyone. He is being thorough, which in this context is indistinguishable from obstruction. He secretly thinks the democratic system is one of the better things human beings have managed to build and would be embarrassed if anyone found out.</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>Uncle Sirisena</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="assets/npc_uncle_neutral.webp" alt="Uncle Sirisena Portrait"></figure>
                                     <p>Retired. Connected to everything. Correct about nothing election-related. Runs the WhatsApp group Alupotha Patriots with 847 members. Has a television that is always on. Has a framed photo of every president since 1978, including some he later removed from the wall and then quietly put back. Feeds everyone who enters his house regardless of the political situation. His motivations are entirely good. His information hygiene is catastrophic.</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>Sergeant Wickramasinghe</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="assets/npc_sergeant_talking.webp" alt="Sergeant Wickramasinghe Portrait"></figure>
                                     <p>Eleven years at this posting. Has seen voter fraud attempts, illegal poster campaigns, election violence, and one incident involving a candidate's supporter and a loudhailer that he is not at liberty to discuss. He finds most situations mildly amusing. He gives accurate information efficiently. He is the most competent person in Alupotha and has made peace with the fact that this does not make him the most influential.</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>Mudalali Perera</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="assets/npc_mudalali_loud.webp" alt="Mudalali Perera Portrait"></figure>
                                     <p>Junction shop owner. Has voted for the same party since 1977 and regards this as a form of integrity. Generous with short eats and political commentary in roughly equal measure. Not malicious. Just very certain and very loud. His father ran this boutique before him. The 1977 receipt is behind the counter. He has never mentioned it to anyone.</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>Mahinda Bandara</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="assets/npc_mahinda_neutral.webp" alt="Mahinda Bandara Portrait"></figure>
                                     <p>Provincial Council candidate. Has been in politics long enough to have several hairstyles documented in public records. Gives out calendars every election cycle with a new photo but the same smile. Has a manifesto. The manifesto has a section about the road. The section about the road has been in every manifesto since 2010, with minor edits. The road section of the 2010 manifesto and the current one are being compared somewhere in this game, if the player looks hard enough.</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>Aunty Soma</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="assets/npc_soma_talking.webp" alt="Aunty Soma Portrait"></figure>
                                     <p>Karunasena's mother. Appears in his storyline directly; referenced by name in the other two characters' storylines. Has voted in every election since she turned eligible in 1983. Does not regard this as exceptional. Regards not voting the same way she regards not eating - technically survivable but why would you. She appears at the beginning of the game and at the end. Her scene at the end, outside the polling station, is the emotional anchor of the whole thing.</p>
                                 </div>
                                 <div class="grid-item full-width">
                                     <h4>The Queue People</h4>
+                                    <figure class="editorial-figure" style="margin-top: 0;"><img src="assets/bg_polling_station.webp" alt="The Queue People Scene"></figure>
                                     <p>At the polling station, three people are around the player in the queue. An elderly woman who needs help locating her name on the voter register. A young man who left his NIC at home and is conducting a crisis in real time. A couple who have discovered they are in the wrong queue and are handling this differently from each other. Helping any of them is optional. The game does not tell you to. It just presents the situation and lets you choose. These three characters represent the highest single-source Voter Participation gains available in the game.</p>
                                 </div>
                             </div>
@@ -345,6 +405,7 @@
 
             <section id="systems-view" class="view-section" aria-labelledby="systems-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Documentation</span>
                     <h2 id="systems-heading">Game Systems, Mechanics &amp; Consequences</h2>
                 </header>
 
@@ -462,7 +523,7 @@
                         </div>
 
                         <div class="content-block">
-                            <h3>Difficulty Modes</h3>
+                            <h3>8.1 Difficulty Modes</h3>
                             <p class="muted-text">Standard mode is the MVP. Hard, Expert, and Speedrun modes are post-launch features. The game state architecture must support them without refactoring - they are not activated in v1.0.</p>
                             <div class="doc-grid">
                                 <div class="grid-item">
@@ -501,6 +562,7 @@
 
             <section id="scenarios-view" class="view-section" aria-labelledby="scenarios-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Documentation</span>
                     <h2 id="scenarios-heading">Scenarios, Misinformation Flow &amp; Endings</h2>
                 </header>
 
@@ -667,36 +729,42 @@
                             <div class="doc-grid">
                                 <div class="grid-item">
                                     <h4>11.1 The Road File</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="The Road File visual asset"></figure>
                                     <p><strong>How to find it:</strong> In the Grama Sevaka Office, click on Nandadasa Mahaththaya's filing cabinet rather than on Nandadasa himself. No prompt is given. The interaction is available from Week 3 onwards.</p>
                                     <p><strong>What happens:</strong> A 90-second exchange. Nandadasa retrieves a thick folder - a paper trail of every road repair application submitted since 2007. Each application was processed correctly. Each was forwarded. Each was received and filed. The road is not fixed because the budget was reallocated at a level above his jurisdiction. He has known this since 2009. He pulls out a thinner folder - his personal correspondence attempting to escalate the issue. He has never mentioned this to anyone because it is not his place.</p>
                                     <p><strong>What it does:</strong> Recontextualises Mahinda Bandara without exonerating him. Also recontextualises Nandadasa entirely. Gauge: +25 IH, +5 CT. Unlocks achievement "Thirty Years in the Same Room".</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>11.2 The 1977 Receipt</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="1977 Receipt Asset"></figure>
                                     <p><strong>How to find it:</strong> In Mudalali Perera's boutique, click specifically on the wall behind the counter. Not on Mudalali himself. No prompt given.</p>
                                     <p><strong>What happens:</strong> A framed receipt from 1977 - a food order from a political rally. Mudalali's father ran this boutique before him and catered the rally for the party that won that election. The party Mudalali has voted for every election since. He did not choose it for ideological reasons. The game says nothing about what this means. The player decides.</p>
                                     <p><strong>What it does:</strong> Gauge: +10 IH, +5 CT. Unlocks achievement "Pol Roti and Politics".</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>11.3 The Manifesto Comparison</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="Manifesto Comparison Asset"></figure>
                                     <p><strong>How to find it:</strong> The player must have already read the current manifesto AND click on a specific unmarked box in the corner of the campaign tent. Two conditions required. No prompt given for the box.</p>
                                     <p><strong>What happens:</strong> The game generates a side-by-side comparison of the 2010 and current manifesto. The road section is highlighted. The wording is 94% identical. The only substantive change is that 2010 says "within the next term" and the current version says "as a priority." The game says nothing about this comparison. It just shows it.</p>
                                     <p><strong>What it does:</strong> Gauge: +20 IH, +10 CT. Unlocks achievement "Actually Read the Fine Print".</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>11.4 The Sergeant's Transfer</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="Police Station File Asset"></figure>
                                     <p><strong>How to find it:</strong> The player must first hear about the 2016 road repair attempt from Mudalali Perera. Then visit the Police Station and specifically ask Sergeant Wickramasinghe about 2016. Two conditions required. No hint given.</p>
                                     <p><strong>What happens:</strong> He pauses longer than usual. He says he arrived at this posting in 2017. He does not know the specific history of every infrastructure project. If the player waits rather than clicking through dialogue, he adds one more line: that he requested this posting specifically and he is not going to explain why. This thread does not resolve. It is simply there for players who are paying attention.</p>
                                     <p><strong>What it does:</strong> No gauge impact. Unlocks achievement "Somebody Had to Ask".</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>11.5 The Bulletin Board Thread</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="Bulletin Board Note Asset"></figure>
                                     <p><strong>How to find it:</strong> Visit the Elections Commission board in Week 3. A small handwritten note is pinned in the corner, not from the Elections Commission. It says: "My name is not on the list. Has anyone else had this problem. Please contact Sandya." The phone number given is fictional.</p>
                                     <p><strong>What happens:</strong> If the player returns to the notice board each week from Week 3 to Week 0, the note changes. Someone has replied by hand underneath. Then someone else. By election day, there is a small cluster of handwritten notes from people helping each other navigate the registration problem. Sandya's name appears on the voter register inside the polling station on Week 0. She made it.</p>
                                     <p><strong>What it does:</strong> Gauge across all weeks: +10 IH, +10 CT, +15 VP total. Unlocks achievement "Sandya Made It".</p>
                                 </div>
                                 <div class="grid-item">
                                     <h4>11.6 Skeptics Cafe</h4>
+                                    <figure class="editorial-figure square" style="margin-top: 0;"><img src="/api/placeholder/400/400" alt="Skeptics Cafe Icon/Location Asset"></figure>
                                     <p><strong>How to find it:</strong> Verify three or more messages using the Elections Commission board in a single playthrough. A small unlabelled icon appears near the notice board on the town map. No announcement. No notification. Player must click it.</p>
                                     <p><strong>What happens:</strong> A secondary information network - community members who evaluate content before sharing. They provide additional misinformation commentary and context on any content currently circulating. Nandadasa is not a member. He was invited once. He did not reply to the invitation, which itself took six weeks.</p>
                                     <p><strong>What it does:</strong> Provides an additional response option (Share with Skeptics Cafe) for all subsequent Uncle Sirisena messages. Unlocks achievement "You Found the Cafe".</p>
@@ -749,6 +817,7 @@
 
             <section id="technical-view" class="view-section" aria-labelledby="technical-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Architecture</span>
                     <h2 id="technical-heading">Technical Architecture &amp; UI Standards</h2>
                 </header>
 
@@ -874,6 +943,7 @@
 
             <section id="network-view" class="view-section" aria-labelledby="network-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Architecture</span>
                     <h2 id="network-heading">Systems Network Map</h2>
                     <p class="lead-text">Interactive visualisation of all characters, locations, and systems. Click any node to view its connections and GDD details.</p>
                 </header>
@@ -924,6 +994,7 @@
 
             <section id="production-view" class="view-section" aria-labelledby="production-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Architecture</span>
                     <h2 id="production-heading">Production Plan &amp; AI Tool Assignments</h2>
                 </header>
 
@@ -955,19 +1026,19 @@
                     </div>
 
                     <div class="content-block">
-                        <h3>Asset Production Checklist</h3>
+                        <h3>18.1 Asset Production Checklist</h3>
                         <p>Master list of all required assets. Must be completed before generating art in Firefly or DALL-E.</p>
                         <table class="data-table" aria-label="Asset Production Checklist">
                             <thead><tr><th scope="col">Asset Name</th><th scope="col">Type</th><th scope="col">AI Tool</th><th scope="col">Web Format</th><th scope="col">Status</th></tr></thead>
                             <tbody>
-                                <tr><td>7 Location Backgrounds</td><td>Background</td><td>Adobe Firefly</td><td>1920x1080 PNG</td><td></td></tr>
-                                <tr><td>1 Town Map Illustration</td><td>Background</td><td>Adobe Firefly</td><td>1920x1080 PNG</td><td></td></tr>
-                                <tr><td>3 Playable Character Sprites (x5 states)</td><td>Character</td><td>Adobe Firefly</td><td>Transparent PNG</td><td></td></tr>
-                                <tr><td>8 NPC Portraits (x3 states)</td><td>NPC</td><td>DALL-E 3</td><td>Transparent PNG</td><td></td></tr>
-                                <tr><td>6 WhatsApp UI Cards</td><td>UI</td><td>Canva / DALL-E</td><td>PNG</td><td></td></tr>
+                                <tr><td>7 Location Backgrounds</td><td>Background</td><td>Adobe Firefly</td><td>1920x1080 webp</td><td></td></tr>
+                                <tr><td>1 Town Map Illustration</td><td>Background</td><td>Adobe Firefly</td><td>1920x1080 webp</td><td></td></tr>
+                                <tr><td>3 Playable Character Sprites (x5 states)</td><td>Character</td><td>Adobe Firefly</td><td>Transparent webp</td><td></td></tr>
+                                <tr><td>8 NPC Portraits (x3 states)</td><td>NPC</td><td>DALL-E 3</td><td>Transparent webp</td><td></td></tr>
+                                <tr><td>6 WhatsApp UI Cards</td><td>UI</td><td>Canva / DALL-E</td><td>webp</td><td></td></tr>
                                 <tr><td>UI Kit (Buttons, Gauges, Dialogue Box)</td><td>UI</td><td>Canva AI</td><td>CSS / SVG</td><td></td></tr>
-                                <tr><td>Mahinda Bandara Posters & Calendars</td><td>UI / Prop</td><td>DALL-E 3</td><td>PNG</td><td></td></tr>
-                                <tr><td>EC Notice Board Elements</td><td>UI / Prop</td><td>Canva AI</td><td>PNG</td><td></td></tr>
+                                <tr><td>Mahinda Bandara Posters & Calendars</td><td>UI / Prop</td><td>DALL-E 3</td><td>webp</td><td></td></tr>
+                                <tr><td>EC Notice Board Elements</td><td>UI / Prop</td><td>Canva AI</td><td>webp</td><td></td></tr>
                                 <tr><td>7 Ambient Location Audio Tracks</td><td>Audio</td><td>Suno</td><td>OGG</td><td></td></tr>
                                 <tr><td>UI Sounds & WhatsApp Notifications</td><td>Audio</td><td>Freesound</td><td>WAV</td><td></td></tr>
                             </tbody>
@@ -975,7 +1046,7 @@
                     </div>
 
                     <div class="content-block">
-                        <h3>Visual Style Bible</h3>
+                        <h3>18.2 Visual Style Bible (UI Focus)</h3>
                         <p>Core visual parameters to be defined as Figma components in Week 1.</p>
                         <ul class="clean-list">
                             <li><strong>Color Palette:</strong> Garnet Red (#8B1A2B) for primary accents/critical actions, Slate (#3D4A5C) for typography/secondary, Off-White (#F5F0EA) for backgrounds.</li>
@@ -985,7 +1056,7 @@
                     </div>
 
                     <div class="content-block">
-                        <h3>6-Week Production Timeline & Milestones</h3>
+                        <h3>18.3 6-Week Production Timeline & Milestones</h3>
                         <table class="data-table" aria-label="Production Timeline">
                             <thead><tr><th scope="col">Week</th><th scope="col">Phase</th><th scope="col">Deliverables</th><th scope="col">Dependencies</th></tr></thead>
                             <tbody>
@@ -1000,7 +1071,7 @@
                     </div>
 
                     <div class="content-block">
-                        <h3>Critical Production Warnings</h3>
+                        <h3>18.4 Critical Production Warnings</h3>
                         <div class="warning-callout" role="alert">
                             <p><strong>Sri Lankan electoral law accuracy:</strong> The voter registration steps, polling rules, and election commission procedures must be verified against real Sri Lankan sources before writing the dialogue. Do not use AI memory for these facts. Cross-check against the Elections Commission of Sri Lanka's official published materials.</p>
                         </div>
@@ -1019,6 +1090,7 @@
 
             <section id="achievements-view" class="view-section" aria-labelledby="achievements-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Design Systems</span>
                     <h2 id="achievements-heading">Achievements &amp; Subtle Clue System</h2>
                     <p class="lead-text">25 total achievements. 4 hidden. The system exists to give an education game a reason to be replayed.</p>
                 </header>
@@ -1033,7 +1105,7 @@
 
                     <div id="ach-system" class="sub-tab-content active" role="tabpanel">
                         <div class="content-block">
-                            <h3>Achievement System - Design Philosophy</h3>
+                            <h3>19. Achievement System - Design Philosophy</h3>
                             <p>Half the achievements are funny. Half are genuinely meaningful. None of them tell the player what to do next. The funny ones should make a first-time player laugh when they read the name before they understand it. The meaningful ones should feel like quiet acknowledgments of something the player actually did, without applause.</p>
                             <p>This system exists for one practical reason: an education game that takes itself too seriously is one nobody finishes. The achievements give players a reason to replay and reward the curiosity that drives deeper learning.</p>
 
@@ -1065,7 +1137,7 @@
                     
                     <div id="ach-list" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
-                            <h3>All 25 Achievements - Complete List</h3>
+                            <h3>20. All 25 Achievements - Complete List</h3>
                             <table class="data-table" aria-label="Complete achievement list">
                                 <thead>
                                     <tr><th scope="col">Name</th><th scope="col">Description (visible after unlock)</th><th scope="col">Trigger Condition</th><th scope="col">Notification Type</th></tr>
@@ -1121,7 +1193,7 @@
                     
                     <div id="ach-clues" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
-                            <h3>The Subtle Clue System</h3>
+                            <h3>21. The Subtle Clue System</h3>
                             <p>Clues only exist for 3 of the 6 secrets. The other three - the Sergeant's Transfer thread, the 1977 Receipt, and Sandya's Bulletin Board Thread - have no clues at all. Players either find them or they do not.</p>
                             <p>Clues are delivered as casual NPC dialogue only - not UI tooltips, not tutorial text, not highlight effects. Each clue is a single line delivered once per playthrough. It does not repeat on subsequent visits. The visual treatment is the same dialogue box as all other NPC speech, but in a slightly more muted style, like an afterthought. No special sound. No icon. No signal that this was a clue.</p>
 
@@ -1169,7 +1241,8 @@
 
             <section id="scope-view" class="view-section" aria-labelledby="scope-heading">
                 <header class="doc-header">
-                    <h2 id="scope-heading">22. Scope Definition - MVP vs Post-Launch</h2>
+                    <span class="section-eyebrow">Design Systems</span>
+                    <h2 id="scope-heading">Scope Definition — MVP vs Post-Launch</h2>
                     <p class="lead-text">What is built in v1.0. What is documented but deferred. What the codebase must support without activation.</p>
                 </header>
 
@@ -1229,30 +1302,67 @@
                 </div>
             </section>
 
+            <section id="gallery-view" class="view-section" aria-labelledby="gallery-heading">
+                <header class="doc-header">
+                    <span class="section-eyebrow">Design Systems</span>
+                    <h2 id="gallery-heading">Visual Progress &amp; Process Gallery</h2>
+                    <p class="lead-text">Investigation boards, raw assets, and work-in-progress snapshots.</p>
+                </header>
+
+                <div class="doc-body">
+                    <div class="content-block">
+                        <h3>Investigation &amp; Process Work</h3>
+                        <div class="gallery-grid">
+                            <figure class="editorial-figure" style="margin-top: 0;">
+                                <img src="assets/main_menu_screen.webp" alt="Main Menu Screen">
+                                <figcaption class="editorial-caption">Game Start / Title Screen</figcaption>
+                            </figure>
+                            <figure class="editorial-figure" style="margin-top: 0;">
+                                <img src="assets/opening_cinematic.webp" alt="Intro Sequence">
+                                <figcaption class="editorial-caption">Opening Cinematic</figcaption>
+                            </figure>
+                            <figure class="editorial-figure" style="margin-top: 0;">
+                                <img src="assets/location_ui.webp" alt="Dialogue UI at Mudalali's Boutique">
+                                <figcaption class="editorial-caption">Location UI &amp; Dialogue Processing</figcaption>
+                            </figure>
+                            <figure class="editorial-figure" style="margin-top: 0;">
+                                <img src="assets/dialogue_processing.webp" alt="Supporting Cast Implementation">
+                                <figcaption class="editorial-caption">NPC Roster Implementation</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="status-view" class="view-section" aria-labelledby="status-heading">
                 <header class="doc-header">
+                    <span class="section-eyebrow">Project Status</span>
                     <h2 id="status-heading">Development Status &amp; Patch Notes</h2>
-                    <p class="lead-text">Current Phase: Early Alpha / Prototyping &nbsp;|&nbsp; Web Only Build</p>
+                    <p class="lead-text">Current Phase: Early Alpha · Web Only Build</p>
                 </header>
 
                 <div class="doc-tabs" role="tablist" aria-label="Status section tabs">
                     <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="status-patch" data-tab-target="status-patch">Patch Notes</button>
                     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="status-roadmap" data-tab-target="status-roadmap">Current State &amp; Roadmap</button>
-                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="status-involved" data-tab-target="status-involved">Get Involved &amp; Vacancies</button>
+                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="status-involved" data-tab-target="status-involved">Contribute &amp; Co-Create</button>
+                    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="status-credits" data-tab-target="status-credits">Team &amp; Credits</button>
                 </div>
 
                 <div class="tab-content-container">
                     <div id="status-patch" class="sub-tab-content active" role="tabpanel">
                         <div class="content-block">
-                            <h3>Version History</h3>
+                            <h3>23. Version History</h3>
                             <table class="data-table" aria-label="Patch Notes">
                                 <thead>
                                     <tr><th scope="col">Version</th><th scope="col">Focus</th><th scope="col">Key Changes &amp; Developer Notes</th></tr>
                                 </thead>
                                 <tbody>
                                     <tr><td><strong>v2.0.2</strong></td><td>Alpha Core Loop</td><td>Integrated custom Visual Novel UI, WhatsApp media cards, and the strict 6-week countdown state machine. Karunasena's path made fully playable. Achievements system built and persistent via <code>localStorage</code>. Map expanded to 13 locations.</td></tr>
-                                    <tr><td><strong>v2.0</strong></td><td>The Web Pivot</td><td>Project officially renamed from "Play. Learn. Vote." to "Road Remains." Godot engine dependency entirely scrapped in favor of a lightweight, accessible Vanilla JS and HTML5 DOM engine.</td></tr>
-                                    <tr><td><strong>v1.0</strong></td><td>Pre-Production &amp; Prototyping</td><td>Initial concept pitched. First prototype built using the Godot 2D Engine and the Dialogic plugin. Town map was limited to 7 abstract locations.</td></tr>
+                                    <tr><td><strong>v2.0.1</strong></td><td>UI Standardization</td><td>System-wide pass to eliminate modern glassmorphism. Enforced the strict "2006 card" design aesthetic for all panels, buttons, and dialogue boxes to properly ground the visual identity.</td></tr>
+                                    <tr><td><strong>v2.0.0</strong></td><td>The Web Pivot</td><td>Project officially renamed from "Play. Learn. Vote." to "Road Remains." Godot engine dependency entirely scrapped in favor of a lightweight, accessible Vanilla JS and HTML5 DOM engine.</td></tr>
+                                    <tr><td><strong>v1.5.3</strong></td><td>Critical Exploit Fix</td><td>Fixed a major logic loop glitch where the player could infinitely farm/increase their score by repeatedly interacting with the same single notice on the Elections Commission notice board. Hard-capped verification gains to once per week/notice.</td></tr>
+                                    <tr><td><strong>v1.2.0</strong></td><td>Systems & Scenarios</td><td>First major pass at scene JSONs and dialogue logic trees. Implemented the base misinformation mechanics and the core gauges.</td></tr>
+                                    <tr><td><strong>v1.0.0</strong></td><td>Pre-Production</td><td>Initial "Play. Learn. Vote." concept pitched, focusing on information integrity. Core game design documents drafted with early UI asset generation.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1260,7 +1370,7 @@
 
                     <div id="status-roadmap" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
-                            <h3>Where We Are At</h3>
+                            <h3>24. Where We Are At</h3>
                             <p>We are still in the early stages of development. The core infrastructure is established, but significant content pipelines remain open. Based on standard indie dev cycles, we are pivoting towards finalizing narrative branches before expanding platform support.</p>
                             
                             <div class="doc-grid">
@@ -1287,27 +1397,106 @@
 
                     <div id="status-involved" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
-                            <h3>Community, Funding &amp; Vacancies</h3>
-                            <p>As an early-stage indie project, we rely on community support, open-source collaboration, and external funding to reach the finish line. We are actively seeking help in the following areas.</p>
-
-                            <div class="location-card">
-                                <h4>Open Vacancies &amp; Roles Needed</h4>
-                                <ul class="clean-list">
-                                    <li><strong>Localization Specialists:</strong> Native Sinhala and Tamil translators with an understanding of Sri Lankan electoral law and colloquial dialogue.</li>
-                                    <li><strong>QA Playtesters:</strong> Community members willing to stress-test consequence chains, break the logic tree, and report UI inconsistencies across different mobile browsers.</li>
-                                    <li><strong>Vanilla JS Contributors:</strong> Developers to assist with optimizing SVG rendering and refining the accessibility (WCAG) implementations.</li>
-                                    <li><strong>2D Artists:</strong> We plan to add full character portraits and expanded background art soon. We need artists comfortable with an editorial, semi-realistic flat vector style.</li>
-                                </ul>
+                            <h3>25. Contributions &amp; Co-Creation</h3>
+                            
+                            <div class="warning-callout" style="background: var(--c-surface-alt); border-color: var(--c-border-strong);" role="status">
+                                <h4 style="color: var(--c-garnet); margin-bottom: var(--sp-2); border: none; padding: 0;">An Independent, Purpose-Driven Project</h4>
+                                <p>This game is a completely independent, unfunded initiative. The project has been in active development since <strong>April 28th, 2026</strong>, with over <strong>400+ hours</strong> invested into the engine, design, and narrative logic.</p>
+                                <p style="margin-top: var(--sp-3);">I am building this because you rarely see games tackling civic realism and systemic literacy in Sri Lanka. My ultimate goal is to help shape more informed citizens, inspire local game developers, and prove that interactive media can be a powerful educational tool. Currently, there is no financial backing or studio budget—if I had the funds, everyone would be paid for their craft. Until then, I am looking for passionate collaborators who share this vision to help cross the finish line.</p>
                             </div>
 
-                            <div class="location-card">
-                                <h4>Funding &amp; Donations</h4>
-                                <p>We currently need financial backing to sustain development. Donations will go directly toward:</p>
-                                <ul class="clean-list">
-                                    <li>Commissioning professional translations for technical electoral jargon.</li>
-                                    <li>Server hosting costs for the Component B facilitator dashboard.</li>
-                                    <li>Compensating freelance audio engineers for ambient soundscapes and SFX.</li>
-                                </ul>
+                            <div class="doc-grid" style="align-items: stretch;">
+                                <div class="grid-item location-card" style="background: var(--c-paper); margin-bottom: 0; display: flex; flex-direction: column;">
+                                    <h4>Join the Project (Time &amp; Skills)</h4>
+                                    <p>We are looking for dedicated contributors to help bring this world to life. Here is exactly what the tasks look like at this stage:</p>
+                                    <ul class="clean-list" style="margin-bottom: var(--sp-5);">
+                                        <li><strong>Localization:</strong> Translating JSON dialogue files while maintaining character voices.</li>
+                                        <li><strong>Playtesting:</strong> Purposefully breaking consequence chains and testing browser compatibility.</li>
+                                        <li><strong>2D Art:</strong> Illustrating top-down isometric assets based on the Visual Style Bible.</li>
+                                    </ul>
+                                    
+                                    <div style="margin-top: auto; padding-top: var(--sp-6); border-top: 2px solid var(--c-border); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                                        <p style="font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--c-ink); margin-bottom: var(--sp-4); text-transform: uppercase; letter-spacing: 0.05em;">Want to co-create?</p>
+                                        <a href="https://forms.gle/35r4mB8DbwpTcvGe6" target="_blank" rel="noopener noreferrer" style="background: var(--c-garnet); color: #fff; border: none; padding: 14px 24px; font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; display: block; width: 100%; box-sizing: border-box; transition: background 0.2s ease;">Become a Contributor</a>
+                                    </div>
+                                </div>
+
+                                <div class="grid-item location-card" style="background: var(--c-paper); margin-bottom: 0; display: flex; flex-direction: column;">
+                                    <h4>Back the Project (Funding)</h4>
+                                    <p>If you don't have the time to contribute skills but believe in this mission, financial support is the most direct way to help. 100% of all funds will be used to transform this from a passion project into a fully resourced production.</p>
+                                    <p>Donations go directly toward:</p>
+                                    <ul class="clean-list" style="margin-bottom: var(--sp-5);">
+                                        <li><strong>Compensating Talent:</strong> Paying translators, actors, and artists for their craft.</li>
+                                        <li><strong>Infrastructure:</strong> Server hosting and backend architecture.</li>
+                                        <li><strong>Outreach:</strong> Educational workshops once the game launches.</li>
+                                    </ul>
+                                    
+                                    <div style="margin-top: auto; padding-top: var(--sp-6); border-top: 2px solid var(--c-border); display: flex; flex-direction: column; align-items: center; text-align: center;">
+                                        <p style="font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--c-ink); margin-bottom: var(--sp-4); text-transform: uppercase; letter-spacing: 0.05em;">Support Financially</p>
+                                        <a href="https://buymeacoffee.com/chatura" target="_blank" rel="noopener noreferrer" style="background: var(--c-dark); color: var(--c-ink-light); border: 1px solid var(--c-border-strong); padding: 14px 24px; font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; display: block; width: 100%; box-sizing: border-box; transition: background 0.2s ease;">Make a Donation</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="status-credits" class="sub-tab-content" role="tabpanel">
+                        <div class="content-block">
+                            <h3>Project Credits</h3>
+                            <p class="lead-text">The team behind the Alupotha precinct.</p>
+                            
+                            <div class="credits-grid">
+                                <div class="credits-section">
+                                    <div class="credits-role">Direction, Design &amp; Development</div>
+                                    <div class="credits-name">Chatura Dissanayake</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Writing &amp; Narrative</div>
+                                    <div class="credits-name">Imalee Nillekumbura</div>
+                                    <div class="credits-name">Chameera Dissanayake</div>
+                                    <div class="credits-name">Chatura Dissanayake</div>
+                                    <div class="credits-name-small">TBC (Narrative Consultant)</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Art &amp; Visual Design</div>
+                                    <div class="credits-name">Praveen Dissanayake</div>
+                                    <div class="credits-name">Chatura Dissanayake</div>
+                                    <div class="credits-name-small">TBC (Environment Assets)</div>
+                                    <div class="credits-name-small">TBC (UI Illustration)</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Audio &amp; Music</div>
+                                    <div class="credits-name">Nathan Perera (Original Music)</div>
+                                    <div class="credits-name-small">TBC (Audio Mixing)</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Civic &amp; Cultural Consultants</div>
+                                    <div class="credits-name">Mr. Wimal Dissanayake</div>
+                                    <div class="credits-name">Mrs. Lakshmi Wilfred</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Localisation</div>
+                                    <div class="credits-name-small">TBC (Tamil Translation)</div>
+                                    <div class="credits-name-small">TBC (Sinhala Translation)</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Voice Cast</div>
+                                    <div class="credits-name">Chamath De Silva</div>
+                                    <div class="credits-name-small">TBC (Supporting Characters)</div>
+                                </div>
+
+                                <div class="credits-section">
+                                    <div class="credits-role">Quality Assurance</div>
+                                    <div class="credits-name">Sri Lanka Reddit Community</div>
+                                    <div class="credits-name">Praveen Dissanayake</div>
+                                    <div class="credits-name-small">TBC (Lead QA)</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1323,6 +1512,20 @@
             </svg>
         </button>
 
-    </div><script src="script.js"></script>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Automated Fallback for Missing Images
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    this.onerror = null; // Prevents infinite loops
+                    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='transparent'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' font-weight='bold' fill='%239A8060' text-anchor='middle' dominant-baseline='middle'%3EVisuals in progress...%3C/text%3E%3C/svg%3E";
+                    this.style.border = "1px dashed var(--c-border)"; // Adds a subtle dashed line to indicate it's a placeholder
+                    this.style.background = "transparent";
+                });
+            });
+        });
+    </script>
 </body>
 </html>
