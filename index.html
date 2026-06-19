@@ -97,7 +97,7 @@
                     <span class="hero-eyebrow">Chatura Dissanayake presents</span>
                     <h1 class="hero-title">Road Remains</h1>
                     <p class="hero-subtitle">Game Design Document</p>
-                    <p class="hero-meta">A Civic Realism Experience &nbsp;|&nbsp; v2.0.2 &nbsp;|&nbsp; 18 June 2026</p>
+                    <p class="hero-meta">A Civic Realism Experience &nbsp;|&nbsp; v2.0.3&nbsp;|&nbsp; 18 June 2026</p>
                 </div>
 
                 <h2 id="overview-heading" style="margin-top: var(--sp-6);">Overview &amp; Vision Statement</h2>
@@ -1335,7 +1335,7 @@
 
                 <div class="doc-body">
                     <div class="content-block">
-                        <h3>22.1 MVP - v2.0.2 - Web Only</h3>
+                        <h3>22.1 MVP - v2.0.3- Web Only</h3>
                         <p>Every item listed here is built, tested, and delivered at launch. Nothing in this list is optional.</p>
                         <ul class="clean-list">
                             <li>All 13 locations, Karunasena fully playable (Kamala/Kumaran locked), all 3 gauges with full delta system.</li>
@@ -1444,6 +1444,7 @@
                                     <tr><th scope="col">Version</th><th scope="col">Focus</th><th scope="col">Key Changes &amp; Developer Notes</th></tr>
                                 </thead>
                                 <tbody>
+                                    <tr><td><strong>v2.0.3</strong></td><td>Architecture & Audio</td><td>Modularised JS engine into dedicated files (<code>engine.js</code>, <code>state.js</code>, <code>ui.js</code>, <code>config.js</code>). CSS split into component sheets (<code>variables.css</code>, <code>base.css</code>, <code>dialogue.css</code>, <code>map.css</code>). Map data externalised to <code>map-data.json</code>. Full audio layer integrated: BGM tracks for gameplay and credits, ambient audio for the Grama Sevaka Office, and SFX suite (click, hover, pause, slider tick, loading start).</td></tr>
                                     <tr><td><strong>v2.0.2</strong></td><td>Alpha Core Loop</td><td>Integrated custom Visual Novel UI, WhatsApp media cards, and the strict 6-week countdown state machine. Karunasena's path made fully playable. Achievements system built and persistent via <code>localStorage</code>. Map expanded to 13 locations.</td></tr>
                                     <tr><td><strong>v2.0.1</strong></td><td>UI Standardization</td><td>System-wide pass to eliminate modern glassmorphism. Enforced the strict "2006 card" design aesthetic for all panels, buttons, and dialogue boxes to properly ground the visual identity.</td></tr>
                                     <tr><td><strong>v2.0.0</strong></td><td>The Web Pivot</td><td>Project officially renamed from "Play. Learn. Vote." to "Road Remains." Godot engine dependency entirely scrapped in favor of a lightweight, accessible Vanilla JS and HTML5 DOM engine.</td></tr>
