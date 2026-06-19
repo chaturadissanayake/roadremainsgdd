@@ -79,7 +79,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    width: 100vw;
+    width: 100%;
 }
 
 body.menu-open {
@@ -343,6 +343,9 @@ code {
     margin-bottom: var(--sp-2);
     padding: 0 var(--sp-2) var(--sp-2);
     border-bottom: 1px solid var(--c-dark-hover);
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
 }
 
 .nav-btn {
@@ -1532,6 +1535,7 @@ code {
 }
 
 .sidebar-overlay.visible {
+    display: block;
     opacity: 1;
 }
 
@@ -1706,6 +1710,12 @@ code {
         display: block;
         padding: var(--sp-3) var(--sp-5) var(--sp-2);
         border-bottom: 1px solid var(--c-dark-hover);
+        cursor: default;
+        pointer-events: none;
+        user-select: none;
+        min-height: unset;
+        font-size: 9px;
+        letter-spacing: 0.14em;
     }
 
     .nav-btn {
@@ -1740,6 +1750,10 @@ code {
         padding: var(--sp-5);
         margin-top: 0;
         background: var(--c-dark);
+        position: sticky;
+        bottom: 0;
+        border-top: 1px solid var(--c-dark-hover);
+        z-index: 5;
     }
 
     .nav-cta-btn {
