@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Road Remains — Game Design Document v2.0.2</title>
+    <title>Road Remains — Game Design Document v2.0.3</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,7 +86,7 @@
         <main class="main-content" id="main-content" tabindex="-1">
 
             <div class="print-header print-only" aria-hidden="true">
-                <strong>Road Remains - Game Design Document v2.0.2</strong>
+                <strong>Road Remains - Game Design Document v2.0.3</strong>
                 Alpha / Production Build &nbsp;|&nbsp; 18 June 2026
             </div>
 
@@ -148,6 +148,7 @@
                         <div class="definition-item">
                             <h4>0.3 Skeptics Cafe - Canonical Status</h4>
                             <p>Skeptics Cafe is a <strong>discoverable unlockable space, not a mapped location.</strong> It does not appear on the town map at the start of the game. It becomes accessible only after the player verifies three or more messages using the Elections Commission board in a single playthrough. It is referenced in dialogue by Nandadasa Mahaththaya as "a group of people who check things before they share them" - not named directly. Players who find it discover a secondary information network. Its existence is not documented anywhere the player can read before unlocking it.</p>
+                            <p class="muted-text">Technical note: in <code>map-data.json</code>, Skeptics Cafe is the only location entry carrying an <code>unlockedBy</code> field (value: <code>verifiedAtBoardCount_gte_3</code>). All 12 other locations omit this field entirely rather than setting it to a falsy value, so <code>checkMapUnlocks()</code> can treat "no field" as "always visible" without a special case.</p>
                         </div>
 
                         <div class="definition-item">
@@ -158,6 +159,12 @@
                         <div class="definition-item">
                             <h4>0.5 Platform Scope - MVP</h4>
                             <p><strong>MVP is web browser only.</strong> Both Component A and Component B are web applications. Android packaging (Android 12+) is a post-launch deliverable documented in Section 22.2. The web build must be responsive and function correctly on mobile browsers as a prerequisite for eventual Android packaging.</p>
+                        </div>
+
+                        <div class="definition-item">
+                            <h4>0.6 Premise Disclosure vs Mechanical Instruction - Canonical Distinction</h4>
+                            <p>"It does not lecture" (Section 1.1) governs <strong>how the player is taught to play</strong>. It does not govern <strong>whether the player is told what the game is</strong>. These are two different kinds of telling, and conflating them is the single most common implementation mistake on this project - confirmed directly by early itch.io playtesting, where first-time players reported not understanding the goal of the game at all.</p>
+                            <p><strong>Withhold:</strong> the correct response to a misinformation message, the existence of Skeptics Cafe, the consequence of a specific choice before it happens. <strong>Do not withhold:</strong> the premise (six weeks before an election; three numbers track community and personal outcomes), the stakes (gauge values at Week 0 determine which ending is reachable), and the fact that choices made early compound later. The second category must reach every first-time player before gameplay begins, through a mandatory screen (Section 18, row 15) - never through an opt-in "About" panel that a player only finds if they go looking for it.</p>
                         </div>
                     </div>
 
@@ -921,11 +928,12 @@
                         <div class="content-block">
                             <h3>13. Game State Specification (Vanilla JS)</h3>
                             <p>The game is built entirely using HTML5, CSS3, and JavaScript. The Godot engine approach was deprecated to ensure immediate web compatibility and lightweight DOM manipulation. The game operates in a fixed 1920x1080 canvas scaled dynamically via <code>script.js</code>.</p>
-                            <p>All progression is tracked locally and stored via <code>localStorage</code> (using keys: <code>plv_save</code>, <code>plv_achievements</code>, <code>plv_completed_chars</code>).</p>
+                            <p>All progression is tracked locally and stored via <code>localStorage</code> (using keys: <code>plv_save</code>, <code>plv_achievements</code>, <code>plv_completed_chars</code>, <code>plv_textsize</code>).</p>
                             <pre class="code-block"><code>window.gameState = {
   core: {
     character: 'karunasena' | 'kamala' | 'kumaran',
     language: 'en' | 'si' | 'ta',
+    textSize: 'standard' | 'large' | 'extra-large',
     week: 6,
     sessionStart: timestamp,
     sessionId: uuid,
@@ -975,6 +983,24 @@
                                     <tr><td><code>checkMapUnlocks()</code></td><td>Evaluates <code>window.gameState.flags</code> to pulse map nodes (radar ripple) indicating current objectives.</td></tr>
                                     <tr><td><code>showWeekBanner()</code></td><td>Interrupts gameplay with a modal to safely transition weeks only after mandatory tasks are completed.</td></tr>
                                     <tr><td><code>_evalCondition()</code></td><td>Safely parses JSON string conditions against the current state to dynamically alter dialogue branches.</td></tr>
+                                    <tr><td><code>checkAchievements()</code></td><td>Owns all 28 achievement trigger conditions. Called after every flag mutation and gauge update. Does not live in <code>config.js</code> - that file holds only the static achievement data, not the evaluation logic.</td></tr>
+                                    <tr><td><code>applyConsequenceFlags()</code></td><td>Owns all 12 cross-zone consequence chains from Section 7. Reads <code>window.gameState.flags</code> on location load and renders the modified location variant. Single source of truth for consequence logic so it is never duplicated inside individual scene JSON files.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="content-block">
+                            <h3>15.1 Component B - Technical Architecture</h3>
+                            <p class="muted-text">Component A above is specified down to function names and state shape. Component B is currently specified only as feature bullets - "real-time session management," "WebSocket communication," "CSV export" - with no architecture behind them. This is the largest unresolved gap in this document and must be closed before Week 4-5 of the production timeline (Section 18.3), since Component B needs infrastructure Component A deliberately avoids: a server.</p>
+                            <p><strong>Decision required before build:</strong> Component A's "strictly vanilla, no backend" constraint cannot extend to Component B. A facilitator dashboard pushing live scenario state to multiple participant devices needs either a WebSocket server or a polling fallback; static hosting alone cannot do this. This must be resolved as an explicit, named hosting decision, not discovered mid-build.</p>
+                            <table class="data-table" aria-label="Component B open architecture questions">
+                                <thead><tr><th scope="col">Open Question</th><th scope="col">Why It Matters</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Where does the WebSocket server run?</td><td>Determines hosting cost, whether Component B can ship on the same static host as Component A, and who maintains the server after handover to LIRNEasia.</td></tr>
+                                    <tr><td>What identifies a session - a join code, a QR code, both?</td><td>Affects the Facilitator Dashboard and Participant Mobile View screens (Section 18, rows 16-17) directly and cannot be wireframed without this answer.</td></tr>
+                                    <tr><td>What is the participant data model - is any participant identity stored, even anonymised?</td><td>Determines what the <code>component_b_response</code> analytics event (Section 16) can capture, and what the CSV export contains.</td></tr>
+                                    <tr><td>What happens to an in-progress session if the facilitator's connection drops?</td><td>Undefined failure mode. Needs a stated behaviour - session persists server-side vs. session ends - before the Section 18.4 "minimum 10 simultaneous participants" test can be considered complete.</td></tr>
+                                    <tr><td>Does Component B share <code>gameState</code> shape with Component A, or use a separate schema?</td><td>If separate, the two components drift independently over time. If shared, Component A schema changes (Section 13) become breaking changes for Component B with no versioning plan in place.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1011,7 +1037,7 @@
                                 <thead><tr><th scope="col">Requirement</th><th scope="col">WCAG Standard</th><th scope="col">Implementation</th></tr></thead>
                                 <tbody>
                                     <tr><td>Minimum tap target size</td><td>WCAG 2.5.5</td><td>Every tappable element minimum 44×44 pixels. Applies to all interactive elements including map locations, dialogue choices, NPC click targets, and navigation buttons.</td></tr>
-                                    <tr><td>Text size options</td><td>WCAG 1.4.4</td><td>Three display text sizes: standard, large, extra-large. Setting is persistent across sessions via localStorage. Applies to all dialogue text and UI labels.</td></tr>
+                                    <tr><td>Text size options</td><td>WCAG 1.4.4</td><td>Three display text sizes - standard (1x), large (1.18x), extra-large (1.4x) - applied via a single <code>--text-scale</code> CSS custom property consumed by every reading-path font-size rule (dialogue text, choice options, speaker names, media and document cards). Persisted via <code>localStorage</code> key <code>plv_textsize</code>, restored on load before first paint. This setting is independent of the 1920x1080 canvas scale transform (Section 13) and must never be implemented as a multiplier on that transform, since canvas scale is constrained by viewport fit and would clip content on narrow screens.</td></tr>
                                     <tr><td>Colour independence</td><td>WCAG 1.4.1</td><td>Gauge states shown with icon, numerical value, AND colour. Colour is never the sole indicator of information. Positive/negative gauge changes also shown with +/- symbols, not just green/red.</td></tr>
                                     <tr><td>Motion sensitivity</td><td>WCAG 2.3.3</td><td>All animations can be disabled in settings. Also automatically respected via prefers-reduced-motion media query. Setting persists across sessions.</td></tr>
                                     <tr><td>Screen reader navigation</td><td>WCAG 4.1.2</td><td>All menu systems navigable via screen reader. All interactive elements have ARIA labels. All sections have aria-labelledby headings. Skip-to-main-content link at top of page.</td></tr>
@@ -1088,7 +1114,7 @@
                 <div class="doc-body">
                     <div class="content-block">
                         <h3>18. Screen Inventory</h3>
-                        <p>All 16 required screens must be wireframed in Figma before DOM/CSS implementation begins.</p>
+                        <p>All 17 required screens must be wireframed in Figma before DOM/CSS implementation begins.</p>
                         <table class="data-table" aria-label="Screen Inventory List">
                             <thead><tr><th scope="col">#</th><th scope="col">Screen Name</th><th scope="col">Section</th><th scope="col">Priority</th></tr></thead>
                             <tbody>
@@ -1106,8 +1132,9 @@
                                 <tr><td>12</td><td>Ending / Results Screen</td><td>Component A</td><td>MVP</td></tr>
                                 <tr><td>13</td><td>Achievements Screen</td><td>Component A</td><td>MVP</td></tr>
                                 <tr><td>14</td><td>Settings / Accessibility Panel</td><td>Component A</td><td>MVP</td></tr>
-                                <tr><td>15</td><td>Facilitator Dashboard</td><td>Component B</td><td>MVP</td></tr>
-                                <tr><td>16</td><td>Participant Mobile View</td><td>Component B</td><td>MVP</td></tr>
+                                <tr><td>15</td><td>Premise &amp; Stakes Card (mandatory, first launch only - see Section 0.6)</td><td>Component A</td><td>MVP</td></tr>
+                                <tr><td>16</td><td>Facilitator Dashboard</td><td>Component B</td><td>MVP</td></tr>
+                                <tr><td>17</td><td>Participant Mobile View</td><td>Component B</td><td>MVP</td></tr>
                             </tbody>
                         </table>
                     </div>
