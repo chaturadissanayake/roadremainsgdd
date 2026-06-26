@@ -12,6 +12,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png?v=2">
+    <link rel="manifest" href="assets/site.webmanifest?v=2">
 </head>
 <body>
 
@@ -23,7 +28,7 @@
             <div class="sidebar-header">
                 <div class="sidebar-header-left">
                     <h1>Road Remains</h1>
-                    <span class="sidebar-tagline">A Civic Realism Experience</span>
+                    <span class="sidebar-tagline">Road was never going to be built.</span>
                 </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="navSection" aria-label="Toggle navigation menu">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -93,27 +98,131 @@
             <section id="overview-view" class="view-section active" aria-labelledby="overview-heading">
                 
                 <!-- Hero Cover -->
-                <div class="hero-cover">
-                    <span class="hero-eyebrow">Chatura Dissanayake presents</span>
-                    <h1 class="hero-title">Road Remains</h1>
-                    <p class="hero-subtitle">Game Design Document</p>
-                    <p class="hero-meta">A Civic Realism Experience &nbsp;|&nbsp; v2.0.3&nbsp;|&nbsp; 18 June 2026</p>
+                <div class="hero-cover hero-cover-custom">
+                    <!-- Gritty texture overlay -->
+                    <div aria-hidden="true" class="hero-texture"></div>
+                    
+                    <span class="hero-eyebrow" style="color: #8B1A2B; font-weight: 700; opacity: 0.9;">Chatura Dissanayake presents</span>
+                    <h1 class="hero-title hero-title-main">Road Remains</h1>
+                    
+                    <!-- The hook — the road arc in one line -->
+                    <p class="hero-hook">
+                        "Don't worry — the road is going to be fixed this time."
+                    </p>
+
+                    <!-- Genre tags -->
+                    <div class="genre-tags">
+                        <span class="tag">Isometric Visual Novel</span>
+                        <span class="tag">Misinformation &amp; Voting</span>
+                        <span class="tag">Sri Lanka</span>
+                        <span class="tag">30–40 min session</span>
+                    </div>
+
+                    <p class="hero-meta">Game Design Document &nbsp;|&nbsp; v2.0.3 &nbsp;|&nbsp; 18 June 2026</p>
                 </div>
 
-                <h2 id="overview-heading" style="margin-top: var(--sp-6);">Overview &amp; Vision Statement</h2>
+                <!-- ═══════════════════════════════════════════════════════
+                     THE PREMISE — plain language, no jargon, front and center
+                     This block solves the #1 playtesting problem: people 
+                     not knowing what the game is.
+                ════════════════════════════════════════════════════════════ -->
+                <div class="narrative-card">
+                    <p class="narrative-title">The Game in Plain Language</p>
+                    <p class="narrative-text-large">
+                        A politician has been promising to fix your road since 2010. Six weeks before the election, you try to make sure your community can actually vote — sorting through WhatsApp misinformation, registration queues, and election-day confusion.
+                    </p>
+                    <p class="narrative-text">
+                        You're going to believe, at some point, that the road might finally happen. That's the design. You won't find out until the very end whether you were right. The game doesn't tell you what to think. It shows you the evidence — a Road File that proves every application was processed correctly, a 2010 manifesto with a road section that is 94% identical to the current one — and lets you draw the conclusion yourself.
+                    </p>
+                </div>
+
+                <!-- ═══════════════════════════════════════════════════════
+                     THE ROAD ARC — Narrative Architecture (for the team)
+                     Every writer, artist, and dev needs this before anything else.
+                ════════════════════════════════════════════════════════════ -->
+                <div class="road-arc-container">
+                    <p class="narrative-title">THE ROAD ARC</p>
+                    <p class="road-arc-desc">The emotional core of this game. Every writer, artist, and developer reads this before touching anything else.</p>
+
+                    <!-- Arc timeline -->
+                    <div class="timeline">
+                        <div class="timeline-node">
+                            <div class="timeline-dot"></div>
+                            <h4 class="stage-1">WEEKS 6–3 — The Promise</h4>
+                            <p class="narrative-text">Mahinda Bandara's campaign is everywhere. Calendars. Posters. His manifesto has a section about the road. It sounds specific. It sounds achievable. The player has no reason to doubt him yet. Uncle Sirisena says he's always supported Mahinda because he finally gets things done. Mudalali says the road will be sorted before the monsoon hits. The ambient optimism is real — and it's the game's most important lie.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="timeline-dot critical"></div>
+                            <h4 class="stage-1">WEEK 2 — The Crack Shows (Optional, Hidden)</h4>
+                            <p class="narrative-text">If the player clicks Nandadasa's filing cabinet — not Nandadasa, the cabinet — they find the Road File. Every repair application filed since 2007. Every one processed correctly. Every one forwarded correctly. Every one received and filed. The road is not fixed because the budget was reallocated at a level above Nandadasa's jurisdiction. He has known this since 2009. He has never mentioned it. It is not his place. <em style="color: #666;">This scene is 90 seconds. It recontextualises everything without a single didactic line.</em></p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="timeline-dot critical"></div>
+                            <h4 class="stage-1">WEEK 2 — The Manifesto (Optional, Hidden)</h4>
+                            <p class="narrative-text">If the player has read the current manifesto AND clicks an unmarked box in the campaign tent, a side-by-side comparison appears. The road section of the 2010 manifesto vs the current one. 94% identical. The only change: "within the next term" became "as a priority." The game says nothing. It just shows it.</p>
+                        </div>
+
+                        <div class="timeline-node">
+                            <div class="timeline-dot final"></div>
+                            <h4 class="stage-final">WEEK 0 — The Road Remains</h4>
+                            <p class="narrative-text">The election happens. Mahinda Bandara may win or lose. The road is still broken. This is not a twist ending — it is the premise. The game is called <em>Road Remains</em>. Every ending shares the same name. The player voted anyway. Aunty Soma has been voting since 1983 with no illusions. <strong style="color: #c0b0a0;">That's the point.</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Design mandate -->
+                    <div class="mandate-box">
+                        <p class="narrative-title" style="margin-bottom: 0.5rem;">Design Mandate for the Entire Team</p>
+                        <p class="narrative-text">The road must feel genuinely fixable for the first two-thirds of the game. The optimism is real. Mahinda Bandara is not cartoonishly corrupt — he might even believe the promise himself. The disappointment only lands if the hope was real first. Do not undercut the hope early. Do not signal the ending prematurely. Let the player believe. Then show them the filing cabinet.</p>
+                    </div>
+                </div>
+
+                <h2 id="overview-heading">Overview &amp; Vision Statement</h2>
 
                 <div class="doc-body">
 
+                    <!-- ═══════════════════════════════════════════════════
+                         TONE REFERENCE — What "raw" actually means here
+                         Writers and artists: this is your north star.
+                    ════════════════════════════════════════════════════════ -->
+                    <div class="content-block tone-reference">
+                        <h3>Tone Reference — "GTA SA, But It's About Voting"</h3>
+                        <p>The reference point is GTA: San Andreas, not Civics 101. That game's power came from portraying a flawed, corrupt, alive world where you still had agency — where the system was broken but you moved through it anyway. The characters were not heroes or villains; they were people with contradictions, loyalties, and bad information doing what made sense to them.</p>
+                        <p>Road Remains operates in the same register. The difference is the lens: instead of gang politics, it's electoral politics. Same grounded world-logic. Same moral complexity. Same refusal to tell you what to feel.</p>
+                        
+                        <div class="tone-grid">
+                            <div class="tone-card">
+                                <h4>It Has Edge</h4>
+                                <p>Uncle Sirisena runs a WhatsApp group called "Alupotha Patriots" with 847 members and forwards everything without reading it. He is not a villain — his motivations are entirely good. His information hygiene is catastrophic. Both things are true at the same time, and the game never smooths the contradiction.</p>
+                            </div>
+                            <div class="tone-card">
+                                <h4>It's Not Safe</h4>
+                                <p>Mudalali has voted for the same party since 1977 and regards this as a form of integrity. His father ran the boutique before him. The 1977 receipt is behind the counter. He has never mentioned it to anyone. The game does not tell you what to make of that. It just leaves it there.</p>
+                            </div>
+                            <div class="tone-card">
+                                <h4>It's Honest</h4>
+                                <p>Sergeant Wickramasinghe is the most competent person in Alupotha and has made peace with the fact that this does not make him the most influential. He finds most situations mildly amusing. He requested this posting specifically and will not explain why. That thread does not resolve. It is simply there for players paying attention.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tone-warning">
+                            <h4>What "Politically Correct" Looks Like Here (Avoid This)</h4>
+                            <p>A character who exists only to demonstrate the right behavior. A consequence that announces itself as a lesson. A political figure who is clearly good or clearly bad. A world where doing the right thing always works. A moment where the game winks at you. These are the failure modes. The game does not wink. It does not explain. It does not comfort. It just keeps going.</p>
+                        </div>
+                    </div>
+
                     <div class="content-block">
                         <h3>1. Vision Statement</h3>
-                        <p>Road Remains is a single-player, top-down isometric digital experience set in the fictional Sri Lankan village of Alupotha. The player navigates the town layout, intercepts circulating media artifacts, coordinates with key civic figures, and tracks the real-time fallout of their distribution decisions on community trust dynamics.</p>
-                        <p>The experience establishes misinformation resilience structurally through consequence. The layout shifts, administrative processing queues swell, and civic infrastructure degrades reactively based on data handling actions across a six-week timeline.</p>
-                        <p>The atmosphere is grounded in raw, un-embellished domestic realism, capturing localized administrative environments, personal information ecosystems, and structural inertia. The experience rejects didactic instruction, forcing the player to parse systemic accuracy firsthand.</p>
+                        <p>Road Remains is a single-player, top-down isometric game set in the fictional Sri Lankan town of Alupotha — not Colombo, not a village, but the kind of semi-urban junction town most Sri Lankans either come from or pass through. There is a kovil on one side of the main road and a temple on the other. One traffic light that is technically functional. A road that has been broken since before anyone can agree on exactly when.</p>
+                        <p>The player navigates the town for six weeks before an election, making decisions about what to share, who to trust, when to verify, and what to ignore. Three numbers track the consequences — Civic Trust, Information Health, Voter Participation — and they move based on every choice made. The town reacts. Characters remember. Mahinda Bandara keeps promising to fix the road.</p>
+                        <p>The game does not tell the player who to vote for, what the correct politics are, or what conclusions to draw. It puts the player inside a system — flawed, functional, frustrating, real — and asks them to participate in it anyway. The road is not fixed at the end. This is not a failure state. This is the point.</p>
                         <div class="meta-specs" role="list" aria-label="Game specifications">
-                            <span class="spec-tag" role="listitem">Target session length: 30 to 40 minutes</span>
-                            <span class="spec-tag" role="listitem">Designed for structural replay paths</span>
-                            <span class="spec-tag" role="listitem">Available in English, Sinhala, and Tamil</span>
-                            <span class="spec-tag" role="listitem">Architecture: Vanilla JavaScript DOM Engine</span>
+                            <span class="spec-tag" role="listitem">Session length: 30–40 minutes</span>
+                            <span class="spec-tag" role="listitem">Structural replay paths</span>
+                            <span class="spec-tag" role="listitem">English, Sinhala, Tamil</span>
+                            <span class="spec-tag" role="listitem">Vanilla JS DOM Engine</span>
+                            <span class="spec-tag" role="listitem" style="background: var(--c-garnet); color: #fff; border-color: var(--c-garnet);">The road is still broken at the end. That's intentional.</span>
                         </div>
                     </div>
 
@@ -162,21 +271,84 @@
                         </div>
 
                         <div class="definition-item">
-                            <h4>0.6 Premise Disclosure vs Mechanical Instruction - Canonical Distinction</h4>
-                            <p>"It does not lecture" (Section 1.1) governs <strong>how the player is taught to play</strong>. It does not govern <strong>whether the player is told what the game is</strong>. These are two different kinds of telling, and conflating them is the single most common implementation mistake on this project - confirmed directly by early itch.io playtesting, where first-time players reported not understanding the goal of the game at all.</p>
-                            <p><strong>Withhold:</strong> the correct response to a misinformation message, the existence of Skeptics Cafe, the consequence of a specific choice before it happens. <strong>Do not withhold:</strong> the premise (six weeks before an election; three numbers track community and personal outcomes), the stakes (gauge values at Week 0 determine which ending is reachable), and the fact that choices made early compound later. The second category must reach every first-time player before gameplay begins, through a mandatory screen (Section 18, row 15) - never through an opt-in "About" panel that a player only finds if they go looking for it.</p>
+                            <h4>0.6 Premise Disclosure vs Mechanical Instruction — Canonical Distinction</h4>
+                            
+                            <div class="warning-callout" role="alert" data-label="⚠ Confirmed Playtesting Failure — Read Before Implementing Anything">
+                                <p>Early itch.io playtesting confirmed: first-time players reported not understanding the goal of the game at all. This is the single most critical implementation problem on this project. Screen 15 (the mandatory Premise Card) is the fix. It is not optional.</p>
+                            </div>
+
+                            <p>"It does not lecture" (Section 1.1) governs <strong>how the player is taught to play</strong>. It does not govern <strong>whether the player is told what the game is</strong>. These are two different kinds of telling, and conflating them is the single most common implementation mistake on this project.</p>
+                            <p><strong>Withhold:</strong> the correct response to a misinformation message, the existence of Skeptics Cafe, the consequence of a specific choice before it happens. <strong>Do not withhold:</strong> the premise (six weeks before an election; three numbers track community and personal outcomes), the stakes (gauge values at Week 0 determine which ending is reachable), and the fact that choices made early compound later. The second category must reach every first-time player before gameplay begins, through a mandatory screen (Section 18, row 15) — never through an opt-in "About" panel that a player only finds if they go looking for it.</p>
                         </div>
                     </div>
 
                     <div class="content-block">
                         <h3>1.1 What This Game Is Not</h3>
                         <ul class="clean-list">
-                            <li><strong>It does not tell the player who to vote for.</strong> Mahinda Bandara is a fictional candidate. No real political party is named or depicted. The Elections Commission of Sri Lanka is referenced as an institution but no real officials are depicted.</li>
-                            <li><strong>It does not claim the electoral system is perfect.</strong> Nandadasa Mahaththaya's Road File exists precisely to show that correct process and good outcomes are not the same thing.</li>
-                            <li><strong>It does not resolve the road.</strong> The road is still not fixed at the end of the game. This is the point.</li>
-                            <li><strong>It does not reward cynicism.</strong> Non-participation makes the imperfections worse, not better. The game asks the player to participate in the system with full awareness of its imperfections.</li>
-                            <li><strong>It does not lecture.</strong> The situation speaks. The player learns by experiencing consequences, not by being told what the consequences are.</li>
+                            <li><strong>It does not resolve the road.</strong> The road is still not fixed at the end of the game. Every ending shares the same title: "The Road Remains." This is the premise, not the punchline. The game is called Road Remains for a reason, and players should feel the weight of that title when they reach it — not surprise.</li>
+                            <li><strong>It does not reward cynicism.</strong> Non-participation makes the imperfections worse, not better. The game asks the player to participate in the system with full awareness of its flaws. Aunty Soma has voted since 1983 with no illusions about what it will or won't fix. That's the model, not the exception.</li>
+                            <li><strong>It does not tell the player who to vote for.</strong> Mahinda Bandara is fictional. No real party is named. The Elections Commission is referenced as an institution — no real officials depicted. The game has no endorsed candidate and does not signal one through consequence design.</li>
+                            <li><strong>It does not claim the system is perfect.</strong> Nandadasa Mahaththaya's Road File exists precisely to show that correct process and good outcomes are not the same thing. The system can work exactly as designed and still fail the people it serves.</li>
+                            <li><strong>It does not lecture.</strong> The situation speaks. The player learns by experiencing consequences — not by being told what the consequences are, not by a character explaining the lesson, not by a UI element marking the correct choice. The game trusts the player to work it out.</li>
                         </ul>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════
+                         SCREEN 15 — PREMISE CARD (Mandatory first-launch)
+                         This is the fix for the #1 playtesting failure: 
+                         players not understanding what the game is.
+                         See Section 0.6 for the canonical policy.
+                         This mockup shows exactly what players must see before play.
+                    ════════════════════════════════════════════════════════ -->
+                    <div class="content-block">
+                        <h3>Screen 15 — Premise &amp; Stakes Card <span style="font-family: var(--font-ui); font-size: 12px; font-weight: 600; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.06em; vertical-align: middle; margin-left: 0.5rem;">MVP · Mandatory · First Launch Only</span></h3>
+                        <p>Every first-time player sees this screen before the game begins. It cannot be skipped on the first launch. It is not an "About" panel. It is not in a menu. It appears once, in sequence, and is then permanently gone. This is the solution to the playtesting problem documented in Section 0.6 — <em>confirmed directly: first-time players reported not understanding the goal of the game at all.</em></p>
+                        <p class="muted-text">The mockup below is the canonical design reference for the implementation of Screen 15. Implement this exactly. Do not move the road-promise statement. Do not soften it. Do not move it to an info panel.</p>
+
+                        <!-- PREMISE CARD MOCKUP -->
+                        <div style="background: #111; border: 1px solid #2a2a2a; border-radius: 4px; max-width: 680px; margin: 1.5rem auto; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.5);">
+                            <!-- Card header bar -->
+                            <div style="background: #8B1A2B; padding: 0.5rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-family: var(--font-ui); font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.12em;">Road Remains — Before You Begin</span>
+                                <span style="font-family: var(--font-ui); font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em;">Screen 15 of 17</span>
+                            </div>
+                            <!-- Card body -->
+                            <div style="padding: 2.5rem 2rem 2rem;">
+                                <p style="font-family: var(--font-serif); font-size: 0.82rem; font-style: italic; color: #8B1A2B; letter-spacing: 0.04em; margin: 0 0 1.25rem;">Six weeks before the election. Alupotha, Sri Lanka.</p>
+                                
+                                <p style="font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; color: #f0ebe3; line-height: 1.6; margin: 0 0 1.25rem;">The road outside your house has been broken for years. The candidate says this time it will be fixed. People in your community are getting messages about the election — some of them aren't true.</p>
+
+                                <p style="font-family: var(--font-serif); font-size: 0.95rem; color: #9a8a78; line-height: 1.65; margin: 0 0 2rem;">Over the next six weeks, three numbers track what's happening: community trust, how accurately you understand the process, and how many people in Alupotha will actually vote. What you share, verify, or ignore affects all three. Deadlines are real. Some close and do not reopen.</p>
+
+                                <!-- Stakes pills -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem;">
+                                    <div style="background: #1e1e1e; border: 1px solid #333; padding: 0.6rem 0.9rem; border-radius: 3px; flex: 1; min-width: 150px;">
+                                        <p style="font-family: var(--font-ui); font-size: 9px; font-weight: 700; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 0.3rem;">Civic Trust</p>
+                                        <p style="font-family: var(--font-serif); font-size: 0.8rem; color: #9a8a78; margin: 0; line-height: 1.4;">Does this community believe the election is worth participating in?</p>
+                                    </div>
+                                    <div style="background: #1e1e1e; border: 1px solid #333; padding: 0.6rem 0.9rem; border-radius: 3px; flex: 1; min-width: 150px;">
+                                        <p style="font-family: var(--font-ui); font-size: 9px; font-weight: 700; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 0.3rem;">Information Health</p>
+                                        <p style="font-family: var(--font-serif); font-size: 0.8rem; color: #9a8a78; margin: 0; line-height: 1.4;">How accurate is your understanding of how the process actually works?</p>
+                                    </div>
+                                    <div style="background: #1e1e1e; border: 1px solid #333; padding: 0.6rem 0.9rem; border-radius: 3px; flex: 1; min-width: 150px;">
+                                        <p style="font-family: var(--font-ui); font-size: 9px; font-weight: 700; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 0.3rem;">Voter Participation</p>
+                                        <p style="font-family: var(--font-serif); font-size: 0.8rem; color: #9a8a78; margin: 0; line-height: 1.4;">How many people in Alupotha are going to vote on election day?</p>
+                                    </div>
+                                </div>
+
+                                <!-- The road statement — the thing players MUST know -->
+                                <div style="border: 1px solid #3a2a2a; border-radius: 3px; padding: 1rem 1.25rem; margin-bottom: 2rem; background: #1a1212;">
+                                    <p style="font-family: var(--font-ui); font-size: 9px; font-weight: 700; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 0.4rem;">One thing to know before you start</p>
+                                    <p style="font-family: var(--font-serif); font-size: 0.9rem; color: #c0b0a0; line-height: 1.6; margin: 0;">The road is still broken at the end, whatever you do. The game is not about fixing it. It is about what you do anyway.</p>
+                                </div>
+
+                                <!-- CTA -->
+                                <div style="text-align: center;">
+                                    <div style="display: inline-block; background: #8B1A2B; color: #f0ebe3; font-family: var(--font-ui); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 36px; border-radius: 2px; cursor: default;">Begin — Week 6</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="note-text"><em>The "Begin — Week 6" button is the only interactive element on this screen. There is no "skip" option, no settings link, no back button. The screen is shown exactly once per device. The <code>premiseCardShown</code> flag is set in localStorage before the character select screen loads.</em></p>
                     </div>
 
                 </div>
@@ -199,9 +371,10 @@
                     <div id="world-locations" class="sub-tab-content active" role="tabpanel">
 
                         <div class="content-block">
-                            <h3>2. The Town - Alupotha</h3>
-                            <p>Alupotha means Middle Town. It is a composite of everywhere in Sri Lanka - not Colombo, not a village, but the kind of semi-urban junction town that most Sri Lankans either come from or pass through. There is a kovil on one side of the main road and a temple on the other. One traffic light that is technically functional. A bus that comes when it comes. Coconut trees everywhere, including in places where coconut trees probably should not be.</p>
-                            <p>The game world is presented as a clickable illustrated town map scaled dynamically on a 1920x1080 canvas. 12 of the 13 locations are mapped from the beginning; the 13th, Skeptics Cafe, unlocks later (see Section 0.3). Some are interactive hubs, while others provide atmospheric depth. The player navigates by clicking a location on the map. The week countdown and three gauges are always visible at the top of the screen regardless of which location the player is in.</p>
+                            <h3>2. The Town — Alupotha</h3>
+                            <p>Alupotha means Middle Town. It is a composite of everywhere in Sri Lanka — not Colombo, not a village, but the kind of semi-urban junction town that most Sri Lankans either come from or pass through. There is a kovil on one side of the main road and a temple on the other. One traffic light that is technically functional. A bus that comes when it comes. Coconut trees everywhere, including in places where coconut trees probably should not be.</p>
+                            <p>The road through the centre of town has been broken since before anyone can agree on exactly when. There are three competing stories about why. Mahinda Bandara's campaign posters are everywhere. His calendar is on the wall of Mudalali's boutique, the police station, the Grama Sevaka Office, and four other locations. The road is in his manifesto. It has been in his manifesto since 2010.</p>
+                            <p>The game world is a clickable illustrated town map on a 1920×1080 canvas. Twelve of the thirteen locations are accessible from the start; the thirteenth unlocks only if the player verifies three or more messages at the Elections Commission board. The week countdown and three gauges are always visible — the player is never without information about where they stand.</p>
                             <figure class="editorial-figure">
                                 <img src="assets/fullmap.webp" alt="Alupotha Town Map Wireframe">
                                 <figcaption class="editorial-caption">Fig 1. Alupotha Map Layout (Draft)</figcaption>
@@ -601,8 +774,9 @@
                         </div>
 
                         <div class="content-block">
-                            <h3>10. The Misinformation Mechanic - Detailed Design</h3>
-                            <p>This is the most educationally critical mechanic in the game. Uncle Sirisena sends the player content in four formats that mirror exactly how misinformation actually circulates in Sri Lanka. The game does not reward blanket distrust any more than it rewards blanket trust. It rewards discrimination - evaluating each piece of information on its merits. The false content is faster and easier to act on. The accurate verification requires a trip. This asymmetry is intentional and is the core educational design.</p>
+                            <h3>10. The Misinformation Mechanic — Detailed Design</h3>
+                            <p>Uncle Sirisena sends content in four formats that mirror exactly how misinformation actually circulates. He is not a bot. He is not a bad person. He is a retired man with a lot of time, a phone, and 847 WhatsApp contacts who trusts him. The game does not reward blanket distrust any more than it rewards blanket trust — because one of Uncle Sirisena's messages is correct, and ignoring everything means missing it.</p>
+                            <p>The educational design is in the asymmetry: the false content is faster and easier to act on. The verification requires navigating to another location. That friction is the point. Real misinformation spreads because checking takes effort and sharing takes a second.</p>
 
                             <h4>10.1 Content Formats</h4>
                             <ul class="clean-list">
@@ -870,7 +1044,13 @@
                     <div id="flow-endings" class="sub-tab-content" role="tabpanel">
                         <div class="content-block">
                             <h3>12. Endings</h3>
-                            <p>The ending is determined by the player's gauge scores and flag states at Week 0, after voting. Endings are evaluated in order from secret to bad - the game checks for the secret ending first, then good, then neutral, then bad.</p>
+                            <p>The ending is determined by the player's gauge scores and flag states at Week 0, after voting. Endings are evaluated in order from secret to bad — the game checks for the secret ending first, then good, then neutral, then bad.</p>
+                            
+                            <!-- The naming convention callout -->
+                            <div style="background: #1a1a1a; border-left: 3px solid #8B1A2B; padding: 1.25rem 1.5rem; margin: 1.5rem 0; border-radius: 0 3px 3px 0;">
+                                <p style="font-family: var(--font-ui); font-size: 10px; font-weight: 700; color: #8B1A2B; text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 0.5rem;">Design Note — Why All Four Endings Have the Same Name</p>
+                                <p style="font-family: var(--font-serif); font-size: 0.9rem; color: #9a8a78; line-height: 1.65; margin: 0;">Every ending in this game is called "The Road Remains." Good, Bad, Neutral, and Secret. The road does not get fixed in any of them. This is not a mistake. It is the entire argument of the game made structural: the outcome of the election does not depend on whether the candidate fixes the road — it depends on whether the community participated with accurate information. The title of the ending is the same. What changes is the community that reaches it.</p>
+                            </div>
 
                             <div class="logic-tree" aria-label="Game endings">
                                 <div class="logic-node border-danger">
@@ -895,12 +1075,14 @@
                                     </div>
                                 </div>
                                 <div class="logic-node border-primary">
-                                    <div class="node-title">12.4 Secret Ending - "The Unbroken Chain"</div>
+                                    <div class="node-title">12.4 Secret Ending — "The Unbroken Chain"</div>
                                     <div class="node-desc">
                                         <p><strong>Trigger:</strong> All three gauges above 75 at Week 0. Manifesto comparison completed. Road File found. All three queue people helped. Valid ballot cast.</p>
-                                        <p>The standard good ending plays in full. After the closing card, there is one more scene. Aunty Soma takes a worn voter registration card from her purse - her original card from 1983. She shows it to Karunasena. She says, in whichever language the player has selected, that she has carried this since the first time she voted. That it is not the card that matters. That the road will probably not be fixed. That Mahinda Bandara will probably win again. That she comes every time anyway because the alternative is to let other people make all the decisions, and she has never found a convincing argument for that.</p>
+                                        <p>The standard good ending plays in full. After the closing card, there is one more scene. Aunty Soma takes a worn voter registration card from her purse — her original card from 1983. She shows it to Karunasena. She says, in whichever language the player has selected, that she has carried this since the first time she voted. That it is not the card that matters. That the road will probably not be fixed. That Mahinda Bandara will probably win again. That she comes every time anyway because the alternative is to let other people make all the decisions, and she has never found a convincing argument for that.</p>
                                         <p>She puts the card away. The game ends. There are no further statistics or scores. Just the closing.</p>
-                                        <p class="note-text"><em>The secret ending text is the same in all three languages. It is the only piece of content in the game with no variation by character - the scene is always Aunty Soma and Karunasena, referenced by the other two characters in their own epilogue text as something they heard about later.</em></p>
+                                        <div class="warning-callout" style="margin-top: 1.5rem;" data-label="Implementation Note — The Only Content with No Character Variation">
+                                            <p>The secret ending is always Aunty Soma and Karunasena, regardless of which character the player chose. Kamala and Kumaran reference this scene in their own epilogue text as something they heard about later. This is the only piece of content in the entire game that works this way. It is not a technical constraint — it is a choice about whose voice the game ends on.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1091,7 +1273,7 @@
                                     <div class="legend-item"><div class="legend-color char-player" aria-hidden="true"></div><span>Playable Characters</span></div>
                                     <div class="legend-item"><div class="legend-color char-npc" aria-hidden="true"></div><span>NPCs &amp; Supporting Characters</span></div>
                                     <div class="legend-item"><div class="legend-color loc-public" aria-hidden="true"></div><span>Locations &amp; Spaces</span></div>
-                                    <div class="legend-item"><div class="legend-color" style="background:var(--c-dark)" aria-hidden="true"></div><span>Abstract Systems &amp; Scenarios</span></div>
+                                    <div class="legend-item"><div class="legend-color sys-abstract" aria-hidden="true"></div><span>Abstract Systems &amp; Scenarios</span></div>
 
                                     <h3>Relationship Types</h3>
                                     <div class="legend-item"><svg width="24" height="4" aria-hidden="true"><line x1="0" y1="2" x2="24" y2="2" class="line-trust" stroke-width="2"/></svg><span>Trust / Support</span></div>
@@ -1532,7 +1714,7 @@
                                     
                                     <div style="margin-top: auto; padding-top: var(--sp-6); border-top: 2px solid var(--c-border); display: flex; flex-direction: column; align-items: center; text-align: center;">
                                         <p style="font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--c-ink); margin-bottom: var(--sp-4); text-transform: uppercase; letter-spacing: 0.05em;">Want to co-create?</p>
-                                        <a href="https://forms.gle/35r4mB8DbwpTcvGe6" target="_blank" rel="noopener noreferrer" style="background: var(--c-garnet); color: #fff; border: none; padding: 14px 24px; font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; display: block; width: 100%; box-sizing: border-box; transition: background 0.2s ease;">Become a Contributor</a>
+                                        <a href="https://forms.gle/35r4mB8DbwpTcvGe6" target="_blank" rel="noopener noreferrer" class="support-btn-primary">Become a Contributor</a>
                                     </div>
                                 </div>
 
@@ -1548,7 +1730,7 @@
                                     
                                     <div style="margin-top: auto; padding-top: var(--sp-6); border-top: 2px solid var(--c-border); display: flex; flex-direction: column; align-items: center; text-align: center;">
                                         <p style="font-family: var(--font-ui); font-size: 14px; font-weight: 700; color: var(--c-ink); margin-bottom: var(--sp-4); text-transform: uppercase; letter-spacing: 0.05em;">Support Financially</p>
-                                        <a href="https://buymeacoffee.com/chatura" target="_blank" rel="noopener noreferrer" style="background: var(--c-dark); color: var(--c-ink-light); border: 1px solid var(--c-border-strong); padding: 14px 24px; font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; display: block; width: 100%; box-sizing: border-box; transition: background 0.2s ease;">Make a Donation</a>
+                                        <a href="https://buymeacoffee.com/chatura" target="_blank" rel="noopener noreferrer" class="support-btn-secondary">Make a Donation</a>
                                     </div>
                                 </div>
                             </div>
@@ -1629,18 +1811,5 @@
 
     </div>
     <script src="script.js"></script>
-    <script>
-        // Automated Fallback for Missing Images
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('img').forEach(img => {
-                img.addEventListener('error', function() {
-                    this.onerror = null; // Prevents infinite loops
-                    this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='transparent'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' font-weight='bold' fill='%239A8060' text-anchor='middle' dominant-baseline='middle'%3EVisuals in progress...%3C/text%3E%3C/svg%3E";
-                    this.style.border = "1px dashed var(--c-border)"; // Adds a subtle dashed line to indicate it's a placeholder
-                    this.style.background = "transparent";
-                });
-            });
-        });
-    </script>
 </body>
 </html>

@@ -1,430 +1,499 @@
-/**
- * Road Remains - Vanilla JS Architecture
- * Focus: Mobile Responsiveness, Event Delegation, LocalStorage State, Stable D3 Physics
- */
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Cache core DOM elements
+    // ─── DOM refs ────────────────────────────────────────────────────────────
     const DOM = {
-        mainContent: document.getElementById('main-content'),
-        navSection: document.getElementById('navSection'),
-        sidebarOverlay: document.getElementById('sidebarOverlay'),
-        mobileMenuBtn: document.getElementById('mobileMenuBtn'),
-        backToTop: document.getElementById('backToTop'),
-        networkContainer: document.getElementById('network')
+        mainContent:     document.getElementById('main-content'),
+        navSection:      document.getElementById('navSection'),
+        sidebarOverlay:  document.getElementById('sidebarOverlay'),
+        mobileMenuBtn:   document.getElementById('mobileMenuBtn'),
+        backToTop:       document.getElementById('backToTop'),
+        networkContainer: document.getElementById('network'),
     };
 
-    // Safe LocalStorage Utility
+    // ─── localStorage wrapper ────────────────────────────────────────────────
     const Store = {
         get(key) {
             try { return localStorage.getItem(key); }
-            catch (e) { return null; }
+            catch { return null; }
         },
         set(key, value) {
             try { localStorage.setItem(key, value); }
-            catch (e) { /* silently fail */ }
-        }
+            catch { /* private/quota - silently ignore */ }
+        },
     };
 
-    // Declared early so activateView() can safely check it during the
-    // state-restore step below, before the D3 network map section
-    // (further down this file) actually assigns it a function.
-    let initNetwork = null;
-    let overlayTimer; // Declared early to prevent Temporal Dead Zone ReferenceError during initial saved-view restoration
+    // ─── Motion preference ───────────────────────────────────────────────────
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // =========================================================================
-    // 1. State Persistence & Initialization
-    // =========================================================================
-    // Remember the last opened view when the user refreshes
+    // ─── State ───────────────────────────────────────────────────────────────
+    let initNetwork  = null;    // set once D3 block runs
+    let overlayTimer = null;
+
+    // ─── Restore last active view ────────────────────────────────────────────
     const savedView = Store.get('gdd_active_view');
     if (savedView) {
         const targetBtn = document.querySelector(`.nav-btn[data-view-target="${savedView}"]`);
-        if (targetBtn) {
-            activateView(targetBtn, savedView, false);
-        }
+        if (targetBtn) activateView(targetBtn, savedView, false);
     }
 
-    // =========================================================================
-    // 2. Global Event Delegation
-    // =========================================================================
-    // Attaching a single listener to the body is significantly more performant
-    // than attaching individual listeners to dozens of buttons.
+    // ─── Single delegated click handler ─────────────────────────────────────
     document.body.addEventListener('click', (e) => {
-        
-        // Handle Sidebar Navigation Clicks
+
         const navBtn = e.target.closest('.nav-btn');
         if (navBtn) {
-            const targetId = navBtn.getAttribute('data-view-target');
-            activateView(navBtn, targetId, true);
+            activateView(navBtn, navBtn.getAttribute('data-view-target'), true);
             return;
         }
-        
-        // Handle Inner Document Tab Clicks (excluding sidebar nav if it uses tab role)
+
         const tabBtn = e.target.closest('.tab-btn');
         if (tabBtn && !tabBtn.closest('.sidebar-nav')) {
             activateTab(tabBtn);
             return;
         }
 
-        // Handle Logic Tree Interactive Buttons
         const interactBtn = e.target.closest('.btn-interact');
         if (interactBtn) {
             handleLogicTree(interactBtn);
             return;
         }
 
-        // Handle Network Map Filters
         const filterBtn = e.target.closest('.filter-btn');
         if (filterBtn) {
             handleNetworkFilter(filterBtn);
             return;
         }
+
+        const beginBtn = e.target.closest('.begin-btn');
+        if (beginBtn) {
+            Store.set('premiseCardShown', 'true');
+            const statusNavButton = document.querySelector('.nav-btn[data-view-target="status-view"]');
+            if (statusNavButton) {
+                activateView(statusNavButton, 'status-view', true);
+            }
+            return;
+        }
     });
 
-    // =========================================================================
-    // 3. Core Functional Logic
-    // =========================================================================
-
+    // ─── View switching ──────────────────────────────────────────────────────
     function activateView(btn, targetViewId, shouldScroll) {
         const targetView = document.getElementById(targetViewId);
-        if (!targetView) return;
+        if (!targetView) return;                                 // single guard, no duplicate below
 
-        // Reset all navigation buttons
+        // Update nav buttons
         document.querySelectorAll('.nav-btn').forEach(b => {
             b.classList.remove('active');
             b.setAttribute('aria-selected', 'false');
         });
-        
-        // Hide all views
-        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-        
-        // Activate selected button and view
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
 
-        if (targetView) {
-            targetView.classList.add('active');
-            
-            // A11y: Move focus to the new section's header
-            const heading = targetView.querySelector('h2');
-            if (heading) {
-                heading.setAttribute('tabindex', '-1');
-                heading.focus({ preventScroll: true });
-            }
+        // Swap visible section
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        targetView.classList.add('active');
+
+        // Focus the heading for screen readers, then clean up the tabindex so it
+        // does not linger in the natural tab order after the focus moves away.
+        const heading = targetView.querySelector('h2');
+        if (heading) {
+            heading.setAttribute('tabindex', '-1');
+            heading.focus({ preventScroll: true });
+            heading.addEventListener('blur', () => heading.removeAttribute('tabindex'), { once: true });
         }
 
-        // Persist the choice in local storage safely
         Store.set('gdd_active_view', targetViewId);
 
-        // Force D3.js dimension recalculation if the map becomes visible
+        // Initialise (or re-centre) the network map if its view just became active
         if (targetViewId === 'network-view' && typeof initNetwork === 'function') {
             requestAnimationFrame(() => initNetwork());
         }
 
+        // Jump straight to a specific sub-tab if the button carries a hint
         if (btn.dataset.specificTab) {
             requestAnimationFrame(() => {
-                const tabBtn = document.querySelector(`[data-tab-target="${btn.dataset.specificTab}"]`);
-                if (tabBtn) activateTab(tabBtn);
+                const subTabBtn = document.querySelector(`[data-tab-target="${btn.dataset.specificTab}"]`);
+                if (subTabBtn) activateTab(subTabBtn);
             });
         }
 
-        // Reset scroll position for the new view
         if (shouldScroll && DOM.mainContent) {
             DOM.mainContent.scrollTop = 0;
         }
-        
+
         closeMobileMenu();
     }
 
+    // ─── Tab panel switching ─────────────────────────────────────────────────
     function activateTab(btn) {
-        const targetId = btn.getAttribute('data-tab-target');
-        const tabsContainer = btn.closest('[role="tablist"]');
+        const targetId       = btn.getAttribute('data-tab-target');
+        const tabsContainer  = btn.closest('[role="tablist"]');
         if (!tabsContainer) return;
 
-        let contentContainer;
+        // The content wrapper is usually the immediate next sibling; fall back to
+        // a parent-scoped search for nested tab systems.
         const nextSib = tabsContainer.nextElementSibling;
-        
-        // Resolve the correct content container relative to the tabs
-        if (nextSib && nextSib.classList.contains('tab-content-container')) {
-            contentContainer = nextSib;
-        } else {
-            const parent = tabsContainer.parentElement;
-            contentContainer = parent ? parent.querySelector('.tab-content-container') : null;
-        }
+        const contentContainer =
+            (nextSib && nextSib.classList.contains('tab-content-container'))
+                ? nextSib
+                : (tabsContainer.parentElement
+                    ? tabsContainer.parentElement.querySelector('.tab-content-container')
+                    : null);
 
-        // Reset sibling tabs
-        tabsContainer.querySelectorAll('.tab-btn').forEach(b => { 
-            b.classList.remove('active'); 
-            b.setAttribute('aria-selected', 'false'); 
+        tabsContainer.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
         });
-        
-        // Hide sibling panels
+
         if (contentContainer) {
             contentContainer.querySelectorAll('.sub-tab-content').forEach(panel => {
                 panel.classList.remove('active');
             });
         }
 
-        // Activate selected
         btn.classList.add('active', 'visited');
         btn.setAttribute('aria-selected', 'true');
+
         const targetContent = document.getElementById(targetId);
-        if (targetContent) {
-            targetContent.classList.add('active');
-        }
+        if (targetContent) targetContent.classList.add('active');
     }
 
+    // ─── Expandable consequence panels ──────────────────────────────────────
     function handleLogicTree(btn) {
         const consequenceId = btn.getAttribute('aria-controls');
-        const consequence = document.getElementById(consequenceId);
-        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-        
-        // Close siblings cleanly within the same decision node
+        const consequence   = document.getElementById(consequenceId);
+        const isExpanded    = btn.getAttribute('aria-expanded') === 'true';
+
+        // Collapse any open sibling
         btn.closest('.choices').querySelectorAll('.btn-interact').forEach(sib => {
-            if (sib !== btn) {
-                sib.setAttribute('aria-expanded', 'false');
-                const sibConsId = sib.getAttribute('aria-controls');
-                const sibCons = document.getElementById(sibConsId);
-                if (sibCons) {
-                    sibCons.classList.remove('show');
-                    sibCons.hidden = true;
-                }
-            }
+            if (sib === btn) return;
+            sib.setAttribute('aria-expanded', 'false');
+            const sibCons = document.getElementById(sib.getAttribute('aria-controls'));
+            if (sibCons) { sibCons.classList.remove('show'); sibCons.hidden = true; }
         });
 
-        // Toggle current choice
         if (consequence) {
-            btn.setAttribute('aria-expanded', !isExpanded);
+            btn.setAttribute('aria-expanded', String(!isExpanded));
             consequence.classList.toggle('show', !isExpanded);
             consequence.hidden = isExpanded;
         }
     }
 
-    // --- Keyboard Accessibility for ARIA Tabs ---
+    // ─── Keyboard navigation for tab / nav button groups ────────────────────
     document.body.addEventListener('keydown', (e) => {
         const isTabBtn = e.target.classList.contains('tab-btn');
         const isNavBtn = e.target.classList.contains('nav-btn');
-        if (isTabBtn || isNavBtn) {
-            const btn = e.target;
-            const containerSelector = isTabBtn ? '[role="tablist"]' : '[role="tablist"]';
-            const container = btn.closest(containerSelector);
-            if (!container) return;
-            
-            const btnClass = isTabBtn ? '.tab-btn' : '.nav-btn';
-            const btns = Array.from(container.querySelectorAll(btnClass));
-            const idx = btns.indexOf(btn);
-            let nextBtn;
+        if (!isTabBtn && !isNavBtn) return;
 
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                nextBtn = btns[(idx + 1) % btns.length];
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                nextBtn = btns[(idx - 1 + btns.length) % btns.length];
-            } else if (e.key === 'Home') {
-                nextBtn = btns[0];
-            } else if (e.key === 'End') {
-                nextBtn = btns[btns.length - 1];
-            }
+        const btn       = e.target;
+        // BUG FIX: previously the ternary produced the same string in both branches.
+        const container = btn.closest('[role="tablist"]');
+        if (!container) return;
 
-            if (nextBtn) { 
-                e.preventDefault(); 
-                nextBtn.focus(); 
-                if (isTabBtn) activateTab(nextBtn);
-                else activateView(nextBtn, nextBtn.getAttribute('data-view-target'), true);
-            }
+        const btnSelector = isTabBtn ? '.tab-btn' : '.nav-btn';
+        const btns        = Array.from(container.querySelectorAll(btnSelector));
+        const idx         = btns.indexOf(btn);
+        let nextBtn;
+
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                nextBtn = btns[(idx + 1) % btns.length]; break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                nextBtn = btns[(idx - 1 + btns.length) % btns.length]; break;
+            case 'Home':
+                nextBtn = btns[0]; break;
+            case 'End':
+                nextBtn = btns[btns.length - 1]; break;
+        }
+
+        if (nextBtn) {
+            e.preventDefault();
+            nextBtn.focus();
+            if (isTabBtn) activateTab(nextBtn);
+            else activateView(nextBtn, nextBtn.getAttribute('data-view-target'), true);
         }
     });
 
-    // =========================================================================
-    // 4. D3.js Systems Network Map - Stabilized & Bounded
-    // =========================================================================
-    let networkNodes, networkLinks, simulation, svg, zoomBehavior;
-    
-    // Hard-coded visual theme to match the brutalist CSS updates
-    const themeColors = { 
-        character: "#8B1A2B", // Garnet
-        npc: "#000000",       // Black
-        location: "#B8860B",  // Dark Gold
-        scenario: "#F5EDD8"   // Pale Ochre (Improves contrast against canvas)
-    };
-    
+    // ─── Escape closes the mobile menu ──────────────────────────────────────
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && DOM.navSection?.classList.contains('open')) {
+            closeMobileMenu();
+            DOM.mobileMenuBtn?.focus();
+        }
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // NETWORK MAP  (D3 force graph)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    networkNodes.append('circle')
+            .attr('r',    d => d.type === 'character' ? 22 : 16)
+            .attr('fill', d => d.color)
+            .style('stroke',       '#1a1a1a')
+            .style('stroke-width', '2.5px');
+
+        networkNodes.append('text')
+            .attr('dy',           d => (d.type === 'character' ? 36 : 28))
+            .attr('text-anchor',  'middle')
+            .text(d => d.shortName)
+            .style('font-family', "'DM Sans', system-ui, sans-serif")
+            .style('font-size',   '11px')
+            .style('font-weight', '700')
+            .style('fill',        '#f0ebe3')
+            .style('pointer-events', 'none');
+
+        // ── Tooltip on hover ────────────────────────────────────────────────
+        const tooltip = d3.select('body').append('div')
+            .attr('role', 'tooltip')
+            .style('position',       'fixed')
+            .style('background',     '#1a1a1a')
+            .style('color',          '#f0ebe3')
+            .style('border',         '1px solid #3a3a3a')
+            .style('border-radius',  '3px')
+            .style('padding',        '6px 10px')
+            .style('font-family',    "'DM Sans', system-ui, sans-serif")
+            .style('font-size',      '12px')
+            .style('pointer-events', 'none')
+            .style('opacity',        0)
+            .style('z-index',        9999)
+            .style('max-width',      '220px')
+            .style('line-height',    '1.5');
+
     const gameData = {
         nodes: [
-            { id: "karunasena", shortName: "Karuna", label: "Karunasena", type: "character", role: "First-time voter" },
-            { id: "kamala", shortName: "Kamala", label: "Kamala", type: "character", role: "School teacher (Locked)" },
-            { id: "kumaran", shortName: "Kumaran", label: "Kumaran", type: "character", role: "Migrant worker (Locked)" },
-            { id: "mahinda", shortName: "Mahinda", label: "Mahinda Bandara", type: "npc", role: "Incumbent politician" },
-            { id: "elderly", shortName: "Soma", label: "Aunty Soma", type: "npc", role: "Voter with 1983 card" },
-            { id: "nandadasa", shortName: "Nanda", label: "Nandadasa", type: "npc", role: "Grama Sevaka" },
-            { id: "shopkeeper", shortName: "Mudalali", label: "Mudalali Perera", type: "npc", role: "Information hub" },
-            { id: "sirisena", shortName: "Sirisena", label: "Uncle Sirisena", type: "npc", role: "Misinformation vector" },
-            { id: "police", shortName: "Sergeant", label: "Sgt. Wickramasinghe", type: "npc", role: "Election law authority" },
-            { id: "queue", shortName: "Queue", label: "Queue People", type: "npc", role: "Election day metrics" },
-            { id: "grama_office", shortName: "Office", label: "Grama Office (loc1)", type: "location", role: "Registration" },
-            { id: "uncle_house", shortName: "Uncle", label: "Uncle's House (loc2)", type: "location", role: "Misinformation Hub" },
-            { id: "ec_board", shortName: "Board", label: "EC Notice Board (loc3)", type: "location", role: "Verification Board" },
-            { id: "shop", shortName: "Shop", label: "Boutique (loc4)", type: "location", role: "Junction Shop Rumors" },
-            { id: "community_hall", shortName: "Hall", label: "Community Hall (loc5)", type: "location", role: "Atmospheric Space" },
-            { id: "police_station", shortName: "Police", label: "Police Station (loc6)", type: "location", role: "Law Enforcement" },
-            { id: "skeptics_cafe", shortName: "Cafe", label: "Skeptics Cafe (loc7)", type: "location", role: "Verification Node" },
-            { id: "campaign_tent", shortName: "Tent", label: "Campaign Tent (loc8)", type: "location", role: "Candidate Manifestos" },
-            { id: "polling_station", shortName: "Polling", label: "Polling Station (loc9)", type: "location", role: "Week 0 Climax" },
-            { id: "kovil", shortName: "Kovil", label: "Kovil (loc_kovil)", type: "location", role: "Atmospheric Node" },
-            { id: "temple", shortName: "Temple", label: "Temple (loc_temple)", type: "location", role: "Atmospheric Node" },
-            { id: "bar", shortName: "Bar", label: "The Bar (loc_bar)", type: "location", role: "Atmospheric Node" },
-            { id: "boarding", shortName: "Boarding", label: "Boarding (loc_boarding)", type: "location", role: "Kumaran's Residence" },
-            { id: "registration", shortName: "Reg.", label: "Voter Registration", type: "scenario", role: "Week 6-4 Tracking" },
-            { id: "misinformation", shortName: "Misinfo", label: "Misinfo Eval", type: "scenario", role: "Core Loop Content" },
-            { id: "manifesto", shortName: "Manifesto", label: "Manifesto Check", type: "scenario", role: "Comparison Analytics" }
+            // Playable characters
+            { id: 'karunasena', shortName: 'Karuna',   label: 'Karunasena',          type: 'character', role: 'First-time voter' },
+            { id: 'kamala',     shortName: 'Kamala',   label: 'Kamala',               type: 'character', role: 'School teacher (Locked)' },
+            { id: 'kumaran',    shortName: 'Kumaran',  label: 'Kumaran',              type: 'character', role: 'Migrant worker (Locked)' },
+            // NPCs
+            { id: 'mahinda',    shortName: 'Mahinda',  label: 'Mahinda Bandara',      type: 'npc',       role: 'Incumbent politician' },
+            { id: 'elderly',    shortName: 'Soma',     label: 'Aunty Soma',           type: 'npc',       role: 'Voter since 1983' },
+            { id: 'nandadasa',  shortName: 'Nanda',    label: 'Nandadasa',            type: 'npc',       role: 'Grama Sevaka' },
+            { id: 'shopkeeper', shortName: 'Mudalali', label: 'Mudalali Perera',      type: 'npc',       role: 'Junction shop owner' },
+            { id: 'sirisena',   shortName: 'Sirisena', label: 'Uncle Sirisena',       type: 'npc',       role: 'Misinformation vector' },
+            { id: 'police',     shortName: 'Sergeant', label: 'Sgt. Wickramasinghe',  type: 'npc',       role: 'Election law authority' },
+            { id: 'queue',      shortName: 'Queue',    label: 'Queue People',         type: 'npc',       role: 'Election day VP gains' },
+            // Locations — BUG FIX: removed internal "(loc1)" IDs from user-visible labels
+            { id: 'grama_office',     shortName: 'Office',   label: 'Grama Sevaka Office',  type: 'location', role: 'Voter registration hub' },
+            { id: 'uncle_house',      shortName: 'Uncle',    label: "Uncle's House",         type: 'location', role: 'Misinformation source' },
+            { id: 'ec_board',         shortName: 'Board',    label: 'EC Notice Board',       type: 'location', role: 'Official verification' },
+            { id: 'shop',             shortName: 'Shop',     label: "Mudalali's Boutique",   type: 'location', role: 'Rumour exchange' },
+            { id: 'community_hall',   shortName: 'Hall',     label: 'Community Hall',        type: 'location', role: 'Atmospheric space' },
+            { id: 'police_station',   shortName: 'Police',   label: 'Police Station',        type: 'location', role: 'Law enforcement' },
+            { id: 'skeptics_cafe',    shortName: 'Cafe',     label: 'Skeptics Cafe',         type: 'location', role: 'Hidden verification node' },
+            { id: 'campaign_tent',    shortName: 'Tent',     label: 'Campaign Tent',         type: 'location', role: 'Manifesto & candidate' },
+            { id: 'polling_station',  shortName: 'Polling',  label: 'Polling Station',       type: 'location', role: 'Week 0 climax' },
+            { id: 'kovil',            shortName: 'Kovil',    label: 'Kovil',                 type: 'location', role: 'Atmospheric node' },
+            { id: 'temple',           shortName: 'Temple',   label: 'Temple',                type: 'location', role: 'Atmospheric node' },
+            { id: 'bar',              shortName: 'Bar',      label: 'The Bar',               type: 'location', role: 'Atmospheric node' },
+            { id: 'boarding',         shortName: 'Boarding', label: "Kumaran's Boarding",    type: 'location', role: "Kumaran's residence" },
+            // Scenarios / abstract systems
+            { id: 'registration',   shortName: 'Reg.',     label: 'Voter Registration',   type: 'scenario', role: 'Weeks 6–4 deadline system' },
+            { id: 'misinformation', shortName: 'Misinfo',  label: 'Misinfo Evaluation',   type: 'scenario', role: 'Core loop — Uncle messages' },
+            { id: 'manifesto',      shortName: 'Manifesto',label: 'Manifesto Comparison', type: 'scenario', role: 'Road-promise evidence chain' },
         ],
+
         links: [
-            { source: "karunasena", target: "uncle_house", type: "conflict" },
-            { source: "karunasena", target: "grama_office", type: "location" },
-            { source: "kamala", target: "shop", type: "location" },
-            { source: "kumaran", target: "boarding", type: "location" },
-            { source: "mahinda", target: "campaign_tent", type: "location" },
-            { source: "elderly", target: "polling_station", type: "location" },
-            { source: "nandadasa", target: "grama_office", type: "location" },
-            { source: "shopkeeper", target: "shop", type: "location" },
-            { source: "sirisena", target: "uncle_house", type: "location" },
-            { source: "sirisena", target: "misinformation", type: "influence" },
-            { source: "police", target: "police_station", type: "location" },
-            { source: "ec_board", target: "skeptics_cafe", type: "trust" },
-            { source: "ec_board", target: "misinformation", type: "trust" }
-        ]
+            // Characters ↔ primary locations
+            { source: 'karunasena', target: 'uncle_house',     type: 'conflict'  },
+            { source: 'karunasena', target: 'grama_office',    type: 'location'  },
+            { source: 'karunasena', target: 'ec_board',        type: 'location'  },
+            { source: 'karunasena', target: 'polling_station', type: 'location'  },
+            { source: 'kamala',     target: 'shop',            type: 'location'  },
+            { source: 'kamala',     target: 'grama_office',    type: 'location'  },
+            { source: 'kumaran',    target: 'boarding',        type: 'location'  },
+            { source: 'kumaran',    target: 'grama_office',    type: 'location'  },
+            // NPCs ↔ their home locations
+            { source: 'mahinda',    target: 'campaign_tent',   type: 'location'  },
+            { source: 'nandadasa',  target: 'grama_office',    type: 'location'  },
+            { source: 'shopkeeper', target: 'shop',            type: 'location'  },
+            { source: 'sirisena',   target: 'uncle_house',     type: 'location'  },
+            { source: 'police',     target: 'police_station',  type: 'location'  },
+            { source: 'elderly',    target: 'polling_station', type: 'location'  },
+            { source: 'queue',      target: 'polling_station', type: 'location'  },
+            // Key NPC ↔ scenario influence links
+            { source: 'sirisena',   target: 'misinformation',  type: 'influence' },
+            { source: 'ec_board',   target: 'misinformation',  type: 'trust'     },
+            { source: 'ec_board',   target: 'skeptics_cafe',   type: 'trust'     },
+            { source: 'nandadasa',  target: 'registration',    type: 'trust'     },
+            { source: 'mahinda',    target: 'manifesto',       type: 'influence' },
+            { source: 'campaign_tent', target: 'manifesto',    type: 'location'  },
+            // Cross-location consequence chains (the "town remembers" system)
+            { source: 'misinformation', target: 'grama_office',   type: 'conflict'  },
+            { source: 'misinformation', target: 'police_station',  type: 'conflict'  },
+            { source: 'registration',   target: 'polling_station', type: 'trust'     },
+            { source: 'manifesto',      target: 'campaign_tent',   type: 'conflict'  },
+            { source: 'sirisena',       target: 'registration',    type: 'conflict'  },
+        ],
     };
 
     if (DOM.networkContainer && typeof d3 !== 'undefined') {
-        
-        // Map colors securely to nodes before building SVG
-        gameData.nodes.forEach(n => { n.color = themeColors[n.type] || "#000000"; });
-        
-        let width = DOM.networkContainer.clientWidth || 800;
+
+        gameData.nodes.forEach(n => { n.color = themeColors[n.type] || '#555'; });
+
+        let width  = DOM.networkContainer.clientWidth  || 800;
         let height = DOM.networkContainer.clientHeight || 500;
         let networkInitialized = false;
 
-        svg = d3.select('#network').append('svg')
+        // All D3 selections scoped here — no outer-scope `let` pollution
+        const svg = d3.select('#network').append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', `0 0 ${width} ${height}`)
-            .attr('preserveAspectRatio', 'xMidYMid meet');
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+            .attr('role', 'img')
+            .attr('aria-label', 'Force-directed network of Road Remains characters, locations, and systems');
 
-        // Physics Configuration - tweaked to keep nodes from exploding outward
-        simulation = d3.forceSimulation(gameData.nodes)
-            .force('link', d3.forceLink(gameData.links).id(d => d.id).distance(110))
-            .force('charge', d3.forceManyBody().strength(-450))
-            .force('collision', d3.forceCollide().radius(40))
-            .force('center', d3.forceCenter(width / 2, height / 2))
-            .alphaDecay(0.04);
+        // Reduced-motion: settle instantly rather than animating
+        const alphaDecay = prefersReducedMotion ? 0.3 : 0.04;
 
-        const g = svg.append('g');
-        zoomBehavior = d3.zoom().scaleExtent([0.5, 3]).on('zoom', e => g.attr('transform', e.transform));
+        const simulation = d3.forceSimulation(gameData.nodes)
+            .force('link',      d3.forceLink(gameData.links).id(d => d.id).distance(120))
+            .force('charge',    d3.forceManyBody().strength(-480))
+            .force('collision', d3.forceCollide().radius(42))
+            .force('center',    d3.forceCenter(width / 2, height / 2))
+            .alphaDecay(alphaDecay);
+
+        const g            = svg.append('g');
+        const zoomBehavior = d3.zoom().scaleExtent([0.4, 3.5]).on('zoom', e => g.attr('transform', e.transform));
         svg.call(zoomBehavior);
 
-        const linkColorMap = { 
-            trust: '#2F5D46', 
-            conflict: '#8B1A2B', 
-            influence: '#000000', 
-            location: '#B8860B' 
+        const linkColorMap = {
+            trust:     '#2F5D46',
+            conflict:  '#8B1A2B',
+            influence: '#6B7280',
+            location:  '#B8860B',
         };
 
-        networkLinks = g.selectAll('line').data(gameData.links).enter().append('line')
-            .attr('class', d => `link line-${d.type}`)
-            .attr('stroke-width', d => d.type === 'trust' ? 3 : 2)
-            .attr('stroke', d => linkColorMap[d.type] || '#000000')
+        const networkLinks = g.selectAll('line').data(gameData.links).enter().append('line')
+            .attr('class',          d => `link line-${d.type}`)
+            .attr('stroke-width',   d => d.type === 'trust' ? 3 : 1.5)
+            .attr('stroke',         d => linkColorMap[d.type] || '#555')
             .attr('stroke-dasharray', d => d.type === 'conflict' ? '6,4' : null)
-            .attr('stroke-opacity', 0.8);
+            .attr('stroke-opacity', 0.7);
 
-        networkNodes = g.selectAll('g.node').data(gameData.nodes).enter().append('g')
+        // Node groups
+        const networkNodes = g.selectAll('g.node').data(gameData.nodes).enter().append('g')
             .attr('class', 'node')
+            .attr('tabindex', '0')                  // keyboard reachable
+            .attr('role', 'button')
+            .attr('aria-label', d => `${d.label} — ${d.role}`)
             .style('cursor', 'pointer')
             .call(d3.drag()
                 .on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-                .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
-                .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+                .on('drag',  (e, d) => { d.fx = e.x; d.fy = e.y; })
+                .on('end',   (e, d) => { if (!e.active) simulation.alphaTarget(0);  d.fx = null; d.fy = null; })
             );
 
-        // Nodes: Brutalist 2px solid borders to match CSS
         networkNodes.append('circle')
-            .attr('r', d => d.type === 'character' ? 20 : 15)
+            .attr('r',    d => d.type === 'character' ? 22 : 16)
             .attr('fill', d => d.color)
-            .style('stroke', '#000000')
-            .style('stroke-width', '3px');
+            .style('stroke',       '#1a1a1a')
+            .style('stroke-width', '2.5px');
 
-        // Node labels
         networkNodes.append('text')
-            .attr('dy', d => (d.type === 'character' ? 32 : 26))
-            .attr('text-anchor', 'middle')
+            .attr('dy',           d => (d.type === 'character' ? 36 : 28))
+            .attr('text-anchor',  'middle')
             .text(d => d.shortName)
             .style('font-family', "'DM Sans', system-ui, sans-serif")
-            .style('font-size', '12px')
-            .style('font-weight', '800')
-            .style('fill', '#000000')
+            .style('font-size',   '11px')
+            .style('font-weight', '700')
+            .style('fill',        '#f0ebe3')
             .style('pointer-events', 'none');
 
+        // ── Tooltip on hover ────────────────────────────────────────────────
+        const tooltip = d3.select('body').append('div')
+            .attr('role', 'tooltip')
+            .style('position',       'fixed')
+            .style('background',     '#1a1a1a')
+            .style('color',          '#f0ebe3')
+            .style('border',         '1px solid #3a3a3a')
+            .style('border-radius',  '3px')
+            .style('padding',        '6px 10px')
+            .style('font-family',    "'DM Sans', system-ui, sans-serif")
+            .style('font-size',      '12px')
+            .style('pointer-events', 'none')
+            .style('opacity',        0)
+            .style('z-index',        9999)
+            .style('max-width',      '220px')
+            .style('line-height',    '1.5');
+
+        networkNodes
+            .on('mouseenter', (event, d) => {
+                tooltip
+                    .html(`<strong>${d.label}</strong><br><span style="opacity:0.7;font-size:11px">${d.role}</span>`)
+                    .style('left',  `${event.clientX + 12}px`)
+                    .style('top',   `${event.clientY - 10}px`)
+                    .transition().duration(120).style('opacity', 1);
+            })
+            .on('mousemove', (event) => {
+                tooltip
+                    .style('left', `${event.clientX + 12}px`)
+                    .style('top',  `${event.clientY - 10}px`);
+            })
+            .on('mouseleave', () => {
+                tooltip.transition().duration(150).style('opacity', 0);
+            });
+
+        // ── Simulation tick ─────────────────────────────────────────────────
         simulation.on('tick', () => {
-            // Hard bounds clamping to prevent nodes from drifting entirely off canvas
-            const radius = 25;
+            const pad = 28;
             gameData.nodes.forEach(d => {
-                d.x = Math.max(radius, Math.min(width - radius, d.x));
-                d.y = Math.max(radius, Math.min(height - radius, d.y));
+                d.x = Math.max(pad, Math.min(width - pad, d.x));
+                d.y = Math.max(pad, Math.min(height - pad, d.y));
             });
 
             networkLinks
                 .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
                 .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-            
+
             networkNodes.attr('transform', d => `translate(${d.x},${d.y})`);
         });
 
-        // Click interaction: Isolate and focus on a specific node and its neighbors
+        // ── Node click: highlight connected subgraph ─────────────────────────
         networkNodes.on('click', (event, d) => {
             event.stopPropagation();
-            networkNodes.style('opacity', 0.15); 
-            networkLinks.style('stroke-opacity', 0.1);
-            
+
             const connectedIds = new Set([d.id]);
             gameData.links.forEach(l => {
-                const srcId = l.source.id || l.source;
-                const tgtId = l.target.id || l.target;
-                if (srcId === d.id || tgtId === d.id) { 
-                    connectedIds.add(srcId); 
-                    connectedIds.add(tgtId); 
+                const srcId = l.source.id ?? l.source;
+                const tgtId = l.target.id ?? l.target;
+                if (srcId === d.id || tgtId === d.id) {
+                    connectedIds.add(srcId);
+                    connectedIds.add(tgtId);
                 }
             });
 
-            networkNodes.style('opacity', n => connectedIds.has(n.id) ? 1 : 0.15);
-            networkLinks.style('stroke-opacity', l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1);
+            networkNodes.style('opacity', n => connectedIds.has(n.id) ? 1 : 0.1);
+            networkLinks.style('stroke-opacity', l =>
+                (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.05
+            );
 
+            // Populate the sidebar info panel
             const panel = document.getElementById('selectedInfo');
             if (panel) {
-                // Construct DOM nodes manually instead of innerHTML strings
+                const connectionCount = [...connectedIds].length - 1;   // exclude self
                 const wrapper = document.createElement('div');
                 wrapper.className = 'node-info-panel';
-
-                const heading = document.createElement('h4');
-                heading.className = 'node-info-title';
-                heading.textContent = d.label;
-
-                const desc = document.createElement('p');
-                desc.className = 'node-info-role';
-                desc.textContent = d.role;
-
-                const badge = document.createElement('span');
-                badge.className = 'node-type-badge';
-                badge.textContent = d.type;
-
-                wrapper.append(heading, desc, badge);
+                wrapper.innerHTML = `
+                    <h4 class="node-info-title">${d.label}</h4>
+                    <p class="node-info-role">${d.role}</p>
+                    <span class="node-type-badge">${d.type}</span>
+                    <p style="margin-top:0.75rem; font-size:12px; opacity:0.6;">
+                        ${connectionCount} direct connection${connectionCount !== 1 ? 's' : ''}
+                    </p>`;
                 panel.replaceChildren(wrapper);
             }
-            
+
+            // Switch sidebar to the Info tab
             const infoTabBtn = document.querySelector('[data-tab-target="info-tab"]');
             if (infoTabBtn) activateTab(infoTabBtn);
         });
 
-        // Click on background resets the view
+        // Clicking the SVG background clears the selection
         svg.on('click', () => {
-            networkNodes.style('opacity', 1); 
-            networkLinks.style('stroke-opacity', 0.8);
+            networkNodes.style('opacity', 1);
+            networkLinks.style('stroke-opacity', 0.7);
             const panel = document.getElementById('selectedInfo');
             if (panel) {
                 const p = document.createElement('p');
@@ -434,54 +503,104 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Reset button functionality
+        // Keyboard activation for focused nodes
+        networkNodes.on('keydown', (event, d) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                networkNodes.dispatch('click', { detail: event });
+            }
+        });
+
+        // ── Reset button ────────────────────────────────────────────────────
         const resetBtn = document.getElementById('resetBtn');
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
                 const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
                 if (allBtn) {
-                    document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('active');
-                        b.setAttribute('aria-pressed', 'false');
-                    });
                     allBtn.classList.add('active');
                     allBtn.setAttribute('aria-pressed', 'true');
                 }
                 networkNodes.style('opacity', 1);
-                networkLinks.style('stroke-opacity', 0.8);
-                svg.transition().duration(750).call(zoomBehavior.transform, d3.zoomIdentity);
-                simulation.alpha(0.8).restart();
+                networkLinks.style('stroke-opacity', 0.7);
+
+                const transitionDuration = prefersReducedMotion ? 0 : 750;
+                svg.transition().duration(transitionDuration)
+                   .call(zoomBehavior.transform, d3.zoomIdentity);
+
+                simulation.alpha(0.6).restart();
             });
         }
 
-        initNetwork = function() {
+        // ── initNetwork: called when the view first becomes visible ──────────
+        initNetwork = function () {
             if (!DOM.networkContainer || DOM.networkContainer.clientWidth < 10) return;
-            
-            width = DOM.networkContainer.clientWidth; 
+
+            width  = DOM.networkContainer.clientWidth;
             height = DOM.networkContainer.clientHeight;
-            
+
             svg.attr('viewBox', `0 0 ${width} ${height}`);
             simulation.force('center', d3.forceCenter(width / 2, height / 2));
-            
+
             if (!networkInitialized) {
-                // Scatter initially so they don't spawn stacked on exactly 0,0
-                gameData.nodes.forEach(n => { 
-                    n.x = width/2 + (Math.random()-0.5)*100; 
-                    n.y = height/2 + (Math.random()-0.5)*100; 
+                // Seed positions near the centre so the simulation settles faster
+                gameData.nodes.forEach(n => {
+                    n.x = width  / 2 + (Math.random() - 0.5) * 120;
+                    n.y = height / 2 + (Math.random() - 0.5) * 120;
                 });
-                // Small delay lets the browser finish rendering the container bounds
-                setTimeout(() => { 
-                    simulation.alpha(1).restart(); 
-                    networkInitialized = true; 
+                setTimeout(() => {
+                    simulation.alpha(1).restart();
+                    networkInitialized = true;
                 }, 50);
-            } else { 
-                simulation.alpha(0.3).restart(); 
+            } else {
+                simulation.alpha(0.25).restart();
             }
         };
+
+        // ── ResizeObserver keeps the graph centred when the container resizes ─
+        // (more accurate than window 'resize', fires on panel layout changes too)
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(() => {
+                const nwView = document.getElementById('network-view');
+                if (nwView?.classList.contains('active')) initNetwork();
+            }).observe(DOM.networkContainer);
+        }
     }
 
-    // Global Window resize observer & Dynamic Heights
-    let resizeTimer;
+    // ─── Network filter ──────────────────────────────────────────────────────
+    function handleNetworkFilter(btn) {
+        const networkNodes = document.querySelectorAll('#network g.node');
+        const networkLinks = document.querySelectorAll('#network line');
+        if (!networkNodes.length) return;
+
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+
+        const filter  = btn.dataset.filter;
+        const typeMap = {
+            characters: ['character', 'npc'],
+            locations:  ['location'],
+            scenarios:  ['scenario'],
+        };
+
+        // Re-select via D3 so we can read the bound data
+        d3.select('#network').selectAll('g.node')
+            .style('opacity', d =>
+                filter === 'all' || (typeMap[filter]?.includes(d.type)) ? 1 : 0.05
+            );
+
+        d3.select('#network').selectAll('line')
+            .style('stroke-opacity', filter === 'all' ? 0.7 : 0.08);
+    }
+
+    // ─── Dynamic layout metrics ──────────────────────────────────────────────
     function updateDynamicHeights() {
         const header = document.querySelector('.sidebar-header');
         if (header) {
@@ -490,136 +609,137 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateDynamicHeights();
 
-    window.addEventListener('resize', () => {
-        updateDynamicHeights();
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            const nwView = document.getElementById('network-view');
-            if (nwView && nwView.classList.contains('active') && typeof initNetwork === 'function') {
-                initNetwork();
-            }
-        }, 150);
-    });
-
-    function handleNetworkFilter(btn) {
-        if (!networkNodes) return;
-        
-        document.querySelectorAll('.filter-btn').forEach(b => { 
-            b.classList.remove('active'); 
-            b.setAttribute('aria-pressed', 'false'); 
-        });
-        
-        btn.classList.add('active'); 
-        btn.setAttribute('aria-pressed', 'true');
-        
-        const filter = btn.dataset.filter;
-        const typeMap = { 
-            characters: ['character', 'npc'], 
-            locations: ['location'], 
-            scenarios: ['scenario'] 
-        };
-        
-        networkNodes.style('opacity', d => 
-            filter === 'all' || (typeMap[filter] && typeMap[filter].includes(d.type)) ? 1 : 0.05
-        );
-        networkLinks.style('stroke-opacity', filter === 'all' ? 0.8 : 0.1);
+    // ResizeObserver on the sidebar header is more accurate than window.resize
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    if (sidebarHeader && typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(updateDynamicHeights).observe(sidebarHeader);
     }
 
-    // =========================================================================
-    // 5. Mobile & Utility Mechanics
-    // =========================================================================
-
+    // ─── Mobile menu ─────────────────────────────────────────────────────────
     function closeMobileMenu() {
-        if (DOM.navSection) DOM.navSection.classList.remove('open');
-        if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.setAttribute('aria-expanded', 'false');
-        if (DOM.sidebarOverlay) { 
-            DOM.sidebarOverlay.classList.remove('visible'); 
-            clearTimeout(overlayTimer);
-            overlayTimer = setTimeout(() => { DOM.sidebarOverlay.style.display = 'none'; }, 200); 
-        }
+        DOM.navSection?.classList.remove('open');
+        DOM.mobileMenuBtn?.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('menu-open');
+
+        if (DOM.sidebarOverlay) {
+            DOM.sidebarOverlay.classList.remove('visible');
+            clearTimeout(overlayTimer);
+            overlayTimer = setTimeout(() => {
+                DOM.sidebarOverlay.style.display = 'none';
+            }, 200);
+        }
     }
 
     if (DOM.mobileMenuBtn) {
         DOM.mobileMenuBtn.addEventListener('click', () => {
-            const isOpen = DOM.navSection && DOM.navSection.classList.contains('open');
+            const isOpen = DOM.navSection?.classList.contains('open');
             if (isOpen) {
                 closeMobileMenu();
             } else {
-                if (DOM.navSection) DOM.navSection.classList.add('open');
+                DOM.navSection?.classList.add('open');
                 DOM.mobileMenuBtn.setAttribute('aria-expanded', 'true');
                 document.body.classList.add('menu-open');
-                
-                if (DOM.sidebarOverlay) { 
+
+                if (DOM.sidebarOverlay) {
                     clearTimeout(overlayTimer);
-                    DOM.sidebarOverlay.style.display = 'block'; 
-                    requestAnimationFrame(() => DOM.sidebarOverlay.classList.add('visible')); 
+                    DOM.sidebarOverlay.style.display = 'block';
+                    requestAnimationFrame(() => DOM.sidebarOverlay.classList.add('visible'));
                 }
             }
         });
     }
 
-    if (DOM.sidebarOverlay) {
-        DOM.sidebarOverlay.addEventListener('click', closeMobileMenu);
-    }
+    DOM.sidebarOverlay?.addEventListener('click', closeMobileMenu);
 
-    // Scroll Observer for Back to Top Button & Progress
+    // ─── Scroll progress bar ─────────────────────────────────────────────────
+    // Appended to document.body (position: fixed) so it stays at the top of the
+    // viewport and does NOT scroll away with the content.
     if (DOM.mainContent) {
         const scrollProgressBar = document.createElement('div');
         scrollProgressBar.className = 'scroll-progress';
-        DOM.mainContent.appendChild(scrollProgressBar);
+        scrollProgressBar.setAttribute('role', 'progressbar');
+        scrollProgressBar.setAttribute('aria-label', 'Document read progress');
+        scrollProgressBar.setAttribute('aria-valuemin', '0');
+        scrollProgressBar.setAttribute('aria-valuemax', '100');
+        scrollProgressBar.setAttribute('aria-valuenow', '0');
+        document.body.appendChild(scrollProgressBar);   // fixed — outside scroll container
 
-        DOM.mainContent.addEventListener('scroll', () => { 
-            if (DOM.backToTop) {
-                DOM.backToTop.classList.toggle('visible', DOM.mainContent.scrollTop > 300); 
-            }
+        DOM.mainContent.addEventListener('scroll', () => {
+            // Show / hide back-to-top
+            DOM.backToTop?.classList.toggle('visible', DOM.mainContent.scrollTop > 300);
+
+            // Update progress bar
             const scrollHeight = DOM.mainContent.scrollHeight - DOM.mainContent.clientHeight;
-            const progress = scrollHeight > 0 ? (DOM.mainContent.scrollTop / scrollHeight) * 100 : 0;
-            scrollProgressBar.style.width = progress + '%';
+            const progress = scrollHeight > 0
+                ? Math.round((DOM.mainContent.scrollTop / scrollHeight) * 100)
+                : 0;
+            scrollProgressBar.style.width = `${progress}%`;
+            scrollProgressBar.setAttribute('aria-valuenow', progress);
         }, { passive: true });
-        
-        if (DOM.backToTop) {
-            DOM.backToTop.addEventListener('click', () => {
-                DOM.mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-    }
 
-    // Delta Table Grouping toggle
-    const deltaTable = document.querySelector('.delta-table');
-    if (deltaTable) {
-        deltaTable.querySelectorAll('tr').forEach(tr => {
-            if (tr.classList.contains('table-group')) {
-                tr.style.cursor = 'pointer';
-                tr.setAttribute('aria-expanded', 'true');
-                tr.addEventListener('click', () => {
-                    const isExpanded = tr.getAttribute('aria-expanded') === 'true';
-                    tr.setAttribute('aria-expanded', !isExpanded);
-                    let next = tr.nextElementSibling;
-                    while(next && !next.classList.contains('table-group')) {
-                        next.style.display = isExpanded ? 'none' : '';
-                        next = next.nextElementSibling;
-                    }
-                });
-            }
+        DOM.backToTop?.addEventListener('click', () => {
+            DOM.mainContent.scrollTo({
+                top:      0,
+                behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            });
         });
     }
 
-    // PDF Export Bind
+    // ─── Delta gauge table: collapsible groups ───────────────────────────────
+    const deltaTable = document.querySelector('.delta-table');
+    if (deltaTable) {
+        deltaTable.querySelectorAll('tr.table-group').forEach(tr => {
+            tr.style.cursor = 'pointer';
+            tr.setAttribute('tabindex', '0');           // keyboard focusable
+            tr.setAttribute('role', 'button');
+            tr.setAttribute('aria-expanded', 'true');
+
+            const toggle = () => {
+                const isExpanded = tr.getAttribute('aria-expanded') === 'true';
+                tr.setAttribute('aria-expanded', String(!isExpanded));
+
+                let next = tr.nextElementSibling;
+                while (next && !next.classList.contains('table-group')) {
+                    next.style.display = isExpanded ? 'none' : '';
+                    next = next.nextElementSibling;
+                }
+            };
+
+            tr.addEventListener('click',   toggle);
+            tr.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+            });
+        });
+    }
+
+    // ─── PDF export ──────────────────────────────────────────────────────────
     const pdfBtn = document.getElementById('pdfExportBtn');
     if (pdfBtn) {
         pdfBtn.addEventListener('click', () => window.print());
     }
 
-    // Scroll indicators for horizontal tabs
+    // ─── Horizontal tab overflow shadow indicator ────────────────────────────
+    function checkTabScroll(tabs) {
+        const isAtEnd = Math.ceil(tabs.scrollLeft + tabs.clientWidth) >= tabs.scrollWidth;
+        tabs.classList.toggle('is-at-end', isAtEnd);
+    }
+
     document.querySelectorAll('.doc-tabs').forEach(tabs => {
-        const checkScroll = () => {
-            const isAtEnd = Math.ceil(tabs.scrollLeft + tabs.clientWidth) >= tabs.scrollWidth;
-            tabs.classList.toggle('is-at-end', isAtEnd);
-        };
-        tabs.addEventListener('scroll', checkScroll, { passive: true });
-        window.addEventListener('resize', checkScroll);
-        setTimeout(checkScroll, 100);
+        tabs.addEventListener('scroll', () => checkTabScroll(tabs), { passive: true });
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(() => checkTabScroll(tabs)).observe(tabs);
+        }
+        checkTabScroll(tabs);
+    });
+
+    // Automated Fallback for Missing Images (Moved from HTML)
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', function() {
+            this.onerror = null;
+            this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='100%25' height='100%25' fill='transparent'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' font-weight='bold' fill='%239A8060' text-anchor='middle' dominant-baseline='middle'%3EVisuals in progress...%3C/text%3E%3C/svg%3E";
+            this.style.border = "1px dashed var(--c-border)";
+            this.style.background = "transparent";
+        });
     });
 
 });

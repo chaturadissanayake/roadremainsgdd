@@ -1,5 +1,4 @@
 :root {
-    /* Spacing scale */
     --sp-1: 0.25rem;
     --sp-2: 0.5rem;
     --sp-3: 0.75rem;
@@ -11,53 +10,42 @@
     --sp-12: 3rem;
     --sp-16: 4rem;
 
-    /* Warm paper palette */
-    --c-paper:         #F6EFE2;   /* main content bg — aged paper */
-    --c-surface:       #EDE3CE;   /* cards, definition items */
-    --c-surface-alt:   #E2D5BB;   /* striping, dividers */
-    --c-border:        #CDBDA0;   /* default border */
-    --c-border-strong: #9A8060;   /* strong border */
+    --c-paper:         #F6EFE2;  
+    --c-surface:       #EDE3CE;   
+    --c-surface-alt:   #E2D5BB;  
+    --c-border:        #CDBDA0;  
+    --c-border-strong: #9A8060;   
 
-    /* Dark sidebar palette */
-    --c-dark:          #1F1208;   /* sidebar bg — old mahogany */
-    --c-dark-mid:      #2D1A0C;   /* nav group headers */
-    --c-dark-hover:    #3E2410;   /* nav item hover */
+    --c-dark:          #1F1208;   
+    --c-dark-mid:      #2D1A0C;  
+    --c-dark-hover:    #3E2410;  
 
-    /* Text */
-    --c-ink:           #1C1309;   /* core text */
-    --c-ink-muted:     #7A6347;   /* secondary text */
-    --c-ink-dim:       #B09A78;   /* very muted, placeholders */
-    --c-ink-light:     #EFE5D0;   /* text on dark backgrounds */
-    --c-ink-dim-light: #9A8060;   /* muted text on dark */
+    --c-ink:           #1C1309;   
+    --c-ink-muted:     #7A6347;   
+    --c-ink-dim:       #B09A78;  
+    --c-ink-light:     #EFE5D0;  
+    --c-ink-dim-light: #9A8060;   
 
-    /* Accents — canonical game colours */
-    --c-garnet:        #8B1A2B;   /* primary accent (game-canonical) */
+    --c-garnet:        #8B1A2B;   
     --c-garnet-hover:  #A3202F;
-    --c-garnet-pale:   #F8ECEE;   /* garnet tint bg */
-    --c-forest:        #2F5740;   /* success/verified */
-    --c-ochre:         #B07828;   /* warning/caution */
-    --c-danger:        #A51D1D;   /* error/danger */
+    --c-garnet-pale:   #F8ECEE;   
+    --c-forest:        #2F5740;  
+    --c-ochre:         #B07828;  
+    --c-danger:        #A51D1D;   
     --c-forest-pale:   #EAF0EC;
     --c-ochre-pale:    #F5EDD8;
 
-    /* Typography roles */
     --font-display:    'Cormorant Garamond', Georgia, serif;
     --font-body:       'Source Serif 4', Georgia, serif;
     --font-ui:         'DM Sans', system-ui, -apple-system, sans-serif;
     --font-mono:       'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-    /* Layout */
     --sidebar-w:       272px;
     --content-max:     860px;
 
-    /* Transitions */
     --t-fast:          0.12s ease;
     --t-std:           0.2s ease;
 }
-
-/* ============================================================================
-   BASE RESET & DOCUMENT DEFAULTS
-   ============================================================================ */
 
 *, *::before, *::after {
     margin: 0;
@@ -91,22 +79,26 @@ body.menu-open .main-content {
     touch-action: none;
 }
 
-:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--c-paper), 0 0 0 4px var(--c-garnet);
-    border-radius: 0;
+.narrative-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-garnet);
+    padding: var(--sp-6) var(--sp-8);
+    margin: 0 0 var(--sp-10);
+    max-width: var(--content-max);
 }
 
-/* ============================================================================
-   TYPOGRAPHY HIERARCHY
-   ============================================================================ */
+/* Prevent focus ring on programmatically focused elements (like the h2 on view load) */
+[tabindex="-1"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
 h1, h2, h3, h4, h5 {
     color: var(--c-ink);
-    line-height: 1.35; /* Improved breathing room for multi-line headers */
+    line-height: 1.35; 
 }
 
-/* Sidebar title */
 h1 {
     font-family: var(--font-ui);
     font-size: 1rem;
@@ -116,7 +108,6 @@ h1 {
     color: var(--c-ink-light);
 }
 
-/* Section heading — Cormorant Garamond for warmth and authority */
 h2 {
     font-family: var(--font-display);
     font-size: 2.6rem;
@@ -126,7 +117,6 @@ h2 {
     margin-bottom: var(--sp-3);
 }
 
-/* Subsection label — small, DM Sans, garnet — not all-caps aggressive */
 h3 {
     font-family: var(--font-ui);
     font-size: 0.72rem;
@@ -139,7 +129,6 @@ h3 {
     line-height: 1.4;
 }
 
-/* Sub-heading — Source Serif 4, slightly larger */
 h4 {
     font-family: var(--font-ui);
     font-size: 0.95rem;
@@ -175,30 +164,25 @@ code {
     color: var(--c-garnet);
 }
 
-/* ============================================================================
-   SCROLLBAR — SUBTLE WARM
-   ============================================================================ */
-
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
     background: var(--c-surface);
+    border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--c-border-strong);
+    border-radius: 4px;
+    border: 2px solid var(--c-surface);
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--c-ink-muted);
 }
-
-/* ============================================================================
-   ACCESSIBILITY UTILITIES
-   ============================================================================ */
 
 .sr-only {
     position: absolute;
@@ -232,10 +216,6 @@ code {
     top: 0;
 }
 
-/* ============================================================================
-   LAYOUT ARCHITECTURE
-   ============================================================================ */
-
 .app-layout {
     display: flex;
     height: 100vh;
@@ -256,10 +236,6 @@ code {
     pointer-events: none;
 }
 
-/* ============================================================================
-   SIDEBAR NAVIGATION — DARK MAHOGANY
-   ============================================================================ */
-
 .sidebar-nav {
     width: var(--sidebar-w);
     flex-shrink: 0;
@@ -272,7 +248,6 @@ code {
     z-index: 50;
 }
 
-/* Custom dark scrollbar inside sidebar */
 .sidebar-nav::-webkit-scrollbar {
     width: 4px;
 }
@@ -294,7 +269,6 @@ code {
     z-index: 10;
 }
 
-/* Game title in sidebar */
 .sidebar-header h1 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -354,14 +328,13 @@ code {
     text-align: left;
     background: transparent;
     border: none;
-    border-left: 3px solid transparent;
-    padding: 10px var(--sp-3) 10px calc(var(--sp-3) - 3px);
+    padding: 10px var(--sp-3);
     font-family: var(--font-ui);
     font-size: 13px;
     font-weight: 400;
     color: var(--c-ink-dim-light);
     cursor: pointer;
-    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+    transition: background var(--t-fast), color var(--t-fast);
     margin-bottom: 1px;
     display: flex;
     align-items: center;
@@ -372,14 +345,12 @@ code {
 .nav-btn:hover {
     background: var(--c-dark-hover);
     color: var(--c-ink-light);
-    border-left-color: var(--c-ink-dim-light);
 }
 
 .nav-btn.active {
     background: var(--c-dark-mid);
     color: var(--c-ink-light);
     font-weight: 600;
-    border-left-color: var(--c-garnet);
 }
 
 .cta-group {
@@ -449,7 +420,6 @@ code {
     flex-shrink: 0;
 }
 
-/* Mobile toggle — hidden on desktop */
 .mobile-menu-btn {
     display: none;
     align-items: center;
@@ -473,10 +443,6 @@ code {
     background: var(--c-dark-hover);
 }
 
-/* ============================================================================
-   MAIN CONTENT — WARM PAPER
-   ============================================================================ */
-
 .main-content {
     flex-grow: 1;
     overflow-y: auto;
@@ -486,10 +452,6 @@ code {
     position: relative;
     width: calc(100% - var(--sidebar-w));
 }
-
-/* ============================================================================
-   HERO COVER PAGE
-   ============================================================================ */
 
 .hero-cover {
     margin-bottom: var(--sp-12);
@@ -505,7 +467,7 @@ code {
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--c-ink-muted);
+    color: var(--c-garnet);
     margin-bottom: var(--sp-4);
 }
 
@@ -516,7 +478,7 @@ code {
     color: var(--c-ink);
     line-height: 1.1;
     letter-spacing: -0.01em;
-    text-transform: none; /* Overrides the global h1 uppercase rule */
+    text-transform: none; 
     margin-bottom: var(--sp-3);
 }
 
@@ -541,10 +503,6 @@ code {
     .hero-subtitle { font-size: 1rem; }
 }
 
-/* ============================================================================
-   VIEWS & TAB SYSTEM
-   ============================================================================ */
-
 .view-section,
 .sub-tab-content {
     display: none;
@@ -560,10 +518,6 @@ code {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
-
-/* ============================================================================
-   SECTION HEADER — GARNET FOLDER TAB (SIGNATURE ELEMENT)
-   ============================================================================ */
 
 .doc-header {
     margin-bottom: var(--sp-10);
@@ -597,10 +551,6 @@ code {
     max-width: var(--content-max);
     width: 100%;
 }
-
-/* ============================================================================
-   TAB BARS
-   ============================================================================ */
 
 .doc-tabs {
     display: flex;
@@ -675,7 +625,6 @@ code {
     background: var(--c-ink-dim);
 }
 
-/* Network map sub-tabs — slightly different style */
 .sub-tabs {
     display: flex;
     flex-wrap: nowrap;
@@ -698,9 +647,9 @@ code {
     position: relative;
     border: 1px solid var(--c-border);
     border-radius: 0;
-    padding: 8px 14px;
-    min-height: 36px;
-    font-size: 11px;
+    padding: 10px 14px;
+    min-height: 44px;
+    font-size: 11.5px;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -726,19 +675,11 @@ code {
     color: #fff;
 }
 
-/* ============================================================================
-   CONTENT BLOCKS
-   ============================================================================ */
-
 .content-block {
     margin-bottom: var(--sp-12);
     max-width: var(--content-max);
     width: 100%;
 }
-
-/* ============================================================================
-   CARDS — DEFINITION ITEMS, LOCATION CARDS, CHARACTER PROFILES
-   ============================================================================ */
 
 .definition-item,
 .location-card,
@@ -778,7 +719,6 @@ code {
     color: var(--c-ink-muted);
 }
 
-/* Note / callout inline */
 .note-text {
     font-family: var(--font-ui);
     font-size: 13px;
@@ -790,7 +730,6 @@ code {
     margin-top: var(--sp-4);
 }
 
-/* Dialogue / clue quotes */
 .clue-dialogue {
     font-family: var(--font-display);
     font-style: italic;
@@ -803,7 +742,6 @@ code {
     line-height: 1.55;
 }
 
-/* Lists */
 .clean-list {
     list-style: none;
     padding-left: 0;
@@ -831,7 +769,6 @@ code {
     border-radius: 50%;
 }
 
-/* Spec / metadata tags - Editorial Style */
 .meta-specs {
     display: flex;
     gap: var(--sp-4);
@@ -858,7 +795,6 @@ code {
     color: var(--c-garnet);
 }
 
-/* Editorial Image Blocks */
 .editorial-figure {
     margin: var(--sp-5) 0;
     width: 100%;
@@ -871,7 +807,7 @@ code {
     background: transparent !important;
     display: block;
     aspect-ratio: 16/9;
-    object-fit: contain; /* Changed from cover to contain to prevent edge cropping */
+    object-fit: contain; 
 }
 
 .editorial-figure.portrait img { aspect-ratio: 3/4; }
@@ -886,24 +822,35 @@ code {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); /* Increased from 280px to make images much larger */
-    gap: var(--sp-6); /* Slightly increased gap so they have room to breathe */
+    grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); 
+    gap: var(--sp-6); 
     margin-top: var(--sp-6);
 }
 
-/* ============================================================================
-   DATA TABLES
-   ============================================================================ */
-
-/* Scroll wrapper — applied on mobile, always present */
 .content-block {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+    /* Adds scrolling shadow indicators for horizontal overflow */
+    .content-block:has(.data-table) {
+        background: 
+            linear-gradient(to right, var(--c-paper) 30%, rgba(255,255,255,0)),
+            linear-gradient(to right, rgba(255,255,255,0), var(--c-paper) 70%) 100% 0,
+            radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.15), rgba(0,0,0,0)),
+            radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.15), rgba(0,0,0,0)) 100% 0;
+        background-repeat: no-repeat;
+        background-color: var(--c-paper);
+        background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+        background-attachment: local, local, scroll, scroll;
+    }
 }
 
 .data-table {
     width: 100%;
     max-width: var(--content-max);
-    min-width: 650px; /* Forces clean horizontal scrolling on mobile to prevent text squishing */
+    min-width: 650px; 
     border-collapse: collapse;
     margin-bottom: var(--sp-8);
     font-size: 13.5px;
@@ -945,7 +892,6 @@ code {
     background: var(--c-surface-alt);
 }
 
-/* Gauge delta table colour codes */
 .delta-table .pos {
     color: var(--c-forest);
     font-family: var(--font-mono);
@@ -967,7 +913,6 @@ code {
     text-align: center;
 }
 
-/* Table group row (section dividers within tables) */
 .table-group td::after {
     content: ' ▼';
     float: right;
@@ -987,10 +932,6 @@ code {
     border-bottom: none !important;
 }
 
-/* ============================================================================
-   STRUCTURAL GRIDS
-   ============================================================================ */
-
 .doc-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -1007,6 +948,13 @@ code {
     width: 100%;
     display: flex;
     flex-direction: column;
+    transition: transform var(--t-std), box-shadow var(--t-std);
+}
+
+.grid-item:hover,
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 
 .grid-item .editorial-figure {
@@ -1016,8 +964,8 @@ code {
 
 .grid-item p,
 .card p {
-    line-height: 1.4; /* Pulls the lines of text closer together */
-    font-size: 0.95rem; /* Slightly scales down text to fit the UI card better */
+    line-height: 1.4;
+    font-size: 0.95rem; 
 }
 
 .grid-item > p:last-child,
@@ -1041,17 +989,13 @@ code {
     grid-column: 1 / -1;
 }
 
-/* ============================================================================
-   LOGIC TREES — INTERACTIVE SCENARIO EXPLORER
-   ============================================================================ */
-
 .logic-tree {
     position: relative;
     padding-left: 24px;
     margin-left: 12px; 
     margin-top: var(--sp-6);
     margin-bottom: var(--sp-8);
-    border-left: 1px solid var(--c-border); /* Softened from the heavy brown bar */
+    border-left: 1px solid var(--c-border);
 }
 
 .decision-node,
@@ -1067,12 +1011,11 @@ code {
     padding-bottom: 0;
 }
 
-/* Connector dot */
 .decision-node::before,
 .logic-node::before {
     content: '';
     position: absolute;
-    left: -30px; /* Perfectly centered on the delicate 1px line */
+    left: -30px;
     top: 6px;
     width: 12px;
     height: 12px;
@@ -1094,7 +1037,7 @@ code {
     margin-bottom: var(--sp-3);
     padding-bottom: var(--sp-2);
     border-bottom: 1px solid var(--c-border);
-    display: block; /* Prevents wrapping overlap issues */
+    display: block; 
     line-height: 1.4;
 }
 
@@ -1128,12 +1071,14 @@ code {
     position: relative;
     z-index: 2;
     width: 100%;
-    transition: all var(--t-fast);
+    transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast), border-color var(--t-fast);
 }
 
 .btn-interact:hover {
     background: var(--c-surface-alt);
     border-color: var(--c-garnet);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .btn-interact::after {
@@ -1182,10 +1127,6 @@ code {
     to   { opacity: 1; }
 }
 
-/* ============================================================================
-   D3 NETWORK MAP
-   ============================================================================ */
-
 #network-view .doc-body {
     max-width: none;
 }
@@ -1211,6 +1152,15 @@ code {
         linear-gradient(90deg, var(--c-border) 1px, transparent 1px);
     background-size: 24px 24px;
     overflow: hidden;
+}
+
+#network {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
 .network-controls {
@@ -1315,7 +1265,6 @@ code {
     margin-top: 0;
 }
 
-/* Node info panel */
 .node-info-panel {
     font-family: var(--font-ui);
 }
@@ -1348,7 +1297,6 @@ code {
     padding: 4px 10px;
 }
 
-/* Map legend */
 .legend h3 {
     font-family: var(--font-ui);
     font-size: 10px;
@@ -1388,14 +1336,11 @@ code {
 .char-player  { background: var(--c-garnet); }
 .char-npc     { background: var(--c-ink-muted); }
 .loc-public   { background: var(--c-ochre); }
+.sys-abstract { background: var(--c-forest); }
 .line-trust   { stroke: var(--c-forest); }
 .line-conflict{ stroke: var(--c-danger); }
 .line-influence { stroke: var(--c-border-strong); }
 .line-location { stroke: var(--c-ochre); }
-
-/* ============================================================================
-   CODE BLOCKS
-   ============================================================================ */
 
 .code-block {
     background: var(--c-dark);
@@ -1417,10 +1362,6 @@ code {
     color: var(--c-ink-light);
     font-size: inherit;
 }
-
-/* ============================================================================
-   WARNING CALLOUT
-   ============================================================================ */
 
 .warning-callout {
     background: var(--c-garnet-pale);
@@ -1456,10 +1397,6 @@ code {
     padding: 3px 10px;
 }
 
-/* ============================================================================
-   TOOL LIST
-   ============================================================================ */
-
 .tool-list {
     margin-top: var(--sp-4);
 }
@@ -1476,10 +1413,6 @@ code {
     border-bottom: none;
     padding-bottom: 0;
 }
-
-/* ============================================================================
-   BACK TO TOP BUTTON
-   ============================================================================ */
 
 .back-to-top {
     position: fixed;
@@ -1512,17 +1445,9 @@ code {
     border-color: var(--c-garnet);
 }
 
-/* ============================================================================
-   PRINT UTILITY
-   ============================================================================ */
-
 .print-only {
     display: none;
 }
-
-/* ============================================================================
-   OVERLAY (MOBILE MENU BACKDROP)
-   ============================================================================ */
 
 .sidebar-overlay {
     display: none;
@@ -1539,10 +1464,6 @@ code {
     opacity: 1;
 }
 
-/* ============================================================================
-   REDUCED MOTION
-   ============================================================================ */
-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -1552,10 +1473,6 @@ code {
         animation: none;
     }
 }
-
-/* ============================================================================
-   RESPONSIVE — TABLET (≤ 1024px)
-   ============================================================================ */
 
 @media (max-width: 1024px) {
     .main-content {
@@ -1601,12 +1518,6 @@ code {
     }
 }
 
-/* ============================================================================
-   RESPONSIVE — MOBILE (≤ 900px)
-   The sidebar collapses to a sticky dark top bar;
-   nav drops down as a full-width dark panel
-   ============================================================================ */
-
 @media (max-width: 900px) {
     .app-layout {
         flex-direction: column;
@@ -1615,7 +1526,6 @@ code {
         height: 100dvh;
     }
 
-    /* Top bar — stays dark, consistent with desktop sidebar */
     .sidebar-nav {
         width: 100%;
         height: auto;
@@ -1625,7 +1535,7 @@ code {
         position: sticky;
         top: 0;
         z-index: 100;
-        overflow: visible; /* Resets both x and y so the absolute dropdown doesn't clip */
+        overflow: visible; 
         background: var(--c-dark);
     }
 
@@ -1657,10 +1567,9 @@ code {
     }
 
     .mobile-menu-btn {
-        flex-shrink: 0; /* Prevents the button from squishing */
+        flex-shrink: 0; 
     }
 
-    /* Mobile dropdown menu panel */
     .nav-section {
         position: absolute;
         top: 100%;
@@ -1676,9 +1585,9 @@ code {
         display: none;
         z-index: 50;
         padding-bottom: 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    /* Dark scrollbar specifically for the mobile dropdown */
     .nav-section::-webkit-scrollbar {
         width: 4px;
     }
@@ -1689,15 +1598,16 @@ code {
         background: var(--c-dark-hover);
     }
 
-    .nav-section.open {
-        display: block;
-        animation: slideDownMenu 0.15s ease-out forwards;
-    }
+.nav-section.open {
+    display: block;
+    animation: slideDownMenu 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform-origin: top center;
+}
 
-    @keyframes slideDownMenu {
-        from { opacity: 0; transform: translateY(-8px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
+@keyframes slideDownMenu {
+    from { opacity: 0; transform: translateY(-12px) scaleY(0.98); }
+    to   { opacity: 1; transform: translateY(0) scaleY(1); }
+}
 
     .nav-group {
         display: flex;
@@ -1707,23 +1617,14 @@ code {
     }
 
     .nav-group-title {
-        display: block;
-        padding: var(--sp-3) var(--sp-5) var(--sp-2);
-        border-bottom: 1px solid var(--c-dark-hover);
-        cursor: default;
-        pointer-events: none;
-        user-select: none;
-        min-height: unset;
-        font-size: 9px;
-        letter-spacing: 0.14em;
+        display: none; /* Hides the documentation text on mobile */
     }
 
     .nav-btn {
         width: 100%;
         border: none;
-        border-left: 4px solid transparent; /* Keeps text perfectly aligned */
         border-bottom: 1px solid var(--c-dark-hover);
-        padding: 14px calc(var(--sp-5) - 4px);
+        padding: 14px var(--sp-5);
         min-height: 48px;
         font-size: 14px;
         background: var(--c-dark);
@@ -1741,8 +1642,6 @@ code {
         background: var(--c-dark-mid);
         color: #fff;
         font-weight: 700;
-        border-left: 4px solid var(--c-garnet);
-        padding-left: calc(var(--sp-5) - 4px);
     }
 
     .cta-group {
@@ -1772,7 +1671,6 @@ code {
         display: flex;
     }
 
-    /* Hide PDF button on mobile for cleaner UI */
     .sidebar-footer {
         display: none;
     }
@@ -1791,10 +1689,6 @@ code {
         font-size: 2rem;
     }
 }
-
-/* ============================================================================
-   RESPONSIVE — SMALL MOBILE (≤ 640px)
-   ============================================================================ */
 
 @media (max-width: 640px) {
     .character-profile .editorial-figure.portrait {
@@ -1867,10 +1761,6 @@ code {
         padding: 4px 10px;
     }
 }
-
-/* ============================================================================
-   PRINT STYLES
-   ============================================================================ */
 
 @page {
     margin: 1.5cm 2cm;
@@ -2131,9 +2021,6 @@ code {
     }
 }
 
-/* ============================================================================
-   CREDITS SECTION
-   ============================================================================ */
 .credits-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -2173,10 +2060,393 @@ code {
     margin-top: 2px;
 }
 
-.credits-section--thanks {
-    grid-column: 1 / -1;
-    text-align: center;
-    border-top: 1px dashed var(--c-border-strong);
-    padding-top: var(--sp-8);
-    margin-top: var(--sp-4);
+/* =========================================
+   EXTRACTED COMPONENT STYLES (Clean HTML)
+   ========================================= */
+
+.hero-cover-custom {
+    position: relative;
+    padding-bottom: var(--sp-8);
+    max-width: var(--content-max);
+    margin-bottom: var(--sp-12);
+    border-bottom: 2px solid var(--c-border);
+}
+.hero-texture {
+    display: none; /* Removed jarring overlay */
+}
+.hero-title-main {
+    color: var(--c-ink);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    margin: 0.4rem 0 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: none; 
+}
+.hero-hook {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    font-style: italic;
+    color: var(--c-ink-muted);
+    margin: 0 0 1.8rem;
+    letter-spacing: 0.01em;
+    max-width: 70ch;
+}
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+.tag {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    color: var(--c-ink-muted);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 0;
+}
+.narrative-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-left: 4px solid var(--c-garnet);
+    padding: var(--sp-6) var(--sp-8);
+    margin: 0 0 var(--sp-10);
+    max-width: var(--content-max);
+}
+.narrative-title {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-garnet);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin: 0 0 var(--sp-3);
+}
+.narrative-text-large {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--c-ink);
+    margin: 0 0 var(--sp-4);
+    max-width: 70ch;
+}
+.narrative-text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--c-ink-muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 70ch;
+}
+.road-arc-container {
+    background: var(--c-paper);
+    border: 1px solid var(--c-border-strong);
+    padding: var(--sp-8);
+    margin: 0 0 var(--sp-10);
+    max-width: var(--content-max);
+}
+.road-arc-desc {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--c-ink-muted);
+    margin: 0 0 var(--sp-8);
+    letter-spacing: 0.02em;
+}
+.timeline {
+    position: relative;
+    padding-left: 1.75rem;
+    border-left: 2px solid var(--c-border);
+}
+.timeline-node {
+    margin-bottom: var(--sp-8);
+    position: relative;
+}
+.timeline-node:last-child {
+    margin-bottom: 0;
+}
+.timeline-dot {
+    position: absolute;
+    left: calc(-1.75rem - 7px);
+    top: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--c-paper);
+    border: 2px solid var(--c-border-strong);
+}
+.timeline-dot.critical { border-color: var(--c-garnet); background: var(--c-garnet-pale); }
+.timeline-dot.final { border-color: var(--c-ink); background: var(--c-surface); }
+.timeline-node h4 {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 var(--sp-2);
+}
+.timeline-node h4.stage-1 { color: var(--c-garnet); }
+.timeline-node h4.stage-final { color: var(--c-ink); }
+.mandate-box {
+    margin-top: var(--sp-8);
+    padding: var(--sp-5) var(--sp-6);
+    background: var(--c-surface);
+    border: 1px dashed var(--c-border-strong);
+    border-radius: 0;
+}
+.tone-reference {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    padding: var(--sp-8);
+    margin-bottom: var(--sp-10);
+    max-width: var(--content-max);
+}
+.tone-reference h3 { 
+    color: var(--c-ink); 
+    margin-top: 0; 
+    font-family: var(--font-ui); 
+    font-size: 0.85rem; 
+    font-weight: 700; 
+    letter-spacing: 0.1em; 
+    text-transform: uppercase; 
+    margin-bottom: var(--sp-5); 
+}
+.tone-reference p { 
+    color: var(--c-ink-muted); 
+    line-height: 1.7; 
+    margin-bottom: 1.2rem; 
+    font-family: var(--font-body); 
+    max-width: 70ch; 
+}
+.tone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+.tone-card {
+    background: var(--c-paper);
+    border: 1px solid var(--c-border);
+    border-top: 3px solid var(--c-border-strong);
+    padding: var(--sp-5);
+    border-radius: 0;
+}
+.tone-card h4 {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-garnet);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.75rem;
+}
+.tone-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--c-ink);
+}
+.tone-warning {
+    margin-top: var(--sp-6);
+    padding: var(--sp-5);
+    background: var(--c-garnet-pale);
+    border: 1px solid var(--c-garnet);
+    border-radius: 0;
+}
+.tone-warning h4 {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-garnet);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.4rem;
+}
+.tone-warning p {
+    color: var(--c-ink);
+    font-size: 0.95rem;
+    margin: 0;
+    font-family: var(--font-body);
+}
+
+.premise-card-container {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border-strong);
+    border-radius: 0;
+    max-width: 680px;
+    margin: var(--sp-8) 0;
+    overflow: hidden;
+}
+.premise-header {
+    background: transparent;
+    padding: var(--sp-6) var(--sp-6) 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.premise-header span {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-garnet);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+.premise-header span:last-child {
+    display: none; /* Hides the "Screen 15" text entirely */
+}
+.premise-body { 
+    padding: var(--sp-4) var(--sp-6) var(--sp-6); 
+}
+.premise-location {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--c-garnet);
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--sp-4);
+}
+.premise-lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--c-ink);
+    line-height: 1.6;
+    margin: 0 0 var(--sp-4);
+}
+.stakes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-8);
+}
+.stake-pill {
+    background: var(--c-paper);
+    border: 1px dashed var(--c-border-strong);
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: 0;
+    flex: 1;
+    min-width: 150px;
+}
+.stake-pill h4 {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--c-garnet);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.3rem;
+}
+.stake-pill p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--c-ink-muted);
+    margin: 0;
+    line-height: 1.4;
+}
+.important-rule {
+    border: 1px dashed var(--c-border-strong);
+    border-radius: 0;
+    padding: var(--sp-4) var(--sp-5);
+    margin-bottom: var(--sp-8);
+    background: var(--c-paper);
+}
+.important-rule h4 {
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-danger);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.4rem;
+}
+.important-rule p {
+    color: var(--c-ink);
+}
+.begin-btn {
+    display: inline-block;
+    background: var(--c-ochre);
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 36px;
+    border-radius: 0;
+    cursor: pointer;
+    border: 1px solid var(--c-ochre);
+    transition: background var(--t-fast), border-color var(--t-fast);
+}
+.begin-btn:hover {
+    background: var(--c-ink);
+    border-color: var(--c-ink);
+}
+
+.d3-tooltip {
+    position: fixed;
+    background: var(--c-dark);
+    color: var(--c-ink-light);
+    border: 1px solid var(--c-border-strong);
+    padding: 8px 12px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 9999;
+    max-width: 220px;
+    line-height: 1.5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.support-btn-primary {
+    background: var(--c-garnet);
+    color: #fff;
+    border: 1px solid var(--c-garnet);
+    padding: 14px 24px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.support-btn-primary:hover {
+    background: var(--c-dark);
+    border-color: var(--c-dark);
+    color: #fff;
+}
+
+.support-btn-secondary {
+    background: transparent;
+    color: var(--c-ink);
+    border: 1px solid var(--c-border-strong);
+    padding: 14px 24px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+
+.support-btn-secondary:hover {
+    background: var(--c-dark);
+    color: var(--c-ink-light);
+    border-color: var(--c-dark);
 }
