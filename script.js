@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const beginBtn = e.target.closest('.begin-btn');
+        const beginBtn = e.target.closest('.s15-btn');
         if (beginBtn) {
             Store.set('premiseCardShown', 'true');
             const statusNavButton = document.querySelector('.nav-btn[data-view-target="status-view"]');
@@ -226,39 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // NETWORK MAP  (D3 force graph)
     // ═══════════════════════════════════════════════════════════════════════
 
-    networkNodes.append('circle')
-            .attr('r',    d => d.type === 'character' ? 22 : 16)
-            .attr('fill', d => d.color)
-            .style('stroke',       '#1a1a1a')
-            .style('stroke-width', '2.5px');
-
-        networkNodes.append('text')
-            .attr('dy',           d => (d.type === 'character' ? 36 : 28))
-            .attr('text-anchor',  'middle')
-            .text(d => d.shortName)
-            .style('font-family', "'DM Sans', system-ui, sans-serif")
-            .style('font-size',   '11px')
-            .style('font-weight', '700')
-            .style('fill',        '#f0ebe3')
-            .style('pointer-events', 'none');
-
-        // ── Tooltip on hover ────────────────────────────────────────────────
-        const tooltip = d3.select('body').append('div')
-            .attr('role', 'tooltip')
-            .style('position',       'fixed')
-            .style('background',     '#1a1a1a')
-            .style('color',          '#f0ebe3')
-            .style('border',         '1px solid #3a3a3a')
-            .style('border-radius',  '3px')
-            .style('padding',        '6px 10px')
-            .style('font-family',    "'DM Sans', system-ui, sans-serif")
-            .style('font-size',      '12px')
-            .style('pointer-events', 'none')
-            .style('opacity',        0)
-            .style('z-index',        9999)
-            .style('max-width',      '220px')
-            .style('line-height',    '1.5');
-
     const gameData = {
         nodes: [
             // Playable characters
@@ -329,6 +296,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (DOM.networkContainer && typeof d3 !== 'undefined') {
 
+        const themeColors = {
+            character: '#8B1A2B',
+            npc:       '#7A6347',
+            location:  '#B07828',
+            scenario:  '#2F5740',
+        };
+
         gameData.nodes.forEach(n => { n.color = themeColors[n.type] || '#555'; });
 
         let width  = DOM.networkContainer.clientWidth  || 800;
@@ -388,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         networkNodes.append('circle')
             .attr('r',    d => d.type === 'character' ? 22 : 16)
             .attr('fill', d => d.color)
-            .style('stroke',       '#1a1a1a')
+            .style('stroke',       getComputedStyle(document.documentElement).getPropertyValue('--c-dark').trim() || '#1F1208')
             .style('stroke-width', '2.5px');
 
         networkNodes.append('text')
@@ -398,25 +372,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .style('font-family', "'DM Sans', system-ui, sans-serif")
             .style('font-size',   '11px')
             .style('font-weight', '700')
-            .style('fill',        '#f0ebe3')
+            .style('fill',        getComputedStyle(document.documentElement).getPropertyValue('--c-ink').trim() || '#1C1309')
+            .style('stroke',      getComputedStyle(document.documentElement).getPropertyValue('--c-surface').trim() || '#EDE3CE')
+            .style('stroke-width', '3px')
+            .style('paint-order', 'stroke fill')
             .style('pointer-events', 'none');
 
         // ── Tooltip on hover ────────────────────────────────────────────────
         const tooltip = d3.select('body').append('div')
             .attr('role', 'tooltip')
-            .style('position',       'fixed')
-            .style('background',     '#1a1a1a')
-            .style('color',          '#f0ebe3')
-            .style('border',         '1px solid #3a3a3a')
-            .style('border-radius',  '3px')
-            .style('padding',        '6px 10px')
-            .style('font-family',    "'DM Sans', system-ui, sans-serif")
-            .style('font-size',      '12px')
-            .style('pointer-events', 'none')
-            .style('opacity',        0)
-            .style('z-index',        9999)
-            .style('max-width',      '220px')
-            .style('line-height',    '1.5');
+            .attr('class', 'd3-tooltip')
+            .style('opacity', 0);
 
         networkNodes
             .on('mouseenter', (event, d) => {
@@ -507,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
         networkNodes.on('keydown', (event, d) => {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
-                networkNodes.dispatch('click', { detail: event });
+                d3.select(event.currentTarget).dispatch('click');
             }
         });
 
@@ -602,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Dynamic layout metrics ──────────────────────────────────────────────
     function updateDynamicHeights() {
-        const header = document.querySelector('.sidebar-header');
+        const header = document.querySelector('.modern-sidebar-header');
         if (header) {
             document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
         }
@@ -610,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDynamicHeights();
 
     // ResizeObserver on the sidebar header is more accurate than window.resize
-    const sidebarHeader = document.querySelector('.sidebar-header');
+    const sidebarHeader = document.querySelector('.modern-sidebar-header');
     if (sidebarHeader && typeof ResizeObserver !== 'undefined') {
         new ResizeObserver(updateDynamicHeights).observe(sidebarHeader);
     }
