@@ -1,0 +1,242 @@
+/* ==========================================================================
+   base.css — design tokens, reset, typography and vertical rhythm.
+
+   Idea: the document is a government file. Sign-painter headings, a book
+   serif for reading, flat grey-green paper, and one colour taken from road
+   paint (signal yellow) used like a highlighter. No borders, no shadows,
+   no rounded corners: things are separated by space and flat fills.
+   Change tokens here and the whole site follows.
+   ========================================================================== */
+
+:root {
+    /* Paper and ink */
+    --ground:      #f2f4f3;   /* page */
+    --panel:       #e5e9e7;   /* quiet fills */
+    --panel-2:     #d6dcd9;   /* hover and pressed */
+    --rule:        #c3cac6;   /* hairlines in tables */
+    --rule-strong: #8e9893;
+    --ink:         #13181c;
+    --ink-2:       #47525a;   /* secondary text */
+    --tar:         #1d2429;   /* dark fills: selected, code, group rows */
+
+    /* Road paint: the one accent */
+    --signal:      #f5c518;
+    --signal-hover:#e6b400;
+    --signal-soft: #fbeeb0;
+    --signal-deep: #6e5400;   /* text on light grounds */
+
+    /* Meaning */
+    --slate:       #3d4a5c;
+    --garnet:      #8b1a2b;
+    --garnet-soft: #f2dcdf;
+    --good:        #24633f;
+    --good-soft:   #d9eadf;
+
+    /* Connections map */
+    --node-character: #8b1a2b;
+    --node-npc:       #3d4a5c;
+    --node-location:  #b27d00;
+    --node-scenario:  #24633f;
+
+    /* Type: signage for headings, a book serif for reading, the same
+       signage family (regular width) for interface text */
+    --font-display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --font-ui:      "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --font-text:    "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-code:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --flow: 1.15rem;            /* default gap between paragraphs, lists, figures */
+
+    /* Layout */
+    --sidebar-width: 15.5rem;
+    --page-width: 60rem;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--space-8);
+    /* Reserve the scrollbar's space so the page never jumps sideways when
+       a tab with less content removes it */
+    scrollbar-gutter: stable;
+    background: var(--ground);
+}
+
+body {
+    font-family: var(--font-text);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--ground);
+    -webkit-font-smoothing: antialiased;
+}
+
+body.menu-open { overflow: hidden; }
+
+::selection { background: var(--signal); color: var(--ink); }
+
+/* ---------- Headings ----------
+   h1  cover title
+   h2  page title
+   h3  numbered section inside a page
+   h4  sub-heading and card title
+   h5  scenario titles                                           */
+
+h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--ink);
+}
+
+h1 { font-size: clamp(4.5rem, 13vw, 9.5rem); line-height: 0.88; letter-spacing: -0.01em; }
+h2 { font-size: clamp(3.25rem, 6vw, 4.75rem); line-height: 0.95; }
+h3 { font-size: 2.6rem; line-height: 1.02; }
+h4 { font-size: 1.55rem; line-height: 1.15; }
+h5 { font-size: 1.3rem; line-height: 1.2; }
+
+/* Section numbers are kilometre markers: the document really is a sequence */
+.sec-num {
+    display: inline-block;
+    margin-right: 0.5rem;
+    padding: 0 0.3em;
+    background: var(--signal);
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+}
+
+/* Headings break into even lines instead of leaving one orphaned word */
+h1, h2, h3, h4, h5 { text-wrap: balance; }
+
+/* A heading that starts with a section number hangs the number in its own
+   column: if the title wraps, line two lines up under line one, never
+   under the number. Applies to every h2 to h5 on the site. */
+:is(h2, h3, h4, h5):has(> .sec-num) {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 0.55rem;
+    align-items: baseline;
+}
+:is(h2, h3, h4, h5) > .sec-num { margin-right: 0; }
+
+p { max-width: 68ch; }
+ul, ol { padding-left: 1.4rem; max-width: 68ch; }
+li + li { margin-top: var(--space-2); }
+li::marker { color: var(--ink-2); }
+
+strong { font-weight: 600; }
+em { font-style: italic; }
+
+/* Links read like highlighter on a printed page */
+a:where(:not(.btn)) {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--signal);
+    text-decoration-thickness: 0.2em;
+    text-underline-offset: 0.12em;
+}
+a:where(:not(.btn)):hover { background: var(--signal); }
+
+img { display: block; max-width: 100%; height: auto; }
+
+code {
+    font-family: var(--font-code);
+    font-size: 0.84em;
+    background: var(--panel);
+    padding: 0.1em 0.35em;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    text-align: inherit;
+}
+
+:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+}
+
+[tabindex="-1"]:focus { outline: none; }
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: absolute;
+    top: -4rem;
+    left: var(--space-2);
+    z-index: 100;
+    padding: var(--space-2) var(--space-4);
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--font-ui);
+    text-decoration: none;
+}
+.skip-link:focus { top: var(--space-2); color: #fff; }
+
+/* ==========================================================================
+   Vertical rhythm. One rule decides the space between neighbours, so no
+   element carries its own bottom margin and gaps never double up.
+   1. Siblings inside any content container sit one --flow apart.
+   2. A heading that follows content gets more room above it.
+   3. Whatever follows a heading sits close to it.
+   Later rules win ties, so the order below matters.
+   ========================================================================== */
+
+:where(.page-header, .block, .grid-item, .definition-item, .note-card,
+       .character-profile, .action-card, .mini-card, .callout, .cover,
+       .info-panel, .credits-section) > * + * {
+    margin-top: var(--flow);
+}
+
+:where(.block, .grid-item, .definition-item, .note-card, .character-profile,
+       .action-card, .mini-card, .callout) > * + h3 { margin-top: var(--space-16); }
+
+:where(.block, .grid-item, .definition-item, .note-card, .character-profile,
+       .action-card, .mini-card, .callout) > * + h4 { margin-top: var(--space-8); }
+
+h1 + *, h2 + * { margin-top: var(--space-5); }
+h3 + *         { margin-top: var(--space-4); }
+h4 + *, h5 + * { margin-top: var(--space-2); }
+
+@media (max-width: 640px) {
+    body { font-size: 1rem; }
+    h3 { font-size: 2.1rem; }
+    h4 { font-size: 1.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}

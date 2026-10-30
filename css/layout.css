@@ -1,0 +1,336 @@
+/* ==========================================================================
+   layout.css — page frame: sidebar, cover, content area, tabs, pager,
+   mobile and print. Nothing here moves on hover: only colours change.
+   ========================================================================== */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    flex: 0 0 var(--sidebar-width);
+    width: var(--sidebar-width);
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    z-index: 50;
+}
+
+/* The cover stands alone: no sidebar until the document is opened */
+body.is-cover .sidebar { display: none; }
+
+.sidebar-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--space-8) var(--space-6) var(--space-6);
+}
+
+.brand { display: block; padding: 0; text-align: left; }
+.brand-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 0.95;
+}
+.brand-tagline {
+    display: block;
+    margin-top: var(--space-2);
+    font-family: var(--font-ui);
+    font-size: 0.92rem;
+    color: var(--ink-2);
+}
+.brand:hover .brand-name {
+    text-decoration: underline;
+    text-decoration-color: var(--signal);
+    text-decoration-thickness: 0.12em;
+    text-underline-offset: 0.1em;
+}
+
+.site-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 var(--space-3) var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+}
+
+.nav-group + .nav-group { margin-top: var(--space-6); }
+
+.nav-heading {
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-ui);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink-2);
+}
+
+.nav-link {
+    display: block;
+    width: 100%;
+    margin-top: 1px;
+    padding: 0.5rem var(--space-3);
+    text-align: left;
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--ink);
+}
+.nav-link:hover { background: var(--panel-2); }
+
+/* The current page is marked like highlighter on a contents list */
+.nav-link[aria-current="page"] {
+    background: var(--signal);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-4) var(--space-6);
+}
+.sidebar-footer .pdf-btn { background: var(--ground); }
+.sidebar-footer .pdf-btn:hover { background: #fff; }
+
+.menu-button {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    background: var(--ground);
+}
+
+/* ---------- Content area ---------- */
+
+.main {
+    flex: 1;
+    min-width: 0;
+}
+
+.page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: var(--space-16) var(--space-12) 7rem;
+}
+
+.view-section { display: none; }
+.view-section.active { display: block; }
+
+/* The connections map needs more room, the cover needs all of it */
+.page:has(#network-view.active) { max-width: 92rem; }
+.page:has(#cover-view.active) { max-width: none; padding: 0; }
+
+.page-header { max-width: 46rem; margin-bottom: var(--space-12); }
+
+.lead {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    max-width: 58ch;
+}
+
+/* ---------- Cover ---------- */
+
+.cover {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--space-16) clamp(1.5rem, 9vw, 9rem);
+}
+
+.cover-sub {
+    margin-top: var(--space-4);
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    line-height: 1.05;
+    max-width: none;
+}
+
+.cover-byline {
+    margin-top: var(--space-6);
+    font-family: var(--font-ui);
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.cover .btn { margin-top: var(--space-12); }
+
+.cover-play {
+    margin-top: var(--space-6);
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+/* The title of the game page stays on one line so it never splits mid-name */
+.cover-play a { display: inline-block; }
+
+.cover-version {
+    margin-top: var(--space-4);
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    color: var(--ink-2);
+}
+
+/* ---------- Tabs: wrapping, equal-width, never a scrollbar ---------- */
+
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-2);
+    margin-bottom: var(--space-16);
+}
+
+.tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: var(--space-4) var(--space-5);
+    text-align: left;
+    background: var(--panel);
+    color: var(--ink);
+}
+
+.tab-title { font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; line-height: 1.1; }
+.tab-meta  { font-family: var(--font-ui); font-size: 0.9rem; line-height: 1.4; color: var(--ink-2); }
+
+.tab:hover { background: var(--panel-2); }
+
+.tab[aria-selected="true"] { background: var(--signal); }
+.tab[aria-selected="true"] .tab-meta { color: var(--ink); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ---------- Previous / next ---------- */
+
+.pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-20);
+}
+
+.pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: var(--space-5) var(--space-6);
+    text-align: left;
+    background: var(--panel);
+}
+.pager-next { grid-column: 2; text-align: right; align-items: flex-end; }
+.pager-label { font-family: var(--font-ui); font-size: 0.9rem; color: var(--ink-2); }
+.pager-title { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; line-height: 1.1; }
+.pager-link:hover { background: var(--signal); }
+.pager-link:hover .pager-label { color: var(--ink); }
+
+/* ---------- Back to top ---------- */
+
+.back-to-top {
+    position: fixed;
+    right: var(--space-6);
+    bottom: var(--space-6);
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tar);
+    color: #fff;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+}
+
+.back-to-top.visible { opacity: 1; visibility: visible; }
+.back-to-top:hover { background: var(--signal); color: var(--ink); }
+body.is-cover .back-to-top { display: none; }
+
+/* ---------- Tablet and mobile ---------- */
+
+@media (max-width: 900px) {
+    .app { display: block; }
+
+    .sidebar {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: auto;
+        max-height: 100dvh;
+    }
+
+    .sidebar-top { align-items: center; padding: var(--space-3) var(--space-4); }
+    .brand { display: flex; align-items: baseline; gap: var(--space-3); }
+    .brand-name { font-size: 1.8rem; }
+    .brand-tagline { display: none; }
+    .menu-button { display: inline-flex; }
+
+    .site-nav,
+    .sidebar-footer { display: none; }
+
+    .sidebar.open { overflow-y: auto; }
+    .sidebar.open .site-nav { display: block; }
+    .sidebar.open .sidebar-footer { display: flex; flex-direction: row; flex-wrap: wrap; }
+
+    .page { padding: var(--space-8) var(--space-5) 5rem; }
+    .page-header { margin-bottom: var(--space-8); }
+    .tabs { grid-template-columns: 1fr 1fr; margin-bottom: var(--space-12); }
+    .pager { margin-top: var(--space-12); }
+}
+
+@media (max-width: 560px) {
+    .tabs { grid-template-columns: 1fr; }
+    .pager { grid-template-columns: 1fr; }
+    .pager-next { grid-column: 1; }
+}
+
+/* ---------- Print: one clean document with every section ---------- */
+
+@media print {
+    body { font-size: 10.5pt; color: #000; background: #fff; }
+    .app { display: block; }
+
+    .sidebar,
+    .back-to-top,
+    .tabs,
+    .pager,
+    .cover .btn,
+    .skip-link,
+    #network-view { display: none !important; }
+
+    .page { max-width: none !important; padding: 0 !important; }
+
+    .view-section,
+    .tab-panel { display: block !important; }
+
+    .cover { min-height: 0; padding: 0 0 var(--space-8); }
+    .view-section + .view-section { break-before: page; }
+
+    h2, h3, h4 { break-after: avoid; }
+    figure, tr, .definition-item, .decision-node { break-inside: avoid; }
+
+    .table-wrap { overflow: visible; }
+    .data-table { min-width: 0; font-size: 9pt; }
+
+    .choice { padding: 0; font-weight: 600; background: none; }
+    .choice::after { display: none; }
+    .consequence[hidden] { display: block !important; }
+
+    a { color: inherit; text-decoration: none; }
+}
